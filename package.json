@@ -11,9 +11,13 @@
     },
     "devDependencies": {
         "@tailwindcss/postcss7-compat": "^2.0.2",
+        "@typescript-eslint/eslint-plugin": "^4.11.0",
+        "@typescript-eslint/parser": "^4.11.0",
         "autoprefixer": "^9",
         "axios": "^0.19",
         "cross-env": "^7.0",
+        "eslint": "^7.16.0",
+        "eslint-plugin-react": "^7.21.5",
         "laravel-mix": "^5.0.1",
         "lodash": "^4.17.19",
         "postcss": "^7",
