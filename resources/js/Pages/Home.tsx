@@ -5,7 +5,7 @@ const Home = () => {
     const bar: string = "TypeScript";
 
     return (
-        <h1>
+        <h1 className="text-2xl text-gray-300">
             Hello {foo} + {bar}
         </h1>
     );
