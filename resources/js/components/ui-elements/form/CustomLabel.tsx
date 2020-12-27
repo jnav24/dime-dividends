@@ -10,7 +10,7 @@ const CustomLabel: React.FC<CustomLabelProps> = ({ error, label, labelId }) => {
 	return (
 		<label
 			htmlFor={labelId}
-			className={`text-sm ${!error ? 'text-gray-600' : 'text-red-600'}`}
+			className={`text-sm ${!error ? 'text-gray-400' : 'text-red-600'}`}
 		>
 			{label}
 		</label>
