@@ -1,4 +1,4 @@
-import React, {BaseSyntheticEvent, SyntheticEvent, useContext, useEffect, useMemo, useState} from 'react';
+import React, {BaseSyntheticEvent, useContext, useEffect, useMemo, useState} from 'react';
 
 import CustomLabel from './CustomLabel';
 import { FormContext } from './FormContextProvider';

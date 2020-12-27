@@ -23,6 +23,8 @@ type FormContextType = {
 		value: string,
 		initialize?: boolean
 	) => string | null;
+    valid: boolean;
+    validateAllFields: () => void,
 };
 
 type FormContextProviderProps = {
@@ -233,12 +235,20 @@ const FormContextProvider: React.FC<FormContextProviderProps> = ({
 		return error;
 	};
 
+	const validateAllFields = () => {
+        for (const [key, obj] of Object.entries(formElements)) {
+            validateField(key, obj.value)
+        }
+    };
+
 	return (
 		<FormContext.Provider
 			value={{
 				validateField,
 				setupForm,
 				formElements,
+                valid,
+                validateAllFields,
 			}}
 		>
 			{children}
