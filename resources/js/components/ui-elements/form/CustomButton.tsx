@@ -6,7 +6,7 @@ type CustomButtonType = {
     checkbox?: boolean,
     color?: string,
     fab?: boolean,
-    handleClick: () => void,
+    handleClick?: () => void,
 	isDisabled?: boolean,
 	submit?: boolean,
 };
@@ -17,7 +17,7 @@ const CustomButton: React.FC<CustomButtonType> = ({
 	children,
     color = 'default',
     fab = false,
-    handleClick,
+    handleClick = () => null,
 	isDisabled = false,
     submit = false
 }) => {

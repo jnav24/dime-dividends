@@ -1,4 +1,4 @@
-import React, { createContext, useReducer } from 'react';
+import React, { createContext, BaseSyntheticEvent, useReducer } from 'react';
 import useFormValidation from '../../../hooks/useFormValidation';
 
 enum FormElement {
@@ -23,11 +23,12 @@ type FormContextType = {
 		value: string,
 		initialize?: boolean
 	) => string | null;
-    valid: boolean;
-    validateAllFields: () => void,
+	valid: boolean;
+	validateAllFields: () => void;
 };
 
 type FormContextProviderProps = {
+	handleSubmit?: () => void;
 	handleUpdateValid: (val: boolean) => void;
 	valid: boolean;
 };
@@ -81,6 +82,7 @@ function reducer(
 
 const FormContextProvider: React.FC<FormContextProviderProps> = ({
 	children,
+	handleSubmit = undefined,
 	handleUpdateValid,
 	valid,
 }) => {
@@ -236,9 +238,18 @@ const FormContextProvider: React.FC<FormContextProviderProps> = ({
 	};
 
 	const validateAllFields = () => {
-        for (const [key, obj] of Object.entries(formElements)) {
-            validateField(key, obj.value)
+		for (const [key, obj] of Object.entries(formElements)) {
+			validateField(key, obj.value);
+		}
+	};
+
+	const validateSubmit = (e: BaseSyntheticEvent) => {
+	    if (valid && handleSubmit instanceof Function) {
+            return handleSubmit();
         }
+
+        e.preventDefault();
+	    return validateAllFields();
     };
 
 	return (
@@ -247,11 +258,11 @@ const FormContextProvider: React.FC<FormContextProviderProps> = ({
 				validateField,
 				setupForm,
 				formElements,
-                valid,
-                validateAllFields,
+				valid,
+				validateAllFields,
 			}}
 		>
-			{children}
+			<form onSubmit={validateSubmit}>{children}</form>
 		</FormContext.Provider>
 	);
 };
