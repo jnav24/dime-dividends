@@ -44,6 +44,12 @@ Run the app
 docker-compose up
 ```
 
+Lastly, you will need to run the migrations.
+
+```
+docker exec -it dime-dividends_php_1 /bin/bash
+php artisan migrate
+```
 Once Docker is running, you can view the project [here](http://localhost:8080)
 
 ## License
