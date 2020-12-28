@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState} from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 
 import CheckIcon from '../icons/CheckIcon';
 import CustomButton from './CustomButton';
@@ -6,15 +6,27 @@ import CustomLabel from './CustomLabel';
 import { FormContext } from './FormContextProvider';
 
 type CustomCheckboxType = {
-    handleUpdateInput: (value: string) => void,
-    label: string,
-    rules?: Record<string, string> | string[],
-    value: string,
+	handleUpdateInput: (value: string) => void;
+	label: string;
+	rules?: Record<string, string> | string[];
+	checked: string;
 };
 
-const CustomCheckbox: React.FC<CustomCheckboxType> = ({ handleUpdateInput, label, rules = [], value}) => {
+const CustomCheckbox: React.FC<CustomCheckboxType> = ({
+	handleUpdateInput,
+	label,
+	rules = [],
+	checked,
+}) => {
 	const formContext = useContext(FormContext);
 	const [labelId, setLabelId] = useState('');
+
+	useEffect(() => {
+		if (label && !!formContext) {
+			setLabelId(formContext.setupForm(label, rules));
+			formContext.validateField(labelId, checked, true);
+		}
+	}, []);
 
 	const error = useMemo(() => {
 		if (formContext && formContext.formElements[labelId]) {
@@ -25,20 +37,21 @@ const CustomCheckbox: React.FC<CustomCheckboxType> = ({ handleUpdateInput, label
 	}, [formContext]);
 
     const updateValue = () => {
-        if (formContext) {
-            formContext.validateField(labelId, !value);
+        const value = checked === 'checked' ? '' : 'checked';
+        if (FormContext) {
+            formContext.validateField(labelId, value);
         }
-        handleUpdateInput(!value);
+        handleUpdateInput(value);
     };
 
 	return (
 		<div className="flex flex-row items-center">
-			{!value && (
+			{checked !== 'checked' && (
 				<CustomButton checkbox handleClick={updateValue}>
 					<CheckIcon className="w-4 h-4 text-white" />
 				</CustomButton>
 			)}
-			{value && (
+			{checked === 'checked' && (
 				<CustomButton
 					checkbox
 					handleClick={updateValue}

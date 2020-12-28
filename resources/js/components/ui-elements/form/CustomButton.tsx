@@ -38,7 +38,7 @@ const CustomButton: React.FC<CustomButtonType> = ({
                     styles = 'bg-danger hover:bg-opacity-85 active:bg-dark-danger ';
                     break;
                 default:
-                    styles = 'bg-white hover:bg-gray-100 active:bg-gray-200 text-gray-700 border-gray-400 border ';
+                    styles = 'bg-white hover:bg-gray-100 active:bg-gray-200 text-gray-700 border-gray-300 border ';
                     break;
             }
         } else {

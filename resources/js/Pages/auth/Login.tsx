@@ -11,6 +11,7 @@ import FormContextProvider from '../../components/ui-elements/form/FormContextPr
 const Login = () => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
+	const [rememberMe, setRememberMe] = useState('');
 	const [isValid, setIsValid] = useState(false);
 
 	return (
@@ -38,9 +39,9 @@ const Login = () => {
 
                     <div className="my-4">
                         <CustomCheckbox
-                            handleUpdateInput={() => console.log('checked')}
+                            handleUpdateInput={setRememberMe}
                             label="Remember me"
-                            value="akdk"
+                            checked={rememberMe}
                         />
                     </div>
 
