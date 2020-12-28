@@ -28,7 +28,7 @@ type FormContextType = {
 };
 
 type FormContextProviderProps = {
-	handleSubmit?: () => void;
+	handleSubmit?: (e: BaseSyntheticEvent) => void;
 	handleUpdateValid: (val: boolean) => void;
 	valid: boolean;
 };
@@ -82,7 +82,7 @@ function reducer(
 
 const FormContextProvider: React.FC<FormContextProviderProps> = ({
 	children,
-	handleSubmit = undefined,
+	handleSubmit,
 	handleUpdateValid,
 	valid,
 }) => {
@@ -245,7 +245,7 @@ const FormContextProvider: React.FC<FormContextProviderProps> = ({
 
 	const validateSubmit = (e: BaseSyntheticEvent) => {
 	    if (valid && handleSubmit instanceof Function) {
-            return handleSubmit();
+            return handleSubmit(e);
         }
 
         e.preventDefault();

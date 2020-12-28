@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, {BaseSyntheticEvent, useState} from 'react';
+import { Inertia } from '@inertiajs/inertia';
 import { InertiaLink } from '@inertiajs/inertia-react';
 
 // @ts-ignore
@@ -14,6 +15,15 @@ const Login = () => {
 	const [rememberMe, setRememberMe] = useState('');
 	const [isValid, setIsValid] = useState(false);
 
+	const handleSubmit = async (e: BaseSyntheticEvent) => {
+	    e.preventDefault();
+        await Inertia.post('/login', {
+            email,
+            password,
+            remember: rememberMe,
+        });
+    };
+
 	return (
 		<Guest>
 			<h1 className="text-center text-2xl text-gray-800 sm:text-gray-600 font-header mb-8">
@@ -22,6 +32,7 @@ const Login = () => {
 
 			<div className="px-4">
 				<FormContextProvider
+					handleSubmit={handleSubmit}
 					handleUpdateValid={setIsValid}
 					valid={isValid}
 				>
@@ -48,11 +59,7 @@ const Login = () => {
 						/>
 					</div>
 
-					<CustomButton
-						block
-						color="secondary"
-						handleClick={() => console.log('peace')}
-					>
+					<CustomButton block color="secondary" submit>
 						Login
 					</CustomButton>
 				</FormContextProvider>
