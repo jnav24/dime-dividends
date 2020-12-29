@@ -2,12 +2,12 @@ import React from 'react';
 
 import Auth from './layouts/Auth';
 
-const Dashboard = () => {
+const Income = () => {
     return (
         <Auth>
-            <h1>Dashboard</h1>
+            <h1>Income</h1>
         </Auth>
     );
 };
 
-export default Dashboard;
+export default Income;
