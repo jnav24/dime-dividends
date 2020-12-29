@@ -16,7 +16,7 @@ const Login = () => {
 	const [rememberMe, setRememberMe] = useState('');
 	const [isValid, setIsValid] = useState(false);
 	const [loginErrors, setLoginErrors] = useState<string[]>([]);
-	const { errors, csrf_token } = usePage().props as CustomProps;
+	const { errors } = usePage().props as CustomProps;
 
 	useEffect(() => {
 		setLoginErrors(Object.values(errors));
@@ -28,7 +28,6 @@ const Login = () => {
 			email,
 			password,
 			remember: rememberMe === 'checked',
-			_token: csrf_token,
 		});
 	};
 

@@ -13,7 +13,7 @@ const ForgotPassword = () => {
 	const [email, setEmail] = useState('');
 	const [loginErrors, setLoginErrors] = useState<string[]>([]);
 	const [isValid, setIsValid] = useState(false);
-	const { errors, csrf_token } = usePage().props as CustomProps;
+	const { errors } = usePage().props as CustomProps;
 
 	useEffect(() => {
 		setLoginErrors(Object.values(errors));
@@ -23,7 +23,6 @@ const ForgotPassword = () => {
 		e.preventDefault();
 		await Inertia.post('/forgot-password', {
 		    email,
-            _token: csrf_token,
         });
 	};
 

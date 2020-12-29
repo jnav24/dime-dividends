@@ -16,7 +16,7 @@ const Register = () => {
 	const [password, setPassword] = useState('');
 	const [isValid, setIsValid] = useState(false);
 	const [loginErrors, setLoginErrors] = useState<string[]>([]);
-	const { errors, csrf_token } = usePage().props as CustomProps;
+	const { errors } = usePage().props as CustomProps;
 
 	useEffect(() => {
 		setLoginErrors(Object.values(errors));
@@ -29,7 +29,6 @@ const Register = () => {
 			name,
 			password,
 			password_confirmation: confirmPassword,
-			_token: csrf_token,
 		});
 	};
 
