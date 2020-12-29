@@ -50,21 +50,21 @@ const Register = () => {
 					<CustomInput
 						handleUpdateInput={setName}
 						label="Name"
-						rules={['required']}
+						rules={['required', 'max:255']}
 						value={name}
 					/>
 
 					<CustomInput
 						handleUpdateInput={setEmail}
 						label="Email"
-						rules={['required', 'email']}
+						rules={['required', 'email', 'max:255']}
 						value={email}
 					/>
 
 					<CustomInput
 						handleUpdateInput={setPassword}
 						label="Password"
-						rules={['required']}
+						rules={['required', 'min:8']}
 						type="password"
 						value={password}
 					/>
@@ -72,7 +72,7 @@ const Register = () => {
 					<CustomInput
 						handleUpdateInput={setConfirmPassword}
 						label="Confirm Password"
-						rules={['required']}
+						rules={['required', 'match:password']}
 						type="password"
 						value={confirmPassword}
 					/>
