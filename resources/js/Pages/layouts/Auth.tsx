@@ -11,7 +11,7 @@ const Auth: React.FC<AuthType> = ({ children }) => {
             <TopNav />
             <BottomNav />
 
-            <div className="bg-gray-200 h-screen overflow-y-auto pb-32">
+            <div className="bg-gray-100 h-screen overflow-y-auto pb-32">
                 {children}
             </div>
         </>
