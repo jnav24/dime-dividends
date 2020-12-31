@@ -70,7 +70,7 @@ const CustomButton: React.FC<CustomButtonType> = ({
 	};
 
 	const validateSubmit = () => {
-		if (formContext && Object.keys(formContext) && !checkbox) {
+		if (formContext && Object.keys(formContext).length && !checkbox) {
 			if (formContext.valid) {
 				return handleClick();
 			}

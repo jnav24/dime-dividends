@@ -22,7 +22,7 @@ const CustomInput: React.FC<CustomInputProps> = ({
     const [labelId, setLabelId] = useState('');
 
 	const error = useMemo(() => {
-        if (formContext && formContext.formElements[labelId]) {
+        if (formContext && Object.keys(formContext).length && formContext.formElements[labelId]) {
             return formContext.formElements[labelId].error;
         }
 
@@ -30,14 +30,14 @@ const CustomInput: React.FC<CustomInputProps> = ({
 	}, [formContext]);
 
 	useEffect(() => {
-		if (label && !!formContext) {
+		if (label && !!formContext && Object.keys(formContext).length) {
             setLabelId(formContext.setupForm(label, rules));
 			formContext.validateField(labelId, value, true);
 		}
 	}, []);
 
 	const updateValue = (inputValue: BaseSyntheticEvent) => {
-		if (formContext) {
+		if (formContext && Object.keys(formContext).length) {
 			formContext.validateField(labelId, inputValue.target.value);
 		}
 		handleUpdateInput(inputValue.target.value);
