@@ -1,51 +1,73 @@
 import React from 'react';
+import { animated, useSpring } from 'react-spring';
+const d3 = require('d3-ease');
 
 type ModalType = {
-    handleShowModal: (e: boolean) => void,
-    persistent?: boolean,
-    show: boolean,
-}
+	handleShowModal: (e: boolean) => void;
+	persistent?: boolean;
+	show: boolean;
+};
 
-const Modal: React.FC<ModalType> = ({ children, handleShowModal, persistent = false, show }) => {
-    const closeModal = () => {
-        if (!persistent) {
-            handleShowModal(false);
-        }
-    };
+const Modal: React.FC<ModalType> = ({
+	children,
+	handleShowModal,
+	persistent = false,
+	show,
+}) => {
+	const closeModal = () => {
+		if (!persistent) {
+			handleShowModal(false);
+		}
+	};
 
-    return (
-        <>
-            {show && (
-                <div className="fixed z-100 inset-0 overflow-y-auto">
-                    <div
-                        className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
-                    >
-                        <div className="fixed inset-0">
-                            <div
-                                className="absolute inset-0 bg-black opacity-75"
-                                onClick={closeModal}
-                            />
-                        </div>
+	const backgroundAnimation = useSpring({
+	    config: {
+	        duration: 250,
+            easing: d3.easeExpOut,
+        },
+        opacity: show ? 0.75 : 0
+    });
+
+	const contentAnimation = useSpring({
+        config: {
+            duration: 300,
+            easing: d3.easeQuadInOut,
+        },
+        opacity: show ? 1 : 0,
+        transform: show ? 'translateY(0)' : 'translateY(45%)',
+    });
+
+	return (
+		<>
+			{show && (
+				<div className="fixed z-100 inset-0 overflow-y-auto">
+					<div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+						<div className="fixed inset-0">
+							<animated.div
+                                style={backgroundAnimation}
+								className="absolute inset-0 bg-black"
+								onClick={closeModal}
+							/>
+						</div>
 
                         {/* This element is to trick the browser into centering the modal contents. */}
-                        <span
-                            className="hidden sm:inline-block sm:align-middle sm:h-screen"
-                        />
-                        &#8203;
+						<span className="hidden sm:inline-block sm:align-middle sm:h-screen" />
+						&#8203;
 
-                        <div
-                            className="inline-block align-bottom bg-white overflow-x-hidden rounded-lg text-left shadow-xl transform transition-all sm:my-8 sm:align-middle"
+                        <animated.div
+                            style={contentAnimation}
+                            className="inline-block align-bottom bg-white overflow-x-hidden rounded-lg text-left shadow-xl sm:my-8 sm:align-middle"
                             role="dialog"
                             aria-modal="true"
                             aria-labelledby="modal-content"
                         >
                             {children}
-                        </div>
-                    </div>
-                </div>
-            )}
-        </>
-    );
+                        </animated.div>
+					</div>
+				</div>
+			)}
+		</>
+	);
 };
 
 export default Modal;
