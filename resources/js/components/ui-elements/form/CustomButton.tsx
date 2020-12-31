@@ -7,6 +7,7 @@ type CustomButtonType = {
 	color?: string;
 	fab?: boolean;
 	handleClick?: () => void;
+	ignoreValidation?: boolean;
 	isDisabled?: boolean;
 	submit?: boolean;
 };
@@ -18,6 +19,7 @@ const CustomButton: React.FC<CustomButtonType> = ({
 	color = 'default',
 	fab = false,
 	handleClick = () => null,
+	ignoreValidation = false,
 	isDisabled = false,
 	submit = false,
 }) => {
@@ -71,7 +73,7 @@ const CustomButton: React.FC<CustomButtonType> = ({
 
 	const validateSubmit = () => {
 		if (formContext && Object.keys(formContext).length && !checkbox) {
-			if (formContext.valid) {
+			if (formContext.valid || ignoreValidation) {
 				return handleClick();
 			}
 
