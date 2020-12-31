@@ -35,7 +35,7 @@ const Dashboard = () => {
 
 				<div className="relative z-30">
 					<AuthContent>
-						<HoldingsSummary />
+						<HoldingsSummary handleShowModal={setShowModal} />
 					</AuthContent>
 				</div>
 			</div>

@@ -3,7 +3,11 @@ import React from 'react';
 import AddIcon from '../ui-elements/icons/AddIcon';
 import CustomButton from '../ui-elements/form/CustomButton';
 
-const HoldingsSummary = () => {
+type HoldingsSummaryType = {
+    handleShowModal: (e: boolean) => void,
+}
+
+const HoldingsSummary: React.FC<HoldingsSummaryType> = ({ handleShowModal }) => {
 	return (
 		<>
 			<div className="flex flex-row justify-between items-center border-b border-gray-400 pt-5 pb-6">
@@ -16,7 +20,7 @@ const HoldingsSummary = () => {
 					</p>
 				</div>
 
-				<CustomButton color="secondary">
+				<CustomButton color="secondary" handleClick={() => handleShowModal(true)}>
 					<AddIcon className="w-4 h-4 mr-2" /> Add Holding
 				</CustomButton>
 			</div>
