@@ -18,8 +18,17 @@ Route::get('/', function () {
     return Inertia::render('Home');
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth'])->name('dashboard');
+Route::group(['middleware' => 'auth'], function () {
+    Route::group(['middleware' => 'password.confirm'], function () {
+        // Any pages you need a confirm password view to show.
+        Route::get('/income', function () {
+            return Inertia::render('Income');
+        })->name('income');
+    });
+
+    Route::get('/dashboard', function () {
+        return Inertia::render('Dashboard');
+    })->name('dashboard');
+});
 
 require __DIR__.'/auth.php';
