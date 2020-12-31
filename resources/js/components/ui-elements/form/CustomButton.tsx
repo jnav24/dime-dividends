@@ -1,86 +1,91 @@
-import React, {useContext, useEffect} from 'react';
-import {FormContext} from './FormContextProvider';
+import React, { useContext } from 'react';
+import { FormContext } from './FormContextProvider';
 
 type CustomButtonType = {
-    block?: boolean,
-    checkbox?: boolean,
-    color?: string,
-    fab?: boolean,
-    handleClick?: () => void,
-	isDisabled?: boolean,
-	submit?: boolean,
+	block?: boolean;
+	checkbox?: boolean;
+	color?: string;
+	fab?: boolean;
+	handleClick?: () => void;
+	isDisabled?: boolean;
+	submit?: boolean;
 };
 
 const CustomButton: React.FC<CustomButtonType> = ({
-    block= false,
-    checkbox= false,
+	block = false,
+	checkbox = false,
 	children,
-    color = 'default',
-    fab = false,
-    handleClick = () => null,
+	color = 'default',
+	fab = false,
+	handleClick = () => null,
 	isDisabled = false,
-    submit = false
+	submit = false,
 }) => {
-    const formContext = useContext(FormContext);
+	const formContext = useContext(FormContext);
 
-    const getButtonStyles = () => {
-        let styles = 'focus:outline-none focus:shadow-outline transition duration-150 ';
+	const getButtonStyles = () => {
+		let styles =
+			'focus:outline-none focus:shadow-outline transition duration-150 ';
 
-        if (!isDisabled) {
-            switch(color) {
-                case 'primary':
-                    styles = 'bg-primary hover:bg-opacity-85 active:bg-dark-primary text-white ';
-                    break;
-                case 'secondary':
-                    styles = 'bg-secondary hover:bg-opacity-85 active:bg-dark-secondary text-gray-700 ';
-                    break;
-                case 'danger':
-                    styles = 'bg-danger hover:bg-opacity-85 active:bg-dark-danger ';
-                    break;
-                default:
-                    styles = 'bg-white hover:bg-gray-100 active:bg-gray-200 text-gray-700 border-gray-300 border ';
-                    break;
-            }
-        } else {
-            styles += 'bg-gray-400 text-gray-700 cursor-text ';
-        }
+		if (!isDisabled) {
+			switch (color) {
+				case 'primary':
+					styles =
+						'bg-primary hover:bg-opacity-85 active:bg-dark-primary text-white ';
+					break;
+				case 'secondary':
+					styles =
+						'bg-secondary hover:bg-opacity-85 active:bg-dark-secondary text-gray-700 ';
+					break;
+				case 'danger':
+					styles =
+						'bg-danger hover:bg-opacity-85 active:bg-dark-danger ';
+					break;
+				default:
+					styles =
+						'bg-white hover:bg-gray-100 active:bg-gray-200 text-gray-700 border-gray-300 border ';
+					break;
+			}
+		} else {
+			styles += 'bg-gray-400 text-gray-700 cursor-text ';
+		}
 
-        if (fab) {
-            styles += 'rounded-full p-2 mr-2 ';
-        }
+		if (fab) {
+			styles += 'rounded-full p-2 mr-2 ';
+		}
 
-        if (checkbox) {
-            styles += 'p-1 rounded-md ';
-        }
+		if (checkbox) {
+			styles += 'p-1 rounded-md ';
+		}
 
-        if (!fab && !checkbox) {
-            styles += 'py-3 px-6 rounded-md text-sm mr-2 ';
-        }
+		if (!fab && !checkbox) {
+			styles += 'py-3 px-6 rounded-md text-sm mr-2 ';
+		}
 
-        if (block) {
-            styles += 'w-full '
-        }
+		if (block) {
+			styles += 'w-full ';
+		}
 
-        return styles;
-    };
+		return styles;
+	};
 
-    const validateSubmit = () => {
-        if (formContext && !checkbox) {
-            if (formContext.valid) {
-                return handleClick();
-            }
+	const validateSubmit = () => {
+		if (formContext && Object.keys(formContext) && !checkbox) {
+			if (formContext.valid) {
+				return handleClick();
+			}
 
-            return formContext.validateAllFields();
-        }
+			return formContext.validateAllFields();
+		}
 
-        return handleClick();
-    };
+		return handleClick();
+	};
 
 	return (
 		<button
 			className={getButtonStyles()}
-            disabled={isDisabled}
-            onClick={validateSubmit}
+			disabled={isDisabled}
+			onClick={validateSubmit}
 			type={submit ? 'submit' : 'button'}
 		>
 			<span className="flex flex-row items-center justify-center">
