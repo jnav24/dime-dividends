@@ -33,7 +33,7 @@ const HoldingsModal: React.FC<HoldingsModalType> = ({
 		<Modal handleShowModal={handleShowModal} show={show}>
 			<div className="w-100">
 				<div className="bg-gray-100 pl-2 py-2 text-2xl text-gray-700 font-header">
-					Add Holding <pre>{isValid}</pre>
+					Add Holding
 				</div>
 
 				<FormContextProvider
