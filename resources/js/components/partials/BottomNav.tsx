@@ -1,14 +1,17 @@
 import React from 'react';
 import { InertiaLink } from '@inertiajs/inertia-react';
 
+import CashIcon from '../ui-elements/icons/CashIcon';
+import LibraryIcon from '../ui-elements/icons/LibraryIcon';
+
 type BottomNavType = {
     type?: 'default' | 'inverted',
 }
 
 const BottomNav: React.FC<BottomNavType> = ({ type = 'default' }) => {
 	const menu = [
-		{ icon: '', label: 'Holdings', link: '/dashboard' },
-		{ icon: '', label: 'Income', link: '/income' },
+		{ icon: <LibraryIcon className="w-5 h-5" />, label: 'Holdings', link: '/dashboard' },
+		{ icon: <CashIcon className="w-5 h-5" />, label: 'Income', link: '/income' },
 	];
 
 	const getStyles = (name: string) => {
