@@ -50,7 +50,7 @@ const CustomInput: React.FC<CustomInputProps> = ({
 				id={labelId}
 				className={`w-full p-2 mt-2 border rounded outline-none ${
 					!error
-						? 'border-gray-200 focus:border-primary'
+						? 'border-gray-300 focus:border-primary'
 						: 'border-red-600'
 				}`}
 				type={type}
