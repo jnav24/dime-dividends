@@ -1,6 +1,5 @@
 import React from 'react';
 
-// @ts-ignore
 import Logo from '../../../assets/logo.png';
 
 const TopNav = () => {

@@ -1,8 +1,6 @@
 import React from 'react';
 
-// @ts-ignore
 import logoImage from '../../../assets/logo_1.png';
-// @ts-ignore
 import onboardImage from '../../../assets/onboard_bg_1-1.jpg';
 
 type GuestProps = {
