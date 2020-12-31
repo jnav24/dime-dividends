@@ -1,11 +1,17 @@
 import React from 'react';
 
 type ModalType = {
+    handleShowModal: (e: boolean) => void,
+    persistent?: boolean,
     show: boolean,
 }
 
-const Modal: React.FC<ModalType> = ({ children, show }) => {
-    const closeModal = () => {};
+const Modal: React.FC<ModalType> = ({ children, handleShowModal, persistent = false, show }) => {
+    const closeModal = () => {
+        if (!persistent) {
+            handleShowModal(false);
+        }
+    };
 
     return (
         <>
