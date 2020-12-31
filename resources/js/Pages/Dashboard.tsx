@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import AddIcon from '../components/ui-elements/icons/AddIcon';
 import Auth from './layouts/Auth';
@@ -11,6 +11,8 @@ import HoldingsModal from '../components/modals/HoldingsModal';
 import WarningIcon from '../components/ui-elements/icons/WarningIcon';
 
 const Dashboard = () => {
+	const [showModal, setShowModal] = useState(false);
+
 	const headers = [
 		'Ticker',
 		'Shares',
@@ -25,7 +27,7 @@ const Dashboard = () => {
 
 	return (
 		<Auth>
-			<HoldingsModal />
+			<HoldingsModal show={showModal} handleShowModal={setShowModal} />
 
 			<div className="w-full relative overflow-hidden">
 				<div className="bg-dark-primary w-full h-full absolute z-20 bg-opacity-90" />
@@ -65,7 +67,7 @@ const Dashboard = () => {
 							<span className="text-gray-400 text-sm mb-4">
 								Click the button to add a holding.
 							</span>
-							<CustomButton color="secondary">
+							<CustomButton color="secondary" handleClick={() => setShowModal(true)}>
 								<AddIcon className="w-4 h-4" />
 								Add Holding
 							</CustomButton>
