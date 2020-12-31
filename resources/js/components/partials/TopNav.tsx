@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import ChevronDownIcon from '../ui-elements/icons/ChevronDownIcon';
 import Logo from '../../../assets/logo.png';
@@ -8,6 +8,15 @@ import { CustomProps } from '../../@types/custom-inertia';
 
 const TopNav = () => {
 	const { user } = usePage().props as CustomProps;
+	const [profileSelected, setProfileSelected] = useState(false);
+
+    const resetSelected = () => {
+        setProfileSelected(false);
+    };
+
+    const toggleSelected = () => {
+        setProfileSelected(!profileSelected);
+    };
 
 	return (
 		<div className="bg-primary px-4 py-3">
@@ -18,10 +27,12 @@ const TopNav = () => {
 
 				<button
 					type="button"
-					className="flex flex-row items-center text-sm border-2 border-primary focus:outline-none transition duration-300 ease rounded-full p-2"
+					className={`flex flex-row items-center text-sm border-2 ${!profileSelected ? 'border-primary' : 'border-white'} focus:outline-none transition duration-300 ease rounded-full p-2`}
 					id="user-menu"
 					aria-label="User menu"
 					aria-haspopup="true"
+                    onBlur={resetSelected}
+                    onClick={toggleSelected}
 				>
 					<span className="rounded-full bg-white">
 						<UserCircleIcon className="h-6 w-6 text-primary" />
