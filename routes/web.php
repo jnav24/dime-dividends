@@ -29,6 +29,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
+
+    Route::get('/search/{ticker}', [\App\Http\Controllers\HoldingsController::class, 'searchByTicker']);
 });
 
 require __DIR__.'/auth.php';
