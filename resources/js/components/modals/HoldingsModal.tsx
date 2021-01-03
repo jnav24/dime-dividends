@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
+import CustomAutocomplete from '../ui-elements/form/CustomAutocomplete';
 import CustomButton from '../ui-elements/form/CustomButton';
 import CustomInput from '../ui-elements/form/CustomInput';
 import FormContextProvider from '../ui-elements/form/FormContextProvider';
@@ -10,24 +12,74 @@ type HoldingsModalType = {
 	show: boolean;
 };
 
+type AutocompleteLabelType = {
+    name: string;
+    company: string;
+}
+
+const AutocompleteLabel: React.FC<AutocompleteLabelType> = ({ name, company}) => {
+    return (
+        <>
+            <span className="font-bold mr-4">{name}</span>
+            <span className="text-sm">{company}</span>
+        </>
+    );
+}
+
 const HoldingsModal: React.FC<HoldingsModalType> = ({
 	handleShowModal,
 	show,
 }) => {
+	const [tickerItems, setTickerItems] = useState([]);
 	const [isValid, setIsValid] = useState(false);
 	const [shares, setShares] = useState('');
 	const [sharePrice, setSharePrice] = useState('');
 	const [ticker, setTicker] = useState('');
-	const closeModal = () => {};
+	const [tickerTimer, setTickerTimer] = useState<null | ReturnType<typeof setTimeout>>(null);
 
 	useEffect(() => {
-		return () => {
+		if (!show) {
 			setTicker('');
 			setShares('');
 			setSharePrice('');
 			setIsValid(false);
-		};
-	}, []);
+		}
+	}, [show]);
+
+	const handleUpdateTicker = (e: string) => {
+		if (tickerTimer) {
+			clearTimeout(tickerTimer);
+		}
+
+		if (e.trim().length && e.toLowerCase() !== ticker.toLowerCase()) {
+            setTickerTimer(setTimeout(() => {
+				axios({
+					method: 'GET',
+					url: `/search/${e}`,
+				}).then((response) => {
+					setTickerItems(
+						response.data.map(
+							(item: { name: string; content: string }) => ({
+								label: <AutocompleteLabel name={item.name} company={item.content} />,
+								value: item.name,
+							})
+						)
+					);
+				});
+			}, 1000));
+		} else {
+		    setTickerItems([]);
+        }
+
+        setTicker(e);
+	};
+
+	const handleSelectAutocomplete = (e: string) => {
+        setTickerItems([]);
+        if (e !== ticker) {
+            handleUpdateTicker(e);
+        }
+    };
 
 	return (
 		<Modal handleShowModal={handleShowModal} show={show}>
@@ -41,8 +93,10 @@ const HoldingsModal: React.FC<HoldingsModalType> = ({
 					handleUpdateValid={setIsValid}
 				>
 					<div className="py-4 px-2">
-						<CustomInput
-							handleUpdateInput={setTicker}
+						<CustomAutocomplete
+                            handleSelectAutocomplete={handleSelectAutocomplete}
+							handleUpdateInput={handleUpdateTicker}
+							items={tickerItems}
 							label="Ticker"
 							rules={['required']}
 							value={ticker}

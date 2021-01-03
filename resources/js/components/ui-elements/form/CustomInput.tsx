@@ -6,6 +6,7 @@ import { FormContext } from './FormContextProvider';
 type CustomInputProps = {
 	handleUpdateInput: (value: string) => void;
 	label: string;
+	onBlur?: boolean,
 	rules?: Record<string, string> | string[];
 	type?: string;
 	value: string;
@@ -14,6 +15,7 @@ type CustomInputProps = {
 const CustomInput: React.FC<CustomInputProps> = ({
 	handleUpdateInput,
 	label,
+    onBlur = true,
 	rules,
 	type = 'text',
 	value,
@@ -57,7 +59,13 @@ const CustomInput: React.FC<CustomInputProps> = ({
 				value={value}
 				autoComplete={type !== 'password' ? 'on' : 'off'}
 				aria-labelledby={labelId}
-				onBlur={updateValue}
+				onBlur={e => {
+				    if (onBlur) {
+                        return updateValue(e);
+                    }
+
+				    return null;
+                }}
 				onInput={updateValue}
 			/>
 			{error && <span className="text-sm text-red-600">{error}</span>}
