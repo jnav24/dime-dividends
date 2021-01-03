@@ -13,7 +13,7 @@ const HoldingsSummary: React.FC<HoldingsSummaryType> = ({ handleShowModal }) => 
 			<div className="flex flex-row justify-between items-center border-b border-gray-400 pt-5 pb-6">
 				<div className="flex flex-row items-end">
 					<h2 className="text-gray-100 font-header text-5xl mr-2 tracking-tight">
-						$1,200
+						$0
 					</h2>
 					<p className="text-gray-100 font-header text-lg">
 						Annual Income
@@ -31,7 +31,7 @@ const HoldingsSummary: React.FC<HoldingsSummaryType> = ({ handleShowModal }) => 
 						Dividend Yield
 					</p>
 					<p className="text-gray-100 font-header text-3xl mr-2 tracking-tight">
-						6.35%
+						0.00%
 					</p>
 				</div>
 
@@ -40,7 +40,7 @@ const HoldingsSummary: React.FC<HoldingsSummaryType> = ({ handleShowModal }) => 
 						Projected Monthly Income
 					</p>
 					<p className="text-gray-100 font-header text-3xl mr-2 tracking-tight">
-						$100.00
+						$0.00
 					</p>
 				</div>
 
@@ -49,7 +49,7 @@ const HoldingsSummary: React.FC<HoldingsSummaryType> = ({ handleShowModal }) => 
 						Average Monthly Income
 					</p>
 					<p className="text-gray-100 font-header text-3xl mr-2 tracking-tight">
-						$46.37
+						$0.00
 					</p>
 				</div>
 
@@ -58,7 +58,7 @@ const HoldingsSummary: React.FC<HoldingsSummaryType> = ({ handleShowModal }) => 
 						Top Performing Stock
 					</p>
 					<p className="text-gray-100 font-header text-3xl mr-2 tracking-tight">
-						MO
+						--
 					</p>
 				</div>
 			</div>
