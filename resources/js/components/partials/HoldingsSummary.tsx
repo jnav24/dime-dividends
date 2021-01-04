@@ -37,7 +37,7 @@ const HoldingsSummary: React.FC<HoldingsSummaryType> = ({ handleShowModal }) => 
 
 				<div>
 					<p className="text-gray-100 font-header text-sm">
-						Projected Monthly Income
+						Portfolio Value
 					</p>
 					<p className="text-gray-100 font-header text-3xl mr-2 tracking-tight">
 						$0.00
