@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Inertia } from '@inertiajs/inertia';
 
 import AddIcon from '../components/ui-elements/icons/AddIcon';
 import Auth from './layouts/Auth';
@@ -10,7 +11,11 @@ import HoldingsSummary from '../components/partials/HoldingsSummary';
 import HoldingsModal from '../components/modals/HoldingsModal';
 import WarningIcon from '../components/ui-elements/icons/WarningIcon';
 
-const Dashboard = () => {
+type DashboardType = {
+    holdings: any[],
+}
+
+const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 	const [showModal, setShowModal] = useState(false);
 
 	const headers = [
@@ -25,9 +30,19 @@ const Dashboard = () => {
 	];
 	const data: any[] = [];
 
+	const addHolding = async (holding: {
+        ticker: string;
+        shares: string;
+        sharePrice: string;
+    }) => {
+	    await Inertia.post('/add-holding', holding);
+    };
+
+	console.log(holdings);
+
 	return (
 		<Auth>
-			<HoldingsModal show={showModal} handleShowModal={setShowModal} />
+			<HoldingsModal show={showModal} handleShowModal={setShowModal} handleAddHolding={addHolding} />
 
 			<div className="w-full relative overflow-hidden">
 				<div className="bg-dark-primary w-full h-full absolute z-20 bg-opacity-90" />
