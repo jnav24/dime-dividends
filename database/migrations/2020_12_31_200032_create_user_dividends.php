@@ -17,7 +17,8 @@ class CreateUserDividends extends Migration
             $table->id();
             $table->integer('user_id', false, true);
             $table->integer('dividend_id', false, true);
-            $table->integer('quantity', false, true);
+            $table->integer('quantity', false, true)->default(0);
+            $table->float('portfolio_value')->default(0.00);
             $table->timestamps();
 
             $table->foreign('user_id')
