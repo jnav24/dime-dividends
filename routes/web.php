@@ -26,9 +26,8 @@ Route::group(['middleware' => 'auth'], function () {
         })->name('income');
     });
 
-    Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [\App\Http\Controllers\HoldingsController::class, 'index'])->name('dashboard');
+    Route::post('/add-holding', [\App\Http\Controllers\HoldingsController::class, 'store'])->name('add-holding');
 
     Route::get('/search/{ticker}', [\App\Http\Controllers\HoldingsController::class, 'searchByTicker']);
 });
