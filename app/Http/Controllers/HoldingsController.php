@@ -13,10 +13,14 @@ class HoldingsController extends Controller
 {
     public function index(): \Inertia\Response
     {
-        $holdings = UserDividend::with(['dividend'])->where('user_id', auth()->user()->id)->get();
+        $holdings = UserDividend::where('user_id', auth()->user()->id)->get();
 
         return Inertia::render('Dashboard', [
-            'holdings' => $holdings,
+            'holdings' => $holdings->map(function ($holding) {
+                return [
+                        'portfolio_value' => $holding->portfolio_value,
+                    ] + $holding->dividend->toArray();
+            }),
         ]);
     }
 
