@@ -16,65 +16,79 @@ const HoldingsSummary: React.FC<HoldingsSummaryType> = ({
 }) => {
 	const { formatDollar } = useCurrency();
 
-	const [portfolioValue, setPortfolioValue] = useState(0.00);
-	const [dividendYield, setDividendYield] = useState(0.00);
-	const [incomeValue, setIncomeValue] = useState(0.00);
+	const [portfolioValue, setPortfolioValue] = useState(0.0);
+	const [dividendYield, setDividendYield] = useState(0.0);
+	const [incomeValue, setIncomeValue] = useState(0.0);
 	const [mostShares, setMostShares] = useState('');
 	const [highestReturn, setHighestReturn] = useState('');
 
-    const frequency = {
-        annually: 1,
-        biannually: 2,
-        monthly: 12,
-        quarterly: 4,
-    };
+	const frequency = {
+		annually: 1,
+		biannually: 2,
+		monthly: 12,
+		quarterly: 4,
+	};
 
 	useEffect(() => {
-		let portfolio = 0.00;
-        const delim = '/';
-		let divYield = 0.00;
-		let income = 0.00;
+		let portfolio = 0.0;
+		const delim = '/';
+		let divYield = 0.0;
+		let income = 0.0;
 		let topShares = '--';
 		let topReturn = '--';
 
-        const calculateTopShare = (val: string, name: string, volume: string | number) => {
-            if (!val.includes(delim)) {
-                return `${name} ${delim} ${volume}`;
-            }
+		const calculateTopShare = (
+			val: string,
+			name: string,
+			volume: string | number
+		) => {
+			if (!val.includes(delim)) {
+				return `${name} ${delim} ${volume}`;
+			}
 
-            const [ticker, amount] = val.split(delim);
+			const [ticker, amount] = val.split(delim);
 
-            if (+volume > +amount) {
-                return `${name} ${delim} ${volume}`;
-            }
+			if (+volume > +amount) {
+				return `${name} ${delim} ${volume}`;
+			}
 
-            return `${ticker} ${delim} ${amount}`;
-        };
+			return `${ticker} ${delim} ${amount}`;
+		};
 
-        const setDollar = (value: string) => {
-            let volume = '';
-            const [ticker, amount] = value.split(delim);
+		const setDollar = (value: string) => {
+			let volume = '';
+			const [ticker, amount] = value.split(delim);
 
-            if (amount) {
-                volume = formatDollar(amount.trim());
-            }
+			if (amount) {
+				volume = formatDollar(amount.trim());
+			}
 
-            return `${ticker} ${delim} $${(volume)}`;
-        };
+			return `${ticker} ${delim} $${volume}`;
+		};
 
 		holdings.map((holding) => {
 			portfolio += +holding.portfolio_value;
 			divYield += +holding.yield;
 			income += +holding.amount_per_share + +holding.quantity;
-			topShares = calculateTopShare(topShares, holding.ticker, holding.quantity);
-            topReturn = calculateTopShare(topReturn, holding.ticker, (holding.amount_per_share * (frequency as any)[holding.frequency]) * holding.quantity);
+			topShares = calculateTopShare(
+				topShares,
+				holding.ticker,
+				holding.quantity
+			);
+			topReturn = calculateTopShare(
+				topReturn,
+				holding.ticker,
+				holding.amount_per_share *
+					(frequency as any)[holding.frequency] *
+					holding.quantity
+			);
 		});
 
 		setDividendYield(Number((divYield / holdings.length).toFixed(2)));
 		setPortfolioValue(portfolio);
-        setIncomeValue(income);
-        setMostShares(topShares);
-        setHighestReturn(setDollar(topReturn));
+		setIncomeValue(income);
+		setMostShares(topShares);
+		setHighestReturn(setDollar(topReturn));
 	}, [holdings]);
 
 	return (
@@ -121,7 +135,7 @@ const HoldingsSummary: React.FC<HoldingsSummaryType> = ({
 						Most Shares
 					</p>
 					<p className="text-gray-100 font-header text-3xl mr-2 tracking-tight">
-                        {mostShares}
+						{mostShares}
 					</p>
 				</div>
 
@@ -130,7 +144,7 @@ const HoldingsSummary: React.FC<HoldingsSummaryType> = ({
 						Highest Return
 					</p>
 					<p className="text-gray-100 font-header text-3xl mr-2 tracking-tight">
-                        {highestReturn}
+						{highestReturn}
 					</p>
 				</div>
 			</div>
