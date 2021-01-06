@@ -13,30 +13,27 @@ import HoldingsModal from '../components/modals/HoldingsModal';
 import WarningIcon from '../components/ui-elements/icons/WarningIcon';
 import useUtils from '../hooks/useUtils';
 import useCurrency from '../hooks/useCurrency';
+import { HoldingType } from '../@types/holdings';
+import useTimestamp from '../hooks/useTimestamp';
 
 type DashboardType = {
     holdings: HoldingType[],
 }
 
-type HoldingType = {
-    amount_per_share: number,
-    frequency: string,
-    id: number,
-    name: string,
-    next_payout_at: string,
-    payout_ratio: number,
-    portfolio_value: number,
-    quantity: number,
-    ticker: string,
-    yield: number,
-}
-
 const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
     const { ucFirst } = useUtils();
     const { formatDollar } = useCurrency();
+    const { formatDate } = useTimestamp();
 
 	const [data, setData] = useState<Array<HoldingType>>([]);
 	const [showModal, setShowModal] = useState(false);
+
+	const frequency = {
+	    annually: 1,
+        biannually: 2,
+        monthly: 12,
+        quarterly: 4,
+    };
 
 	const headers = [
 		'Ticker',
@@ -44,8 +41,8 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 		'Portfolio Value',
 		'Dividend Yield',
 		'Payout Per Share',
-		'Annual Payout',
-		'Current Price',
+		'Annual Income',
+		'Next Payout',
 		'Payout Frequency',
         '',
 	];
@@ -83,7 +80,7 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 
 				<div className="relative z-30">
 					<AuthContent>
-						<HoldingsSummary handleShowModal={setShowModal} />
+						<HoldingsSummary holdings={data} handleShowModal={setShowModal} />
 					</AuthContent>
 				</div>
 			</div>
@@ -122,7 +119,7 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 					)}
 
                     {data.map(holding => (
-                        <div className={`grid grid-cols-${headers.length+1} gap-2 text-gray-700 py-4 items-center text-sm bg-white hover:bg-primary hover:bg-opacity-20`} key={holding.id}>
+                        <div className={`grid grid-cols-${headers.length+1} gap-2 text-gray-700 py-4 items-center text-sm bg-white hover:bg-primary hover:bg-opacity-10`} key={holding.id}>
                             <div className="pl-2 col-span-2">
                                 <p className="font-body font-bold text-lg">{holding.ticker}</p>
                                 <p>{holding.name}</p>
@@ -145,11 +142,11 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
                             </div>
 
                             <div className="pl-2">
-                                {holding.quantity}
+                                ${formatDollar((holding.amount_per_share * (frequency as any)[holding.frequency]) * holding.quantity)}
                             </div>
 
                             <div className="pl-2">
-                                {holding.quantity}
+                                {formatDate('MM/dd/yyyy', holding.next_payout_at)}
                             </div>
 
                             <div className="pl-2">
