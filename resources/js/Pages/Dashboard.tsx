@@ -10,6 +10,8 @@ import CustomButton from '../components/ui-elements/form/CustomButton';
 import HoldingsSummary from '../components/partials/HoldingsSummary';
 import HoldingsModal from '../components/modals/HoldingsModal';
 import WarningIcon from '../components/ui-elements/icons/WarningIcon';
+import useUtils from '../hooks/useUtils';
+import useCurrency from '../hooks/useCurrency';
 
 type DashboardType = {
     holdings: HoldingType[],
@@ -29,22 +31,30 @@ type HoldingType = {
 }
 
 const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
+    const { ucFirst } = useUtils();
+    const { formatDollar } = useCurrency();
+
 	const [data, setData] = useState<Array<HoldingType>>([]);
 	const [showModal, setShowModal] = useState(false);
 
 	const headers = [
 		'Ticker',
 		'Shares',
+		'Portfolio Value',
 		'Dividend Yield',
 		'Payout Per Share',
 		'Annual Payout',
 		'Current Price',
-		'Annual Income',
 		'Payout Frequency',
 	];
 
+	const sortHoldings = (data: Array<HoldingType>) => {
+	    return data.sort((a, b) => a.ticker.localeCompare(b.ticker))
+    };
+
 	useEffect(() => {
-        setData(holdings);
+	    console.log(holdings);
+        setData(sortHoldings(holdings));
     }, []);
 
 	const addHolding = async (holding: {
@@ -54,10 +64,10 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
     }) => {
 	    const { data: { data, success } } = await axios.post('/add-holding', holding);
 	    if (success) {
-            setData([
+            setData(sortHoldings([
                 ...holdings,
                 data,
-            ]);
+            ]));
         }
     };
 
@@ -77,14 +87,13 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 			</div>
 
 			<AuthContent>
-				<h1>Dashboard</h1>
 				<Card className="overflow-hidden">
 					<div
-						className={`grid gap-2 grid-cols-2 sm:grid-cols-${headers.length} bg-gray-200`}
+						className={`grid gap-2 grid-cols-2 sm:grid-cols-${headers.length+1} bg-gray-200`}
 					>
 						{headers.map((header, int) => (
 							<p
-								className="pl-2 py-4 text-gray-700 text-sm"
+								className={`pl-2 py-4 text-gray-700 text-sm ${int === 0 ? 'col-span-2' : ''}`}
 								key={int}
 							>
 								{header}
@@ -110,13 +119,42 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 						</div>
 					)}
 
-					{!!data.length && (
-						<div
-							className={`grid grid-cols-${headers.length} gap-2 text-gray-700 py-4 even:bg-gray-100 items-center text-sm`}
-						>
-							hello!
-						</div>
-					)}
+                    {data.map(holding => (
+                        <div className={`grid grid-cols-${headers.length+1} gap-2 text-gray-700 py-4 items-center text-sm bg-white hover:bg-gray-900`} key={holding.id}>
+                            <div className="pl-2 col-span-2">
+                                <p className="font-body font-bold text-lg">{holding.ticker}</p>
+                                <p>{holding.name}</p>
+                            </div>
+
+                            <div className="pl-2">
+                                {holding.quantity}
+                            </div>
+
+                            <div className="pl-2">
+                                ${formatDollar(holding.portfolio_value)}
+                            </div>
+
+                            <div className="pl-2">
+                                {holding.yield}%
+                            </div>
+
+                            <div className="pl-2">
+                                ${formatDollar(holding.amount_per_share)}
+                            </div>
+
+                            <div className="pl-2">
+                                {holding.quantity}
+                            </div>
+
+                            <div className="pl-2">
+                                {holding.quantity}
+                            </div>
+
+                            <div className="pl-2">
+                                {ucFirst(holding.frequency)}
+                            </div>
+                        </div>
+                    ))}
 				</Card>
 			</AuthContent>
 		</Auth>
