@@ -46,7 +46,15 @@ class SeekingAlphaService
         $response = Http::withHeaders([
             'Content-Type' => 'application/json'
         ])->get("{$this->domain}api/v3/symbol_data?{$query}");
-        return $this->setHoldingsData($response->json()['data'][0]['attributes']);
+        $data = $response->json()['data'];
+
+        if (empty($data)) {
+            return null;
+        }
+
+        return $this->setHoldingsData([
+            'id' => $data[0]['id'],
+        ] + $data[0]['attributes']);
     }
 
     public function getUpcomingDividends(string $ticker)

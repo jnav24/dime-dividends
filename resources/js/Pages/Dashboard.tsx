@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Inertia } from '@inertiajs/inertia';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
 import AddIcon from '../components/ui-elements/icons/AddIcon';
 import Auth from './layouts/Auth';
@@ -12,10 +12,24 @@ import HoldingsModal from '../components/modals/HoldingsModal';
 import WarningIcon from '../components/ui-elements/icons/WarningIcon';
 
 type DashboardType = {
-    holdings: any[],
+    holdings: HoldingType[],
+}
+
+type HoldingType = {
+    amount_per_share: number,
+    frequency: string,
+    id: number,
+    name: string,
+    next_payout_at: string,
+    payout_ratio: number,
+    portfolio_value: number,
+    quantity: number,
+    ticker: string,
+    yield: number,
 }
 
 const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
+	const [data, setData] = useState<Array<HoldingType>>([]);
 	const [showModal, setShowModal] = useState(false);
 
 	const headers = [
@@ -28,17 +42,24 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 		'Annual Income',
 		'Payout Frequency',
 	];
-	const data: any[] = [];
+
+	useEffect(() => {
+        setData(holdings);
+    }, []);
 
 	const addHolding = async (holding: {
         ticker: string;
         shares: string;
         sharePrice: string;
     }) => {
-	    await Inertia.post('/add-holding', holding);
+	    const { data: { data, success } } = await axios.post('/add-holding', holding);
+	    if (success) {
+            setData([
+                ...holdings,
+                data,
+            ]);
+        }
     };
-
-	console.log(holdings);
 
 	return (
 		<Auth>

@@ -18,13 +18,14 @@ class HoldingsController extends Controller
         return Inertia::render('Dashboard', [
             'holdings' => $holdings->map(function ($holding) {
                 return [
+                        'quantity' => $holding->quantity,
                         'portfolio_value' => $holding->portfolio_value,
                     ] + $holding->dividend->toArray();
             }),
         ]);
     }
 
-    public function store(Request $request, SeekingAlphaService $seekingAlphaService)
+    public function store(Request $request, SeekingAlphaService $seekingAlphaService): \Illuminate\Http\JsonResponse
     {
         $validated = $request->validate([
             'ticker' => 'required',
@@ -54,7 +55,14 @@ class HoldingsController extends Controller
         $userDividend->portfolio_value = (float)$validated['sharePrice'] * (int)$validated['shares'];
         $userDividend->quantity = (int)$validated['shares'];
         $userDividend->save();
-        return response()->json(['success' => true]);
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'quantity' => $userDividend->quantity,
+                'portfolio_value' => $userDividend->portfolio_value,
+            ] + $dividend->toArray(),
+        ]);
     }
 
     public function searchByTicker(SeekingAlphaService $seekingAlphaService, $ticker): array
