@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Dividend;
 use App\Models\UserDividend;
+use App\Services\SeekingAlphaService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use Illuminate\Support\Facades\Http;
 
 class HoldingsController extends Controller
 {
@@ -18,9 +20,41 @@ class HoldingsController extends Controller
         ]);
     }
 
-    public function searchByTicker($ticker): array
+    public function store(Request $request, SeekingAlphaService $seekingAlphaService)
     {
-        $response = Http::get('https://seekingalpha.com/api/common/ac/search?limit=5&symbols=1&term=' . $ticker);
-        return $response->json()['symbols'] ?? [];
+        $validated = $request->validate([
+            'ticker' => 'required',
+            'shares' => 'required',
+            'sharePrice' => 'required',
+        ]);
+
+        $dividend = Dividend::where('ticker', $validated['ticker'])->first();
+
+        if (empty($dividend)) {
+            $data = $seekingAlphaService->getHoldingDetails($validated['ticker']);
+
+            $dividend = new Dividend;
+            $dividend->ticker = $data['ticker'];
+            $dividend->name = $data['name'];
+            $dividend->yield = $data['yield'];
+            $dividend->amount_per_share = $data['amount-per-share'];
+            $dividend->payout_ratio = $data['payout-ratio'];
+            $dividend->frequency = strtolower($data['frequency']);
+            $dividend->next_payout_at = Carbon::createFromFormat('Y-m-d', $data['next-payout']);
+            $dividend->save();
+        }
+
+        $userDividend = new UserDividend();
+        $userDividend->user_id = auth()->user()->id;
+        $userDividend->dividend_id = $dividend->id;
+        $userDividend->portfolio_value = (float)$validated['sharePrice'] * (int)$validated['shares'];
+        $userDividend->quantity = (int)$validated['shares'];
+        $userDividend->save();
+        return response()->json(['success' => true]);
+    }
+
+    public function searchByTicker(SeekingAlphaService $seekingAlphaService, $ticker): array
+    {
+        return $seekingAlphaService->searchHoldingByTicker($ticker);
     }
 }
