@@ -14,7 +14,10 @@ type HoldingsModalType = {
 		sharePrice: string;
 	}) => void;
 	handleShowModal: (e: boolean) => void;
+	quantity?: string;
+	price?: string;
 	show: boolean;
+	tickerSymbol?: string;
 };
 
 type AutocompleteLabelType = {
@@ -37,16 +40,26 @@ const AutocompleteLabel: React.FC<AutocompleteLabelType> = ({
 const HoldingsModal: React.FC<HoldingsModalType> = ({
 	handleAddHolding,
 	handleShowModal,
+	quantity = '',
+	price = '',
 	show,
+	tickerSymbol = '',
 }) => {
+    const [editMode, setEditMode] = useState(false);
 	const [tickerItems, setTickerItems] = useState([]);
 	const [isValid, setIsValid] = useState(false);
-	const [shares, setShares] = useState('');
-	const [sharePrice, setSharePrice] = useState('');
-	const [ticker, setTicker] = useState('');
+	const [shares, setShares] = useState(quantity);
+	const [sharePrice, setSharePrice] = useState(price);
+	const [ticker, setTicker] = useState(tickerSymbol);
 	const [tickerTimer, setTickerTimer] = useState<null | ReturnType<
 		typeof setTimeout
 	>>(null);
+
+	useEffect(() => {
+	    if (shares.trim().length || sharePrice.trim().length || ticker.trim().length) {
+            setEditMode(true);
+        }
+    }, []);
 
 	useEffect(() => {
 		if (!show) {
@@ -103,7 +116,7 @@ const HoldingsModal: React.FC<HoldingsModalType> = ({
 		<Modal handleShowModal={handleShowModal} show={show}>
 			<div className="w-100">
 				<div className="bg-gray-100 pl-2 py-2 text-2xl text-gray-700 font-header">
-					Add Holding
+                    {editMode ? 'Edit' : 'Add'} Holding
 				</div>
 
 				<FormContextProvider

@@ -7,6 +7,7 @@ import AuthContent from './layouts/AuthContent';
 import BannerImage from '../../assets/banner_user_profile.jpg';
 import Card from '../components/ui-elements/card/Card';
 import CustomButton from '../components/ui-elements/form/CustomButton';
+import EditIcon from '../components/ui-elements/icons/EditIcon';
 import HoldingsSummary from '../components/partials/HoldingsSummary';
 import HoldingsModal from '../components/modals/HoldingsModal';
 import WarningIcon from '../components/ui-elements/icons/WarningIcon';
@@ -46,6 +47,7 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 		'Annual Payout',
 		'Current Price',
 		'Payout Frequency',
+        '',
 	];
 
 	const sortHoldings = (data: Array<HoldingType>) => {
@@ -120,7 +122,7 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 					)}
 
                     {data.map(holding => (
-                        <div className={`grid grid-cols-${headers.length+1} gap-2 text-gray-700 py-4 items-center text-sm bg-white hover:bg-gray-900`} key={holding.id}>
+                        <div className={`grid grid-cols-${headers.length+1} gap-2 text-gray-700 py-4 items-center text-sm bg-white hover:bg-primary hover:bg-opacity-20`} key={holding.id}>
                             <div className="pl-2 col-span-2">
                                 <p className="font-body font-bold text-lg">{holding.ticker}</p>
                                 <p>{holding.name}</p>
@@ -152,6 +154,12 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 
                             <div className="pl-2">
                                 {ucFirst(holding.frequency)}
+                            </div>
+
+                            <div className="text-center">
+                                <CustomButton fab color="secondary">
+                                    <EditIcon className="w-4 h-4" />
+                                </CustomButton>
                             </div>
                         </div>
                     ))}
