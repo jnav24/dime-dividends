@@ -11,6 +11,6 @@ class UserDividend extends Model
 
     public function dividend(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
-        return $this->hasOne(UserDividend::class);
+        return $this->hasOne(Dividend::class, 'id', 'dividend_id');
     }
 }
