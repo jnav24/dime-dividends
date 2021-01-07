@@ -69,7 +69,7 @@ const HoldingsSummary: React.FC<HoldingsSummaryType> = ({
 		holdings.map((holding) => {
 			portfolio += +holding.portfolio_value;
 			divYield += +holding.yield;
-			income += +holding.amount_per_share + +holding.quantity;
+			income += ((frequency as any)[holding.frequency] * +holding.amount_per_share) * +holding.quantity;
 			topShares = calculateTopShare(
 				topShares,
 				holding.ticker,

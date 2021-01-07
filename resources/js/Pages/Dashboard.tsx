@@ -64,30 +64,39 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
     }, [selectedData]);
 
 	const addHolding = async (holding: HoldingSubmitType) => {
-		const {
-			data: { data, success },
-		} = await axios.post('/add-holding', holding);
-		if (success) {
-			setData(sortHoldings([...holdings, data]));
+        const response = await axios.post('/add-holding', holding);
+		if (response.data.success) {
+			setData(sortHoldings([...data, response.data.data]));
 		}
 	};
 
 	const updateHolding = async (holding: HoldingSubmitType) => {
-        const response = await axios.post(`/update-holding/${holding.id}`, {
-            ticker: holding.ticker,
-            shares: holding.shares,
-        });
+        const tempData: Array<HoldingType> = JSON.parse(JSON.stringify(data));
+        const index = tempData.findIndex(dt => dt.id === holding.id);
 
-        if (response.data.success) {
-            const tempData: Array<HoldingType> = JSON.parse(JSON.stringify(data));
-            const index = tempData.findIndex(dt => dt.id === holding.id);
+        if (index > -1) {
+            const indexData = tempData[index];
+            const shareDifference = Math.abs(+indexData.quantity - +holding.shares);
+            let newPrice = 0.00;
 
-            if (index > -1) {
-                tempData[index].ticker = holding.ticker;
-                tempData[index].quantity = +holding.shares;
+            if (indexData.quantity > +holding.shares) {
+                newPrice = (+holding.sharePrice * shareDifference) + indexData.portfolio_value;
+            } else {
+                newPrice = Math.abs((+holding.sharePrice * shareDifference) - indexData.portfolio_value);
             }
 
-            setData(tempData);
+            const response = await axios.post(`/update-holding/${holding.id}`, {
+                ticker: holding.ticker,
+                shares: holding.shares,
+                sharePrice: newPrice,
+            });
+
+            if (response.data.success) {
+                indexData.ticker = holding.ticker;
+                indexData.quantity = +holding.shares;
+                indexData.portfolio_value = newPrice;
+                setData(tempData);
+            }
         }
     };
 

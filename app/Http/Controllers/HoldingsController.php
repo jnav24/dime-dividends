@@ -72,6 +72,7 @@ class HoldingsController extends Controller
         $validated = $request->validate([
             'ticker' => 'required',
             'shares' => 'required',
+            'sharePrice' => 'required',
         ]);
 
         $userDividend = UserDividend::where('user_id', auth()->user()->id)->where('id', $id)->first();
@@ -80,6 +81,7 @@ class HoldingsController extends Controller
         if ($userDividend && $dividend) {
             $userDividend->dividend_id = $dividend->id;
             $userDividend->quantity = (int)$validated['shares'];
+            $userDividend->portfolio_value = (int)$validated['sharePrice'];
             $userDividend->save();
             return response()->json(['success' => true]);
         }

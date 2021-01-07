@@ -95,7 +95,7 @@ const HoldingsModal: React.FC<HoldingsModalType> = ({
 							)
 						);
 					});
-				}, 1000)
+				}, 250)
 			);
 		} else {
 			setTickerItems([]);
@@ -135,18 +135,16 @@ const HoldingsModal: React.FC<HoldingsModalType> = ({
 						<CustomInput
 							handleUpdateInput={setShares}
 							label="Shares"
-							rules={['required', 'numeric']}
+							rules={['required', 'float:2']}
 							value={shares}
 						/>
 
-                        {!editMode && (
-                            <CustomInput
-                                handleUpdateInput={setSharePrice}
-                                label="Cost Per Share"
-                                rules={['required', 'float:2']}
-                                value={sharePrice}
-                            />
-                        )}
+                        <CustomInput
+                            handleUpdateInput={setSharePrice}
+                            label="Cost Per Share"
+                            rules={['required', 'float:2']}
+                            value={sharePrice}
+                        />
 					</div>
 
 					<div className="bg-gray-100 flex-row flex justify-end py-2">
