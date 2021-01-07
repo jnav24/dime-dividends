@@ -1,8 +1,9 @@
 import React, { ReactNode, useEffect, useRef } from 'react';
 import { InertiaLink } from '@inertiajs/inertia-react';
+import { Inertia } from '@inertiajs/inertia';
 
 type SubNavItemsType = {
-	items: Array<{ to: string; icon: ReactNode; label: string }>;
+	items: Array<{ to: string; icon: ReactNode; label: string; method: string; }>;
 	showNav: boolean;
 };
 
@@ -31,14 +32,30 @@ const SubNavItems: React.FC<SubNavItemsType> = ({ items, showNav }) => {
             ref={subNavElement}
 		>
 			{items.map((item, int) => (
-				<InertiaLink
-					href={item.to}
-					key={int}
-					className="px-2 py-3 flex flex-row justify-start items-center text-sm text-gray-600 hover:bg-gray-200"
-				>
-					{item.icon}
-					<span className="ml-2">{item.label}</span>
-				</InertiaLink>
+			    <div key={int}>
+                    {item.method !== 'post' && (
+                        <InertiaLink
+                            href={item.to}
+                            className="px-2 py-3 flex flex-row justify-start items-center text-sm text-gray-600 hover:bg-gray-200"
+                        >
+                            {item.icon}
+                            <span className="ml-2">{item.label}</span>
+                        </InertiaLink>
+                    )}
+
+                    {item.method === 'post' && (
+                        <button
+                            type="button"
+                            className="px-2 py-3 flex flex-row justify-start items-center text-sm text-gray-600 hover:bg-gray-200 w-full"
+                            onClick={() => {
+                                Inertia.post(item.to);
+                            }}
+                        >
+                            {item.icon}
+                            <span className="ml-2">{item.label}</span>
+                        </button>
+                    )}
+                </div>
 			))}
 		</div>
 	);

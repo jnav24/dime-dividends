@@ -16,6 +16,7 @@ const TopNav = () => {
 		{
 			to: '/logout',
 			label: 'Logout',
+            method: 'post',
 			icon: <LogoutIcon className="w-4 h-4" />,
 		},
 	];
