@@ -15,7 +15,7 @@ use Inertia\Inertia;
 */
 
 Route::get('/', function () {
-    return Inertia::render('Home');
+    return Inertia::render('auth/Login');
 });
 
 Route::group(['middleware' => 'auth'], function () {

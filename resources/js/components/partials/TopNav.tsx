@@ -27,7 +27,7 @@ const TopNav = () => {
 					<img src={Logo} alt="" className="h-10 crisp" />
 				</div>
 
-				<div className="relative">
+				<div className="relative z-100">
 					<button
 						type="button"
 						className={`flex flex-row items-center text-sm border-2 ${
