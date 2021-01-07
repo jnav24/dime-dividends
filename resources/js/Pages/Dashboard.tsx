@@ -13,27 +13,28 @@ import HoldingsModal from '../components/modals/HoldingsModal';
 import WarningIcon from '../components/ui-elements/icons/WarningIcon';
 import useUtils from '../hooks/useUtils';
 import useCurrency from '../hooks/useCurrency';
-import { HoldingType } from '../@types/holdings';
+import { HoldingType, HoldingSubmitType } from '../@types/holdings';
 import useTimestamp from '../hooks/useTimestamp';
 
 type DashboardType = {
-    holdings: HoldingType[],
-}
+	holdings: HoldingType[];
+};
 
 const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
-    const { ucFirst } = useUtils();
-    const { formatDollar } = useCurrency();
-    const { formatDate } = useTimestamp();
+	const { ucFirst } = useUtils();
+	const { formatDollar } = useCurrency();
+	const { formatDate } = useTimestamp();
 
 	const [data, setData] = useState<Array<HoldingType>>([]);
+	const [selectedData, setSelectedData] = useState<HoldingType>({} as HoldingType);
 	const [showModal, setShowModal] = useState(false);
 
 	const frequency = {
-	    annually: 1,
-        biannually: 2,
-        monthly: 12,
-        quarterly: 4,
-    };
+		annually: 1,
+		biannually: 2,
+		monthly: 12,
+		quarterly: 4,
+	};
 
 	const headers = [
 		'Ticker',
@@ -44,35 +45,71 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 		'Annual Income',
 		'Next Payout',
 		'Payout Frequency',
-        '',
+		'',
 	];
 
 	const sortHoldings = (data: Array<HoldingType>) => {
-	    return data.sort((a, b) => a.ticker.localeCompare(b.ticker))
-    };
+		return data.sort((a, b) => a.ticker.localeCompare(b.ticker));
+	};
 
 	useEffect(() => {
-	    console.log(holdings);
-        setData(sortHoldings(holdings));
-    }, []);
+		console.log(holdings);
+		setData(sortHoldings(holdings));
+	}, []);
 
-	const addHolding = async (holding: {
-        ticker: string;
-        shares: string;
-        sharePrice: string;
-    }) => {
-	    const { data: { data, success } } = await axios.post('/add-holding', holding);
-	    if (success) {
-            setData(sortHoldings([
-                ...holdings,
-                data,
-            ]));
+	useEffect(() => {
+	    if (Object.keys(selectedData).length) {
+            setShowModal(true);
+        }
+    }, [selectedData]);
+
+	const addHolding = async (holding: HoldingSubmitType) => {
+		const {
+			data: { data, success },
+		} = await axios.post('/add-holding', holding);
+		if (success) {
+			setData(sortHoldings([...holdings, data]));
+		}
+	};
+
+	const updateHolding = async (holding: HoldingSubmitType) => {
+        const response = await axios.post(`/update-holding/${holding.id}`, {
+            ticker: holding.ticker,
+            shares: holding.shares,
+        });
+
+        if (response.data.success) {
+            const tempData: Array<HoldingType> = JSON.parse(JSON.stringify(data));
+            const index = tempData.findIndex(dt => dt.id === holding.id);
+
+            if (index > -1) {
+                tempData[index].ticker = holding.ticker;
+                tempData[index].quantity = +holding.shares;
+            }
+
+            setData(tempData);
+        }
+    };
+
+	const submitHolding = (holding: HoldingSubmitType) => {
+	    if (!holding.id) {
+	        addHolding(holding);
+        } else {
+	        updateHolding(holding);
         }
     };
 
 	return (
 		<Auth>
-			<HoldingsModal show={showModal} handleShowModal={setShowModal} handleAddHolding={addHolding} />
+			<HoldingsModal
+                data={selectedData}
+				show={showModal}
+				handleShowModal={e => {
+                    setShowModal(e);
+                    setSelectedData({} as HoldingType);
+                }}
+				handleAddHolding={submitHolding}
+			/>
 
 			<div className="w-full relative overflow-hidden">
 				<div className="bg-dark-primary w-full h-full absolute z-20 bg-opacity-90" />
@@ -80,7 +117,10 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 
 				<div className="relative z-30">
 					<AuthContent>
-						<HoldingsSummary holdings={data} handleShowModal={setShowModal} />
+						<HoldingsSummary
+							holdings={data}
+							handleShowModal={setShowModal}
+						/>
 					</AuthContent>
 				</div>
 			</div>
@@ -88,11 +128,15 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 			<AuthContent>
 				<Card className="overflow-hidden">
 					<div
-						className={`grid gap-2 grid-cols-2 sm:grid-cols-${headers.length+1} bg-gray-200`}
+						className={`grid gap-2 grid-cols-2 sm:grid-cols-${
+							headers.length + 1
+						} bg-gray-200`}
 					>
 						{headers.map((header, int) => (
 							<p
-								className={`pl-2 py-4 text-gray-700 text-sm ${int === 0 ? 'col-span-2' : ''}`}
+								className={`pl-2 py-4 text-gray-700 text-sm ${
+									int === 0 ? 'col-span-2' : ''
+								}`}
 								key={int}
 							>
 								{header}
@@ -111,55 +155,69 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 							<span className="text-gray-400 text-sm mb-4">
 								Click the button to add a holding.
 							</span>
-							<CustomButton color="secondary" handleClick={() => setShowModal(true)}>
+							<CustomButton
+								color="secondary"
+								handleClick={() => setShowModal(true)}
+							>
 								<AddIcon className="w-4 h-4" />
 								Add Holding
 							</CustomButton>
 						</div>
 					)}
 
-                    {data.map(holding => (
-                        <div className={`grid grid-cols-${headers.length+1} gap-2 text-gray-700 py-4 items-center text-sm bg-white hover:bg-primary hover:bg-opacity-10`} key={holding.id}>
-                            <div className="pl-2 col-span-2">
-                                <p className="font-body font-bold text-lg">{holding.ticker}</p>
-                                <p>{holding.name}</p>
-                            </div>
+					{data.map((holding) => (
+						<div
+							className={`grid grid-cols-${
+								headers.length + 1
+							} gap-2 text-gray-700 py-4 items-center text-sm bg-white hover:bg-primary hover:bg-opacity-10`}
+							key={holding.id}
+						>
+							<div className="pl-2 col-span-2">
+								<p className="font-body font-bold text-lg">
+									{holding.ticker}
+								</p>
+								<p>{holding.name}</p>
+							</div>
 
-                            <div className="pl-2">
-                                {holding.quantity}
-                            </div>
+							<div className="pl-2">{holding.quantity}</div>
 
-                            <div className="pl-2">
-                                ${formatDollar(holding.portfolio_value)}
-                            </div>
+							<div className="pl-2">
+								${formatDollar(holding.portfolio_value)}
+							</div>
 
-                            <div className="pl-2">
-                                {holding.yield}%
-                            </div>
+							<div className="pl-2">{holding.yield}%</div>
 
-                            <div className="pl-2">
-                                ${formatDollar(holding.amount_per_share)}
-                            </div>
+							<div className="pl-2">
+								${formatDollar(holding.amount_per_share)}
+							</div>
 
-                            <div className="pl-2">
-                                ${formatDollar((holding.amount_per_share * (frequency as any)[holding.frequency]) * holding.quantity)}
-                            </div>
+							<div className="pl-2">
+								$
+								{formatDollar(
+									holding.amount_per_share *
+										(frequency as any)[holding.frequency] *
+										holding.quantity
+								)}
+							</div>
 
-                            <div className="pl-2">
-                                {formatDate('MM/dd/yyyy', holding.next_payout_at)}
-                            </div>
+							<div className="pl-2">
+								{formatDate(
+									'MM/dd/yyyy',
+									holding.next_payout_at
+								)}
+							</div>
 
-                            <div className="pl-2">
-                                {ucFirst(holding.frequency)}
-                            </div>
+							<div className="pl-2">
+								{ucFirst(holding.frequency)}
+							</div>
 
-                            <div className="text-center">
-                                <CustomButton fab color="secondary">
-                                    <EditIcon className="w-4 h-4" />
-                                </CustomButton>
-                            </div>
-                        </div>
-                    ))}
+							<div className="text-center">
+								<CustomButton fab color="secondary" handleClick={() => setSelectedData(holding)}>
+									<EditIcon className="w-4 h-4" />
+								</CustomButton>
+							</div>
+						</div>
+					))}
 				</Card>
 			</AuthContent>
 		</Auth>

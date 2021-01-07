@@ -28,6 +28,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/dashboard', [\App\Http\Controllers\HoldingsController::class, 'index'])->name('dashboard');
     Route::post('/add-holding', [\App\Http\Controllers\HoldingsController::class, 'store'])->name('add-holding');
+    Route::post('/update-holding/{id}', [\App\Http\Controllers\HoldingsController::class, 'update'])->name('update-holding');
 
     Route::get('/search/{ticker}', [\App\Http\Controllers\HoldingsController::class, 'searchByTicker']);
 });

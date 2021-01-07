@@ -6,18 +6,13 @@ import CustomButton from '../ui-elements/form/CustomButton';
 import CustomInput from '../ui-elements/form/CustomInput';
 import FormContextProvider from '../ui-elements/form/FormContextProvider';
 import Modal from './Modal';
+import { HoldingType, HoldingSubmitType } from '../../@types/holdings';
 
 type HoldingsModalType = {
-	handleAddHolding: (holding: {
-		ticker: string;
-		shares: string;
-		sharePrice: string;
-	}) => void;
+	handleAddHolding: (holding: HoldingSubmitType) => void;
 	handleShowModal: (e: boolean) => void;
-	quantity?: string;
-	price?: string;
 	show: boolean;
-	tickerSymbol?: string;
+	data: HoldingType;
 };
 
 type AutocompleteLabelType = {
@@ -38,28 +33,32 @@ const AutocompleteLabel: React.FC<AutocompleteLabelType> = ({
 };
 
 const HoldingsModal: React.FC<HoldingsModalType> = ({
+    data,
 	handleAddHolding,
 	handleShowModal,
-	quantity = '',
-	price = '',
 	show,
-	tickerSymbol = '',
 }) => {
-    const [editMode, setEditMode] = useState(false);
+	const [editMode, setEditMode] = useState(false);
 	const [tickerItems, setTickerItems] = useState([]);
 	const [isValid, setIsValid] = useState(false);
-	const [shares, setShares] = useState(quantity);
-	const [sharePrice, setSharePrice] = useState(price);
-	const [ticker, setTicker] = useState(tickerSymbol);
+	const [shares, setShares] = useState('');
+	const [sharePrice, setSharePrice] = useState('');
+	const [ticker, setTicker] = useState('');
 	const [tickerTimer, setTickerTimer] = useState<null | ReturnType<
 		typeof setTimeout
 	>>(null);
 
 	useEffect(() => {
-	    if (shares.trim().length || sharePrice.trim().length || ticker.trim().length) {
-            setEditMode(true);
+		if (Object.keys(data).length) {
+		    setShares(data.quantity.toString());
+            setSharePrice('0.00');
+            setTicker(data.ticker);
+            setIsValid(!!data.ticker.length && !!data.quantity);
+			setEditMode(true);
+		} else {
+		    setEditMode(false);
         }
-    }, []);
+	}, [data]);
 
 	useEffect(() => {
 		if (!show) {
@@ -116,7 +115,7 @@ const HoldingsModal: React.FC<HoldingsModalType> = ({
 		<Modal handleShowModal={handleShowModal} show={show}>
 			<div className="w-100">
 				<div className="bg-gray-100 pl-2 py-2 text-2xl text-gray-700 font-header">
-                    {editMode ? 'Edit' : 'Add'} Holding
+					{editMode ? 'Edit' : 'Add'} Holding
 				</div>
 
 				<FormContextProvider
@@ -140,12 +139,14 @@ const HoldingsModal: React.FC<HoldingsModalType> = ({
 							value={shares}
 						/>
 
-						<CustomInput
-							handleUpdateInput={setSharePrice}
-							label="Cost Per Share"
-							rules={['required', 'float:2']}
-							value={sharePrice}
-						/>
+                        {!editMode && (
+                            <CustomInput
+                                handleUpdateInput={setSharePrice}
+                                label="Cost Per Share"
+                                rules={['required', 'float:2']}
+                                value={sharePrice}
+                            />
+                        )}
 					</div>
 
 					<div className="bg-gray-100 flex-row flex justify-end py-2">
@@ -157,11 +158,17 @@ const HoldingsModal: React.FC<HoldingsModalType> = ({
 						</CustomButton>
 						<CustomButton
 							handleClick={() => {
-								handleAddHolding({
-									ticker,
-									shares,
-									sharePrice,
-								});
+							    const submitData: HoldingSubmitType = {
+                                    ticker,
+                                    shares,
+                                    sharePrice,
+                                };
+
+							    if (editMode) {
+							        submitData.id = data.id;
+                                }
+
+								handleAddHolding(submitData);
 								handleShowModal(false);
 							}}
 							color="secondary"

@@ -11,6 +11,13 @@ declare namespace Holdings {
         ticker: string,
         yield: number,
     }
+
+    type HoldingSubmitType = {
+        id?: number;
+        ticker: string;
+        shares: string;
+        sharePrice: string;
+    }
 }
 
 export = Holdings;
