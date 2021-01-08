@@ -34,9 +34,14 @@ const CustomInput: React.FC<CustomInputProps> = ({
 	useEffect(() => {
 		if (label && !!formContext && Object.keys(formContext).length) {
             setLabelId(formContext.setupForm(label, rules));
-			formContext.validateField(labelId, value, true);
 		}
 	}, []);
+
+	useEffect(() => {
+	    if (labelId.length) {
+            formContext.validateField(labelId, value, true);
+        }
+    }, [labelId]);
 
 	const updateValue = (inputValue: BaseSyntheticEvent) => {
 		if (formContext && Object.keys(formContext).length) {
