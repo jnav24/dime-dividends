@@ -79,10 +79,10 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
             const shareDifference = Math.abs(+indexData.quantity - +holding.shares);
             let newPrice = 0.00;
 
-            if (indexData.quantity > +holding.shares) {
-                newPrice = (+holding.sharePrice * shareDifference) + indexData.portfolio_value;
+            if (+indexData.quantity < +holding.shares) {
+                newPrice = (+holding.sharePrice * shareDifference) + +indexData.portfolio_value;
             } else {
-                newPrice = Math.abs((+holding.sharePrice * shareDifference) - indexData.portfolio_value);
+                newPrice = Math.abs((+holding.sharePrice * shareDifference) - +indexData.portfolio_value);
             }
 
             const response = await axios.post(`/update-holding/${holding.id}`, {
@@ -95,7 +95,7 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
                 indexData.ticker = holding.ticker;
                 indexData.quantity = +holding.shares;
                 indexData.portfolio_value = newPrice;
-                setData(tempData);
+                setTimeout(() => setData(tempData), 250);
             }
         }
     };
