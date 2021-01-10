@@ -44,7 +44,7 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 		'Payout Per Share',
 		'Annual Income',
 		'Next Payout',
-		'Payout Frequency',
+		'Frequency',
 		'',
 	];
 

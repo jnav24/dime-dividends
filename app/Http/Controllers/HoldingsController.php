@@ -54,7 +54,7 @@ class HoldingsController extends Controller
         $userDividend->user_id = auth()->user()->id;
         $userDividend->dividend_id = $dividend->id;
         $userDividend->portfolio_value = (float)$validated['sharePrice'] * (int)$validated['shares'];
-        $userDividend->quantity = (int)$validated['shares'];
+        $userDividend->quantity = (float)$validated['shares'];
         $userDividend->save();
 
         return response()->json([
