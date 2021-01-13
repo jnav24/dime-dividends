@@ -15,7 +15,7 @@ class SeekingAlphaService
             'frequency' => $data['divDistribution'],
             'name' => $data['companyName'],
             'next-payout' => $data['dividends'][0]['payDate'],
-            'payout-ratio' => $data['payoutRatio'],
+            'payout-ratio' => $data['payoutRatio'] ?? 0.00,
             'ticker' => $data['id'],
             'yield' => $data['divYield'],
         ];
@@ -46,7 +46,7 @@ class SeekingAlphaService
         $response = Http::withHeaders([
             'Content-Type' => 'application/json'
         ])->get("{$this->domain}api/v3/symbol_data?{$query}");
-        $data = $response->json()['data'];
+        $data = $response->json()['data'] ?? null;
 
         if (empty($data)) {
             return null;
