@@ -26,12 +26,14 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 	const { formatDate } = useTimestamp();
 
 	const [data, setData] = useState<Array<HoldingType>>([]);
-	const [selectedData, setSelectedData] = useState<HoldingType>({} as HoldingType);
+	const [selectedData, setSelectedData] = useState<HoldingType>(
+		{} as HoldingType
+	);
 	const [showModal, setShowModal] = useState(false);
 
 	const frequency = {
 		annually: 1,
-		biannually: 2,
+        semiannual: 2,
 		monthly: 12,
 		quarterly: 4,
 	};
@@ -58,71 +60,78 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 	}, []);
 
 	useEffect(() => {
-	    if (Object.keys(selectedData).length) {
-            setShowModal(true);
-        }
-    }, [selectedData]);
+		if (Object.keys(selectedData).length) {
+			setShowModal(true);
+		}
+	}, [selectedData]);
 
 	const addHolding = async (holding: HoldingSubmitType) => {
-        const response = await axios.post('/add-holding', holding);
+		const response = await axios.post('/add-holding', holding);
 		if (response.data.success) {
 			setData(sortHoldings([...data, response.data.data]));
 		}
 	};
 
 	const updateHolding = async (holding: HoldingSubmitType) => {
-        const tempData: Array<HoldingType> = JSON.parse(JSON.stringify(data));
-        const index = tempData.findIndex(dt => dt.id === holding.id);
+		const tempData: Array<HoldingType> = JSON.parse(JSON.stringify(data));
+		const index = tempData.findIndex((dt) => dt.id === holding.id);
 
-        if (index > -1) {
-            const indexData = tempData[index];
-            const shareDifference = Math.abs(+indexData.quantity - +holding.shares);
-            let newPrice = 0.00;
+		if (index > -1) {
+			const indexData = tempData[index];
+			const shareDifference = Math.abs(
+				+indexData.quantity - +holding.shares
+			);
+			let newPrice = 0.0;
 
-            if (+indexData.quantity < +holding.shares) {
-                newPrice = (+holding.sharePrice * shareDifference) + +indexData.portfolio_value;
-            } else {
-                newPrice = Math.abs((+holding.sharePrice * shareDifference) - +indexData.portfolio_value);
-            }
+			if (+indexData.quantity < +holding.shares) {
+				newPrice =
+					+holding.sharePrice * shareDifference +
+					+indexData.portfolio_value;
+			} else {
+				newPrice = Math.abs(
+					+holding.sharePrice * shareDifference -
+						+indexData.portfolio_value
+				);
+			}
 
-            const response = await axios.post(`/update-holding/${holding.id}`, {
-                ticker: holding.ticker,
-                shares: holding.shares,
-                sharePrice: newPrice,
-            });
+			const response = await axios.post(`/update-holding/${holding.id}`, {
+				ticker: holding.ticker,
+				shares: holding.shares,
+				sharePrice: newPrice,
+			});
 
-            if (response.data.success) {
-                indexData.ticker = holding.ticker;
-                indexData.quantity = +holding.shares;
-                indexData.portfolio_value = newPrice;
-                setTimeout(() => setData(tempData), 250);
-            }
-        }
-    };
+			if (response.data.success) {
+				indexData.ticker = holding.ticker;
+				indexData.quantity = +holding.shares;
+				indexData.portfolio_value = newPrice;
+				setTimeout(() => setData(tempData), 250);
+			}
+		}
+	};
 
 	const submitHolding = (holding: HoldingSubmitType) => {
-	    if (!holding.id) {
-	        addHolding(holding);
-        } else {
-	        updateHolding(holding);
-        }
-    };
+		if (!holding.id) {
+			addHolding(holding);
+		} else {
+			updateHolding(holding);
+		}
+	};
 
 	return (
 		<Auth>
 			<HoldingsModal
-                data={selectedData}
+				data={selectedData}
 				show={showModal}
-				handleShowModal={e => {
-                    setShowModal(e);
-                    setSelectedData({} as HoldingType);
-                }}
+				handleShowModal={(e) => {
+					setShowModal(e);
+					setSelectedData({} as HoldingType);
+				}}
 				handleAddHolding={submitHolding}
 			/>
 
 			<div className="w-full relative overflow-hidden">
 				<div className="bg-dark-primary w-full h-full absolute z-20 bg-opacity-90" />
-				<img src={BannerImage} className="absolute z-10" />
+				<img src={BannerImage} className="w-full h-full object-fill absolute z-10" />
 
 				<div className="relative z-30">
 					<AuthContent>
@@ -221,7 +230,11 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 							</div>
 
 							<div className="text-center">
-								<CustomButton fab color="secondary" handleClick={() => setSelectedData(holding)}>
+								<CustomButton
+									fab
+									color="secondary"
+									handleClick={() => setSelectedData(holding)}
+								>
 									<EditIcon className="w-4 h-4" />
 								</CustomButton>
 							</div>

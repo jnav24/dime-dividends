@@ -24,7 +24,7 @@ const HoldingsSummary: React.FC<HoldingsSummaryType> = ({
 
 	const frequency = {
 		annually: 1,
-		biannually: 2,
+        semiannual: 2,
 		monthly: 12,
 		quarterly: 4,
 	};
