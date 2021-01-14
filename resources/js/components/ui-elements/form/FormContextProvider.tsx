@@ -244,13 +244,13 @@ const FormContextProvider: React.FC<FormContextProviderProps> = ({
 	};
 
 	const validateSubmit = (e: BaseSyntheticEvent) => {
-	    if (valid && handleSubmit instanceof Function) {
-            return handleSubmit(e);
-        }
+		if (valid && handleSubmit instanceof Function) {
+			return handleSubmit(e);
+		}
 
-        e.preventDefault();
-	    return validateAllFields();
-    };
+		e.preventDefault();
+		return validateAllFields();
+	};
 
 	return (
 		<FormContext.Provider
