@@ -130,6 +130,7 @@ const HoldingsModal: React.FC<HoldingsModalType> = ({
 							label="Ticker"
 							rules={['required']}
 							value={ticker}
+                            readOnly={!!ticker.length}
 						/>
 
 						<CustomInput

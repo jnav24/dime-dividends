@@ -16,6 +16,7 @@ type CustomInputProps = {
 	rules?: Record<string, string> | string[];
 	type?: string;
 	value: string;
+	readOnly?: boolean;
 };
 
 const CustomInput: React.FC<CustomInputProps> = ({
@@ -25,6 +26,7 @@ const CustomInput: React.FC<CustomInputProps> = ({
 	rules,
 	type = 'text',
 	value,
+	readOnly = false,
 }) => {
 	const formContext = useContext(FormContext);
 	const [labelId, setLabelId] = useState('');
@@ -66,6 +68,8 @@ const CustomInput: React.FC<CustomInputProps> = ({
 			<input
 				id={labelId}
 				className={`w-full p-2 mt-2 border rounded outline-none ${
+					readOnly ? 'bg-gray-200 text-gray-500' : 'bg-white'
+				} ${
 					!error
 						? 'border-gray-300 focus:border-primary'
 						: 'border-red-600'
@@ -81,7 +85,8 @@ const CustomInput: React.FC<CustomInputProps> = ({
 
 					return null;
 				}}
-				onInput={updateValue}
+				onChange={updateValue}
+				readOnly={readOnly}
 			/>
 			{error && <span className="text-sm text-red-600">{error}</span>}
 		</div>

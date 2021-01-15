@@ -9,6 +9,7 @@ type CustomAutocompleteType = {
 	label: string;
 	rules?: Record<string, string> | string[];
 	value: string;
+	readOnly?: boolean;
 };
 
 const CustomAutocomplete: React.FC<CustomAutocompleteType> = ({
@@ -18,6 +19,7 @@ const CustomAutocomplete: React.FC<CustomAutocompleteType> = ({
 	label,
 	rules,
 	value,
+	readOnly = false,
 }) => {
 	const autocompleteElement: React.MutableRefObject<null | HTMLDivElement> = useRef(
 		null
@@ -42,6 +44,7 @@ const CustomAutocomplete: React.FC<CustomAutocompleteType> = ({
 				onBlur={false}
 				rules={rules}
 				value={value}
+				readOnly={readOnly}
 			/>
 
 			<div
