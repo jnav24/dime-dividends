@@ -18,7 +18,7 @@ Route::get('/', function () {
     return Inertia::render('auth/Login');
 });
 
-Route::group(['middleware' => 'auth'], function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::group(['middleware' => 'password.confirm'], function () {
         // Any pages you need a confirm password view to show.
         Route::get('/income', function () {
