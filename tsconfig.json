@@ -69,5 +69,9 @@
   },
   "exclude": [
     "node_modules"
+  ],
+  "include": [
+    "resources/js/**/*.ts",
+    "resources/js/**/*.tsx"
   ]
 }
