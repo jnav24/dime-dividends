@@ -17,6 +17,7 @@ type CustomInputProps = {
 	type?: string;
 	value: string;
 	readOnly?: boolean;
+	validateOnInit?: boolean;
 };
 
 const CustomInput: React.FC<CustomInputProps> = ({
@@ -27,6 +28,7 @@ const CustomInput: React.FC<CustomInputProps> = ({
 	type = 'text',
 	value,
 	readOnly = false,
+    validateOnInit = false,
 }) => {
 	const formContext = useContext(FormContext);
 	const [labelId, setLabelId] = useState('');
@@ -51,13 +53,13 @@ const CustomInput: React.FC<CustomInputProps> = ({
 
 	useEffect(() => {
 		if (labelId.length) {
-			formContext.validateField(labelId, value, true);
+			formContext.validateField(labelId, value, validateOnInit);
 		}
 	}, [labelId]);
 
 	const updateValue = (inputValue: BaseSyntheticEvent) => {
-		if (formContext && Object.keys(formContext).length) {
-			formContext.validateField(labelId, inputValue.target.value);
+		if (formContext && !!Object.keys(formContext).length) {
+			formContext.validateField(labelId, inputValue.target.value, true);
 		}
 		handleUpdateInput(inputValue.target.value);
 	};

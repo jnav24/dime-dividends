@@ -215,7 +215,7 @@ const FormContextProvider: React.FC<FormContextProviderProps> = ({
 			},
 		});
 
-		if (!initialize) {
+		if (initialize) {
 			dispatch({
 				type: FormElement.UPDATE_FORM_ELEMENT,
 				payload: {

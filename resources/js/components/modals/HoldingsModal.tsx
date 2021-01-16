@@ -130,7 +130,7 @@ const HoldingsModal: React.FC<HoldingsModalType> = ({
 							label="Ticker"
 							rules={['required']}
 							value={ticker}
-                            readOnly={!!ticker.length}
+                            readOnly={editMode}
 						/>
 
 						<CustomInput
@@ -138,6 +138,7 @@ const HoldingsModal: React.FC<HoldingsModalType> = ({
 							label="Shares"
 							rules={['required', 'float:2']}
 							value={shares}
+                            validateOnInit={editMode}
 						/>
 
                         <CustomInput
@@ -145,6 +146,7 @@ const HoldingsModal: React.FC<HoldingsModalType> = ({
                             label="Cost Per Share"
                             rules={['required', 'float:2']}
                             value={sharePrice}
+                            validateOnInit={editMode}
                         />
 					</div>
 
