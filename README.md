@@ -4,6 +4,10 @@ Dime Dividend Tracker is a tool to track your dividend income, set dividend inco
 
 **Status:** in development
 
+## Screenshots
+
+![screenshot: dashboard page](https://dimebudget.app/images/dividends_dashboard_screenshot.png)
+
 ## Requirements
 
 This project is using Node version 14.15.1, Php 8 and PostgreSQL 13.1. Please ensure you are using the most compatible versions of these languages on your server to ensure the app runs smoothly. If you have Docker installed, then you can just run the following:
