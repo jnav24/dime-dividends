@@ -4,7 +4,7 @@ import { Inertia } from '@inertiajs/inertia';
 import Alert from '../../components/ui-elements/Alert';
 import CustomButton from '../../components/ui-elements/form/CustomButton';
 import Guest from '../layouts/Guest';
-import { InertiaLink, usePage } from '@inertiajs/inertia-react';
+import { usePage } from '@inertiajs/inertia-react';
 import { CustomProps } from '../../@types/custom-inertia';
 
 const VerifyEmail = () => {
