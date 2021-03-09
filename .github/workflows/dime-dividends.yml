@@ -1,0 +1,33 @@
+name: Dime Dividends
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: self-hosted
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Validate composer.json and composer.lock
+      run: composer validate --strict
+
+    - name: Install dependencies
+      run: composer install --prefer-dist --no-progress --no-suggest
+      
+    - name: Node Setup
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+        
+    - name: Installing Dependencies
+      run: npm install
+      
+    - name: Ensure Tailwind is installed properly
+      run: npm install -D tailwindcss@npm:@tailwindcss/postcss7-compat @tailwindcss/postcss7-compat postcss@^7 autoprefixer@^9
+      
+    - name: Build node for production
+      run: npm run prod
