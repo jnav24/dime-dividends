@@ -11,12 +11,20 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    
+    - name: Setup Storage
+      run: |
+        ln -sfn ${{ secrets.STORAGE_SETUP }} storage
 
     - name: Validate composer.json and composer.lock
       run: composer validate --strict
 
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress --no-suggest
+      
+    - name: Setup Env
+      run: |
+        cp ${{ secrets.ENV_SETUP }} $GITHUB_WORKSPACE/.env   
       
     - name: Node Setup
       uses: actions/setup-node@v2
