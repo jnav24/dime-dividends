@@ -20,7 +20,7 @@ class CreateDividends extends Migration
             $table->float('yield');
             $table->float('amount_per_share');
             $table->float('payout_ratio');
-            $table->enum('frequency', ['monthly', 'quarterly', 'annually', 'biannually']);
+            $table->enum('frequency', ['monthly', 'quarterly', 'annually', 'semiannual']);
             $table->timestamp('next_payout_at');
             $table->timestamps();
         });
