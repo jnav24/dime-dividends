@@ -7,7 +7,7 @@ module.exports = {
       './resources/**/*.ts',
     ],
     options: {
-      safelist: [/^grid-cols-/],
+      safelist: [/^(sm:|md:)?grid-cols-/],
     },
   },
   darkMode: false, // or 'media' or 'class'
