@@ -20,7 +20,9 @@ class CreateUserDividends extends Migration
             $table->float('quantity')->default(0.00);
             $table->float('portfolio_value')->default(0.00);
             $table->timestamps();
+        });
 
+        Schema::table('user_dividends', function (Blueprint $table) {
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users')
