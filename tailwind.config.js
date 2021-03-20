@@ -1,10 +1,15 @@
 module.exports = {
-  purge: [
+  purge: {
+    content: [
       './resources/**/*.blade.php',
       './resources/**/*.js',
       './resources/**/*.tsx',
       './resources/**/*.ts',
-  ],
+    ],
+    options: {
+      safelist: [/^grid-cols-/],
+    },
+  },
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
