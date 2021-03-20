@@ -19,7 +19,7 @@ use Illuminate\Notifications\Notifiable;
  * @property DateTime $created_at
  * @property DateTime $updated_at
  */
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use Notifiable;
 

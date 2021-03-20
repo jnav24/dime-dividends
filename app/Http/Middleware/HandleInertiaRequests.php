@@ -44,6 +44,9 @@ class HandleInertiaRequests extends Middleware
                     ? Session::get('errors')->getBag('default')->getMessages()
                     : (object) [];
             },
+            'status' => function () {
+                return Session::get('status') ? Session::get('status') : '';
+            },
             'user' => fn () => Auth::user(),
         ]);
     }
