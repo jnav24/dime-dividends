@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Support\Facades\Log;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -50,6 +51,21 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
-        return parent::render($request, $exception);
+        $response = parent::render($request, $exception);
+
+        if (!app()->environment('local')) {
+            $message = $exception->getMessage();
+
+            if (in_array($response->status(), [500, 503, 404, 403])) {
+                $message = 'Something unexpected has occurred';
+                Log::error('Handler::render - ' . $exception->getMessage());
+            }
+
+            return back()->with([
+                'message' => $message,
+            ]);
+        }
+
+        return $response;
     }
 }

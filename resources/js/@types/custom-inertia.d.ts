@@ -12,6 +12,7 @@ declare namespace CustomInertia {
 
 	interface CustomProps extends PageProps {
 		errors: Record<string, string>;
+		flash: Record<string, string>;
 		status: string;
 		user: AuthUser,
 	}
