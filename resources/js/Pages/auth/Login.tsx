@@ -16,11 +16,15 @@ const Login = () => {
 	const [rememberMe, setRememberMe] = useState('');
 	const [isValid, setIsValid] = useState(false);
 	const [loginErrors, setLoginErrors] = useState<string[]>([]);
-	const { errors } = usePage().props as CustomProps;
+	const { errors, flash } = usePage().props as CustomProps;
 
 	useEffect(() => {
 		setLoginErrors(Object.values(errors));
 	}, [errors]);
+
+    useEffect(() => {
+        setLoginErrors(Object.values(flash));
+    }, [flash]);
 
 	const handleSubmit = async (e: BaseSyntheticEvent) => {
 		e.preventDefault();
