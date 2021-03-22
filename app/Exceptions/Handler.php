@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Support\Facades\Log;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -53,10 +54,11 @@ class Handler extends ExceptionHandler
         $response = parent::render($request, $exception);
 
         if (!app()->environment('local')) {
-            $message = 'The page expired, please try again.';
+            $message = $exception->getMessage();
 
-            if (!in_array($response->status(), [500, 503, 404, 403])) {
-                $message = $exception->getMessage();
+            if (in_array($response->status(), [500, 503, 404, 403])) {
+                $message = 'Something unexpected has occurred';
+                Log::error('Handler::render - ' . $exception->getMessage());
             }
 
             return back()->with([
