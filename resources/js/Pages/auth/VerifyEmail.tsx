@@ -25,6 +25,7 @@ const VerifyEmail = () => {
 	};
 
 	const handleSendVerification = async () => {
+	    // @todo create an alert on success/error. you can check the http status or data.props.status === 'verification-link-sent'
 		await Inertia.post('/email/verification-notification');
 	};
 
