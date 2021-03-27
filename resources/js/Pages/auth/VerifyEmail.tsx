@@ -9,29 +9,36 @@ import { CustomProps } from '../../@types/custom-inertia';
 
 const VerifyEmail = () => {
     const [emailErrors, setEmailErrors] = useState<string[]>([]);
-	const { errors, status } = usePage().props as CustomProps;
+    const [errorType, setErrorType] = useState<'error' | 'success'>('error');
+    const [emailSent, setEmailSent] = useState(false);
+	const { status } = usePage().props as CustomProps;
 
 	useEffect(() => {
-	    console.log(errors);
-	    setEmailErrors(Object.values(errors));
-    }, [errors]);
-
-	useEffect(() => {
-	    console.log(status);
-    }, [status]);
+        if (emailSent) {
+            if (status === 'verification-link-sent') {
+                setEmailErrors(['Email was sent successfully!']);
+                setErrorType('success');
+            } else {
+                setEmailErrors(['Unable to send the email at this time.']);
+                setErrorType('error');
+            }
+        }
+    }, [status, emailSent]);
 
 	const handleLogout = async () => {
 		await Inertia.post('/logout');
 	};
 
 	const handleSendVerification = async () => {
-	    // @todo create an alert on success/error. you can check the http status or data.props.status === 'verification-link-sent'
 		await Inertia.post('/email/verification-notification');
+		setEmailSent(true);
 	};
 
 	return (
 		<Guest>
-            <Alert errors={emailErrors} type="error" />
+            <div className="px-4">
+                <Alert errors={emailErrors} type={errorType} />
+            </div>
 
 			<h1 className="text-center text-2xl text-gray-800 sm:text-gray-600 font-header mb-4">
 				Thanks for signing up!
