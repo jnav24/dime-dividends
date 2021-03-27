@@ -32,9 +32,11 @@ const ResetPassword = () => {
 
 	return (
 		<Guest>
-			<h1>ResetPassword</h1>
+			<article className="px-6 pb-6">
+				<h1 className="text-center text-2xl text-gray-800 sm:text-gray-600 font-header">
+					Reset Password
+				</h1>
 
-			<div className="px-4">
 				<Alert errors={resetErrors} type="error" />
 
 				<FormContextProvider
@@ -69,7 +71,7 @@ const ResetPassword = () => {
 						Reset Button
 					</CustomButton>
 				</FormContextProvider>
-			</div>
+			</article>
 		</Guest>
 	);
 };
