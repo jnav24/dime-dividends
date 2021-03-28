@@ -6,7 +6,7 @@ import Alert from '../../components/ui-elements/Alert';
 import CustomButton from '../../components/ui-elements/form/CustomButton';
 import CustomInput from '../../components/ui-elements/form/CustomInput';
 import FormContextProvider from '../../components/ui-elements/form/FormContextProvider';
-import { usePage } from '@inertiajs/inertia-react';
+import { InertiaLink, usePage } from '@inertiajs/inertia-react';
 import { CustomProps } from '../../@types/custom-inertia';
 
 const ForgotPassword = () => {
@@ -31,8 +31,8 @@ const ForgotPassword = () => {
 	const handleSubmit = async (e: BaseSyntheticEvent) => {
 		e.preventDefault();
 		await Inertia.post('/forgot-password', {
-		    email,
-        });
+			email,
+		});
 	};
 
 	return (
@@ -65,6 +65,15 @@ const ForgotPassword = () => {
 						Email Password Reset Link
 					</CustomButton>
 				</FormContextProvider>
+			</div>
+
+			<div className="mt-6 py-4 px-4 sm:bg-gray-100 flex flex-row justify-center sm:justify-end items-center">
+				<InertiaLink
+					className="text-gray-700 underline text-sm hover:no-underline"
+					href="/login"
+				>
+					Back to Login
+				</InertiaLink>
 			</div>
 		</Guest>
 	);
