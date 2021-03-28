@@ -239,7 +239,7 @@ const FormContextProvider: React.FC<FormContextProviderProps> = ({
 
 	const validateAllFields = () => {
 		for (const [key, obj] of Object.entries(formElements)) {
-			validateField(key, obj.value);
+			validateField(key, obj.value, true);
 		}
 	};
 
