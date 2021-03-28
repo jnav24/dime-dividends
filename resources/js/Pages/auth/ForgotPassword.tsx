@@ -11,13 +11,22 @@ import { CustomProps } from '../../@types/custom-inertia';
 
 const ForgotPassword = () => {
 	const [email, setEmail] = useState('');
-	const [loginErrors, setLoginErrors] = useState<string[]>([]);
+	const [responseErrors, setResponseErrors] = useState<string[]>([]);
 	const [isValid, setIsValid] = useState(false);
-	const { errors } = usePage().props as CustomProps;
+	const [errorType, setErrorType] = useState<'error' | 'success'>('error');
+	const { errors, status } = usePage().props as CustomProps;
 
 	useEffect(() => {
-		setLoginErrors(Object.values(errors));
-	}, [errors]);
+		if (Object.values(errors).length) {
+            setResponseErrors(Object.values(errors));
+            setErrorType('error');
+        }
+
+		if (status.length) {
+            setResponseErrors([status]);
+            setErrorType('success');
+        }
+	}, [errors, status]);
 
 	const handleSubmit = async (e: BaseSyntheticEvent) => {
 		e.preventDefault();
@@ -38,7 +47,7 @@ const ForgotPassword = () => {
 					instructions on resetting your password.
 				</p>
 
-				<Alert errors={loginErrors} type="error" />
+				<Alert errors={responseErrors} type={errorType} />
 
 				<FormContextProvider
 					handleSubmit={handleSubmit}
