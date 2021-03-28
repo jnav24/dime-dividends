@@ -56,6 +56,8 @@ class HandleInertiaRequests extends Middleware
             'status' => function () {
                 return Session::get('status') ? Session::get('status') : '';
             },
+            'request' => fn () => $request,
+            'reset_password_token' => fn () => $request->route('token') ?? '',
             'user' => fn () => Auth::user(),
         ]);
     }

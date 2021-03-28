@@ -10,12 +10,12 @@ import Guest from '../layouts/Guest';
 import { CustomProps } from '../../@types/custom-inertia';
 
 const ResetPassword = () => {
-	const [email, setEmail] = useState('');
+    const { errors, request, reset_password_token } = usePage().props as CustomProps;
+    const [email, setEmail] = useState(request?.email ?? '');
 	const [password, setPassword] = useState('');
 	const [confirmPassword, setConfirmPassword] = useState('');
 	const [isValid, setIsValid] = useState(false);
 	const [resetErrors, setResetErrors] = useState<string[]>([]);
-	const { errors } = usePage().props as CustomProps;
 
 	useEffect(() => {
 		setResetErrors(Object.values(errors));
@@ -27,6 +27,7 @@ const ResetPassword = () => {
 			email,
 			password,
 			password_confirmation: confirmPassword,
+            token: reset_password_token,
 		});
 	};
 

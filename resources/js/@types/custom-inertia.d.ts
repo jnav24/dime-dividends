@@ -14,6 +14,8 @@ declare namespace CustomInertia {
 		errors: Record<string, string>;
 		flash: Record<string, string>;
 		status: string;
+		request: Record<string, string>;
+        reset_password_token: string;
 		user: AuthUser,
 	}
 }
