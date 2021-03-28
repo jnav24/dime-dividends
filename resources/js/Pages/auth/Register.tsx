@@ -80,9 +80,16 @@ const Register = () => {
 						value={confirmPassword}
 					/>
 
-					<CustomButton block color="secondary" submit isDisabled={isSubmitting}>
-                        {!isSubmitting && (<span>Register</span>)}
-                        {isSubmitting && <LoadingIcon className="w-6 h-6 text-gray-600 animate-spin" />}
+					<CustomButton
+						block
+						color="secondary"
+						submit
+						isDisabled={isSubmitting}
+					>
+						{!isSubmitting && <span>Register</span>}
+						{isSubmitting && (
+							<LoadingIcon className="w-6 h-6 text-gray-600 animate-spin" />
+						)}
 					</CustomButton>
 				</FormContextProvider>
 			</div>

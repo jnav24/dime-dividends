@@ -15,7 +15,7 @@ const Login = () => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [rememberMe, setRememberMe] = useState('');
-    const [isSubmitting, setIsSubmitting] = useState(false);
+	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [isValid, setIsValid] = useState(false);
 	const [loginErrors, setLoginErrors] = useState<string[]>([]);
 	const { errors, flash } = usePage().props as CustomProps;
@@ -24,19 +24,19 @@ const Login = () => {
 		setLoginErrors(Object.values(errors));
 	}, [errors]);
 
-    useEffect(() => {
-        setLoginErrors(Object.values(flash));
-    }, [flash]);
+	useEffect(() => {
+		setLoginErrors(Object.values(flash));
+	}, [flash]);
 
 	const handleSubmit = async (e: BaseSyntheticEvent) => {
 		e.preventDefault();
-        setIsSubmitting(true);
+		setIsSubmitting(true);
 		await Inertia.post('/login', {
 			email,
 			password,
 			remember: rememberMe === 'checked',
 		});
-        setIsSubmitting(false);
+		setIsSubmitting(false);
 	};
 
 	return (
@@ -76,9 +76,16 @@ const Login = () => {
 						/>
 					</div>
 
-					<CustomButton block color="secondary" submit isDisabled={isSubmitting}>
-                        {!isSubmitting && (<span>Login</span>)}
-                        {isSubmitting && <LoadingIcon className="w-6 h-6 text-gray-600 animate-spin" />}
+					<CustomButton
+						block
+						color="secondary"
+						submit
+						isDisabled={isSubmitting}
+					>
+						{!isSubmitting && <span>Login</span>}
+						{isSubmitting && (
+							<LoadingIcon className="w-6 h-6 text-gray-600 animate-spin" />
+						)}
 					</CustomButton>
 				</FormContextProvider>
 			</div>

@@ -11,11 +11,12 @@ import Guest from '../layouts/Guest';
 import { CustomProps } from '../../@types/custom-inertia';
 
 const ResetPassword = () => {
-    const { errors, request, reset_password_token } = usePage().props as CustomProps;
-    const [email, setEmail] = useState(request?.email ?? '');
+	const { errors, request, reset_password_token } = usePage()
+		.props as CustomProps;
+	const [email, setEmail] = useState(request?.email ?? '');
 	const [password, setPassword] = useState('');
 	const [confirmPassword, setConfirmPassword] = useState('');
-    const [isSubmitting, setIsSubmitting] = useState(false);
+	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [isValid, setIsValid] = useState(false);
 	const [resetErrors, setResetErrors] = useState<string[]>([]);
 
@@ -25,14 +26,14 @@ const ResetPassword = () => {
 
 	const handleSubmit = async (e: BaseSyntheticEvent) => {
 		e.preventDefault();
-        setIsSubmitting(true);
+		setIsSubmitting(true);
 		await Inertia.post('/reset-password', {
 			email,
 			password,
 			password_confirmation: confirmPassword,
-            token: reset_password_token,
+			token: reset_password_token,
 		});
-        setIsSubmitting(false);
+		setIsSubmitting(false);
 	};
 
 	return (
@@ -72,9 +73,16 @@ const ResetPassword = () => {
 						handleUpdateInput={setConfirmPassword}
 					/>
 
-					<CustomButton block color="secondary" submit isDisabled={isSubmitting}>
-                        {!isSubmitting && (<span>Reset Button</span>)}
-                        {isSubmitting && <LoadingIcon className="w-6 h-6 text-gray-600 animate-spin" />}
+					<CustomButton
+						block
+						color="secondary"
+						submit
+						isDisabled={isSubmitting}
+					>
+						{!isSubmitting && <span>Reset Button</span>}
+						{isSubmitting && (
+							<LoadingIcon className="w-6 h-6 text-gray-600 animate-spin" />
+						)}
 					</CustomButton>
 				</FormContextProvider>
 			</article>

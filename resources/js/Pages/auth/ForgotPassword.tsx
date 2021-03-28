@@ -65,9 +65,18 @@ const ForgotPassword = () => {
 						value={email}
 					/>
 
-					<CustomButton block color="secondary" submit isDisabled={isSubmitting}>
-                        {!isSubmitting && (<span>Email Password Reset Link</span>)}
-                        {isSubmitting && <LoadingIcon className="w-6 h-6 text-gray-600 animate-spin" />}
+					<CustomButton
+						block
+						color="secondary"
+						submit
+						isDisabled={isSubmitting}
+					>
+						{!isSubmitting && (
+							<span>Email Password Reset Link</span>
+						)}
+						{isSubmitting && (
+							<LoadingIcon className="w-6 h-6 text-gray-600 animate-spin" />
+						)}
 					</CustomButton>
 				</FormContextProvider>
 			</div>

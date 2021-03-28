@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { Inertia } from '@inertiajs/inertia';
 
 import Alert from '../../components/ui-elements/Alert';
@@ -9,40 +9,40 @@ import { usePage } from '@inertiajs/inertia-react';
 import { CustomProps } from '../../@types/custom-inertia';
 
 const VerifyEmail = () => {
-    const [emailErrors, setEmailErrors] = useState<string[]>([]);
-    const [errorType, setErrorType] = useState<'error' | 'success'>('error');
-    const [emailSent, setEmailSent] = useState(false);
-    const [isSubmitting, setIsSubmitting] = useState(false);
+	const [emailErrors, setEmailErrors] = useState<string[]>([]);
+	const [errorType, setErrorType] = useState<'error' | 'success'>('error');
+	const [emailSent, setEmailSent] = useState(false);
+	const [isSubmitting, setIsSubmitting] = useState(false);
 	const { status } = usePage().props as CustomProps;
 
 	useEffect(() => {
-        if (emailSent) {
-            if (status === 'verification-link-sent') {
-                setEmailErrors(['Email was sent successfully!']);
-                setErrorType('success');
-            } else {
-                setEmailErrors(['Unable to send the email at this time.']);
-                setErrorType('error');
-            }
-        }
-    }, [status, emailSent]);
+		if (emailSent) {
+			if (status === 'verification-link-sent') {
+				setEmailErrors(['Email was sent successfully!']);
+				setErrorType('success');
+			} else {
+				setEmailErrors(['Unable to send the email at this time.']);
+				setErrorType('error');
+			}
+		}
+	}, [status, emailSent]);
 
 	const handleLogout = async () => {
 		await Inertia.post('/logout');
 	};
 
 	const handleSendVerification = async () => {
-        setIsSubmitting(true);
+		setIsSubmitting(true);
 		await Inertia.post('/email/verification-notification');
 		setEmailSent(true);
-        setIsSubmitting(false);
+		setIsSubmitting(false);
 	};
 
 	return (
 		<Guest>
-            <div className="px-4">
-                <Alert errors={emailErrors} type={errorType} />
-            </div>
+			<div className="px-4">
+				<Alert errors={emailErrors} type={errorType} />
+			</div>
 
 			<h1 className="text-center text-2xl text-gray-800 sm:text-gray-600 font-header mb-4">
 				Thanks for signing up!
@@ -60,15 +60,25 @@ const VerifyEmail = () => {
 						block
 						color="secondary"
 						handleClick={handleSendVerification}
-                        isDisabled={isSubmitting}
-                    >
-                        {!isSubmitting && (<span>Resend Verification Email</span>)}
-                        {isSubmitting && <LoadingIcon className="w-6 h-6 text-gray-600 animate-spin" />}
+						isDisabled={isSubmitting}
+					>
+						{!isSubmitting && (
+							<span>Resend Verification Email</span>
+						)}
+						{isSubmitting && (
+							<LoadingIcon className="w-6 h-6 text-gray-600 animate-spin" />
+						)}
 					</CustomButton>
 
-					<CustomButton block handleClick={handleLogout} isDisabled={isSubmitting}>
-                        {!isSubmitting && (<span>Logout</span>)}
-                        {isSubmitting && <LoadingIcon className="w-6 h-6 text-gray-600 animate-spin" />}
+					<CustomButton
+						block
+						handleClick={handleLogout}
+						isDisabled={isSubmitting}
+					>
+						{!isSubmitting && <span>Logout</span>}
+						{isSubmitting && (
+							<LoadingIcon className="w-6 h-6 text-gray-600 animate-spin" />
+						)}
 					</CustomButton>
 				</div>
 			</div>

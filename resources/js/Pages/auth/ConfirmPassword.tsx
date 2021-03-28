@@ -15,7 +15,7 @@ import { CustomProps } from '../../@types/custom-inertia';
 const ConfirmPassword = () => {
 	const [isValid, setIsValid] = useState(false);
 	const [loginErrors, setLoginErrors] = useState<string[]>([]);
-    const [isSubmitting, setIsSubmitting] = useState(false);
+	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [password, setPassword] = useState('');
 	const { errors } = usePage().props as CustomProps;
 
@@ -25,49 +25,55 @@ const ConfirmPassword = () => {
 
 	const handleSubmit = async (e: BaseSyntheticEvent) => {
 		e.preventDefault();
-        setIsSubmitting(true);
+		setIsSubmitting(true);
 		await Inertia.post('/confirm-password', {
 			password,
 		});
-        setIsSubmitting(false);
+		setIsSubmitting(false);
 	};
 
 	return (
 		<Auth>
 			<AuthContent>
 				<div className="flex flex-col items-center">
-                    <h1 className="text-2xl text-gray-800 sm:text-gray-600 font-header mb-6 mt-12">
-                        Confirm password to continue
-                    </h1>
+					<h1 className="text-2xl text-gray-800 sm:text-gray-600 font-header mb-6 mt-12">
+						Confirm password to continue
+					</h1>
 
-                    <p className="text-sm text-center text-gray-600 mb-8 w-100">
-                        This is a secure area of the application. Please confirm
-                        your password before continuing.
-                    </p>
+					<p className="text-sm text-center text-gray-600 mb-8 w-100">
+						This is a secure area of the application. Please confirm
+						your password before continuing.
+					</p>
 
-                    <Card className="w-100 p-4">
-                        <Alert errors={loginErrors} type="error" />
+					<Card className="w-100 p-4">
+						<Alert errors={loginErrors} type="error" />
 
-                        <FormContextProvider
-                            valid={isValid}
-                            handleSubmit={handleSubmit}
-                            handleUpdateValid={setIsValid}
-                        >
-                            <CustomInput
-                                handleUpdateInput={setPassword}
-                                label="Password"
-                                rules={['required']}
-                                type="password"
-                                value={password}
-                            />
+						<FormContextProvider
+							valid={isValid}
+							handleSubmit={handleSubmit}
+							handleUpdateValid={setIsValid}
+						>
+							<CustomInput
+								handleUpdateInput={setPassword}
+								label="Password"
+								rules={['required']}
+								type="password"
+								value={password}
+							/>
 
-                            <CustomButton submit color="secondary" isDisabled={isSubmitting}>
-                                {!isSubmitting && (<span>Confirm</span>)}
-                                {isSubmitting && <LoadingIcon className="w-6 h-6 text-gray-600 animate-spin" />}
-                            </CustomButton>
-                        </FormContextProvider>
-                    </Card>
-                </div>
+							<CustomButton
+								submit
+								color="secondary"
+								isDisabled={isSubmitting}
+							>
+								{!isSubmitting && <span>Confirm</span>}
+								{isSubmitting && (
+									<LoadingIcon className="w-6 h-6 text-gray-600 animate-spin" />
+								)}
+							</CustomButton>
+						</FormContextProvider>
+					</Card>
+				</div>
 			</AuthContent>
 		</Auth>
 	);
