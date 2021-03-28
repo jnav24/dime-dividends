@@ -6,12 +6,14 @@ import Alert from '../../components/ui-elements/Alert';
 import CustomButton from '../../components/ui-elements/form/CustomButton';
 import CustomInput from '../../components/ui-elements/form/CustomInput';
 import FormContextProvider from '../../components/ui-elements/form/FormContextProvider';
-import { usePage } from '@inertiajs/inertia-react';
+import LoadingIcon from '../../components/ui-elements/icons/LoadingIcon';
+import { InertiaLink, usePage } from '@inertiajs/inertia-react';
 import { CustomProps } from '../../@types/custom-inertia';
 
 const ForgotPassword = () => {
 	const [email, setEmail] = useState('');
 	const [responseErrors, setResponseErrors] = useState<string[]>([]);
+	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [isValid, setIsValid] = useState(false);
 	const [errorType, setErrorType] = useState<'error' | 'success'>('error');
 	const { errors, status } = usePage().props as CustomProps;
@@ -30,9 +32,11 @@ const ForgotPassword = () => {
 
 	const handleSubmit = async (e: BaseSyntheticEvent) => {
 		e.preventDefault();
+        setIsSubmitting(true);
 		await Inertia.post('/forgot-password', {
-		    email,
-        });
+			email,
+		});
+        setIsSubmitting(false);
 	};
 
 	return (
@@ -61,10 +65,29 @@ const ForgotPassword = () => {
 						value={email}
 					/>
 
-					<CustomButton block color="secondary" submit>
-						Email Password Reset Link
+					<CustomButton
+						block
+						color="secondary"
+						submit
+						isDisabled={isSubmitting}
+					>
+						{!isSubmitting && (
+							<span>Email Password Reset Link</span>
+						)}
+						{isSubmitting && (
+							<LoadingIcon className="w-6 h-6 text-gray-600 animate-spin" />
+						)}
 					</CustomButton>
 				</FormContextProvider>
+			</div>
+
+			<div className="mt-6 py-4 px-4 sm:bg-gray-100 flex flex-row justify-center sm:justify-end items-center">
+				<InertiaLink
+					className="text-gray-700 underline text-sm hover:no-underline"
+					href="/login"
+				>
+					Back to Login
+				</InertiaLink>
 			</div>
 		</Guest>
 	);

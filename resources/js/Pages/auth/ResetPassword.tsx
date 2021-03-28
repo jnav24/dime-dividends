@@ -6,16 +6,19 @@ import Alert from '../../components/ui-elements/Alert';
 import CustomButton from '../../components/ui-elements/form/CustomButton';
 import CustomInput from '../../components/ui-elements/form/CustomInput';
 import FormContextProvider from '../../components/ui-elements/form/FormContextProvider';
+import LoadingIcon from '../../components/ui-elements/icons/LoadingIcon';
 import Guest from '../layouts/Guest';
 import { CustomProps } from '../../@types/custom-inertia';
 
 const ResetPassword = () => {
-	const [email, setEmail] = useState('');
+	const { errors, request, reset_password_token } = usePage()
+		.props as CustomProps;
+	const [email, setEmail] = useState(request?.email ?? '');
 	const [password, setPassword] = useState('');
 	const [confirmPassword, setConfirmPassword] = useState('');
+	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [isValid, setIsValid] = useState(false);
 	const [resetErrors, setResetErrors] = useState<string[]>([]);
-	const { errors } = usePage().props as CustomProps;
 
 	useEffect(() => {
 		setResetErrors(Object.values(errors));
@@ -23,18 +26,23 @@ const ResetPassword = () => {
 
 	const handleSubmit = async (e: BaseSyntheticEvent) => {
 		e.preventDefault();
+		setIsSubmitting(true);
 		await Inertia.post('/reset-password', {
 			email,
 			password,
 			password_confirmation: confirmPassword,
+			token: reset_password_token,
 		});
+		setIsSubmitting(false);
 	};
 
 	return (
 		<Guest>
-			<h1>ResetPassword</h1>
+			<article className="px-6 pb-6">
+				<h1 className="text-center text-2xl text-gray-800 sm:text-gray-600 font-header">
+					Reset Password
+				</h1>
 
-			<div className="px-4">
 				<Alert errors={resetErrors} type="error" />
 
 				<FormContextProvider
@@ -65,11 +73,19 @@ const ResetPassword = () => {
 						handleUpdateInput={setConfirmPassword}
 					/>
 
-					<CustomButton block color="secondary" submit>
-						Reset Button
+					<CustomButton
+						block
+						color="secondary"
+						submit
+						isDisabled={isSubmitting}
+					>
+						{!isSubmitting && <span>Reset Button</span>}
+						{isSubmitting && (
+							<LoadingIcon className="w-6 h-6 text-gray-600 animate-spin" />
+						)}
 					</CustomButton>
 				</FormContextProvider>
-			</div>
+			</article>
 		</Guest>
 	);
 };
