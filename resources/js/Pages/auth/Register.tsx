@@ -6,6 +6,7 @@ import Guest from '../layouts/Guest';
 import CustomButton from '../../components/ui-elements/form/CustomButton';
 import CustomInput from '../../components/ui-elements/form/CustomInput';
 import FormContextProvider from '../../components/ui-elements/form/FormContextProvider';
+import LoadingIcon from '../../components/ui-elements/icons/LoadingIcon';
 import { CustomProps } from '../../@types/custom-inertia';
 import { Inertia } from '@inertiajs/inertia';
 
@@ -14,6 +15,7 @@ const Register = () => {
 	const [name, setName] = useState('');
 	const [confirmPassword, setConfirmPassword] = useState('');
 	const [password, setPassword] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
 	const [isValid, setIsValid] = useState(false);
 	const [loginErrors, setLoginErrors] = useState<string[]>([]);
 	const { errors } = usePage().props as CustomProps;
@@ -24,12 +26,14 @@ const Register = () => {
 
 	const handleSubmit = async (e: BaseSyntheticEvent) => {
 		e.preventDefault();
+        setIsSubmitting(true);
 		await Inertia.post('/register', {
 			email,
 			name,
 			password,
 			password_confirmation: confirmPassword,
 		});
+        setIsSubmitting(false);
 	};
 
 	return (
@@ -76,8 +80,9 @@ const Register = () => {
 						value={confirmPassword}
 					/>
 
-					<CustomButton block color="secondary" submit>
-						Register
+					<CustomButton block color="secondary" submit isDisabled={isSubmitting}>
+                        {!isSubmitting && (<span>Register</span>)}
+                        {isSubmitting && <LoadingIcon className="w-6 h-6 text-gray-600 animate-spin" />}
 					</CustomButton>
 				</FormContextProvider>
 			</div>

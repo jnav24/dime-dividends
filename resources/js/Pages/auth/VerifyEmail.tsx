@@ -4,6 +4,7 @@ import { Inertia } from '@inertiajs/inertia';
 import Alert from '../../components/ui-elements/Alert';
 import CustomButton from '../../components/ui-elements/form/CustomButton';
 import Guest from '../layouts/Guest';
+import LoadingIcon from '../../components/ui-elements/icons/LoadingIcon';
 import { usePage } from '@inertiajs/inertia-react';
 import { CustomProps } from '../../@types/custom-inertia';
 
@@ -11,6 +12,7 @@ const VerifyEmail = () => {
     const [emailErrors, setEmailErrors] = useState<string[]>([]);
     const [errorType, setErrorType] = useState<'error' | 'success'>('error');
     const [emailSent, setEmailSent] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 	const { status } = usePage().props as CustomProps;
 
 	useEffect(() => {
@@ -30,8 +32,10 @@ const VerifyEmail = () => {
 	};
 
 	const handleSendVerification = async () => {
+        setIsSubmitting(true);
 		await Inertia.post('/email/verification-notification');
 		setEmailSent(true);
+        setIsSubmitting(false);
 	};
 
 	return (
@@ -56,12 +60,15 @@ const VerifyEmail = () => {
 						block
 						color="secondary"
 						handleClick={handleSendVerification}
-					>
-						Resend Verification Email
+                        isDisabled={isSubmitting}
+                    >
+                        {!isSubmitting && (<span>Resend Verification Email</span>)}
+                        {isSubmitting && <LoadingIcon className="w-6 h-6 text-gray-600 animate-spin" />}
 					</CustomButton>
 
-					<CustomButton block handleClick={handleLogout}>
-						Logout
+					<CustomButton block handleClick={handleLogout} isDisabled={isSubmitting}>
+                        {!isSubmitting && (<span>Logout</span>)}
+                        {isSubmitting && <LoadingIcon className="w-6 h-6 text-gray-600 animate-spin" />}
 					</CustomButton>
 				</div>
 			</div>

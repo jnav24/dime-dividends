@@ -8,12 +8,14 @@ import Card from '../../components/ui-elements/card/Card';
 import CustomButton from '../../components/ui-elements/form/CustomButton';
 import CustomInput from '../../components/ui-elements/form/CustomInput';
 import FormContextProvider from '../../components/ui-elements/form/FormContextProvider';
+import LoadingIcon from '../../components/ui-elements/icons/LoadingIcon';
 import { usePage } from '@inertiajs/inertia-react';
 import { CustomProps } from '../../@types/custom-inertia';
 
 const ConfirmPassword = () => {
 	const [isValid, setIsValid] = useState(false);
 	const [loginErrors, setLoginErrors] = useState<string[]>([]);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 	const [password, setPassword] = useState('');
 	const { errors } = usePage().props as CustomProps;
 
@@ -23,9 +25,11 @@ const ConfirmPassword = () => {
 
 	const handleSubmit = async (e: BaseSyntheticEvent) => {
 		e.preventDefault();
+        setIsSubmitting(true);
 		await Inertia.post('/confirm-password', {
 			password,
 		});
+        setIsSubmitting(false);
 	};
 
 	return (
@@ -57,8 +61,9 @@ const ConfirmPassword = () => {
                                 value={password}
                             />
 
-                            <CustomButton submit color="secondary">
-                                Confirm
+                            <CustomButton submit color="secondary" isDisabled={isSubmitting}>
+                                {!isSubmitting && (<span>Confirm</span>)}
+                                {isSubmitting && <LoadingIcon className="w-6 h-6 text-gray-600 animate-spin" />}
                             </CustomButton>
                         </FormContextProvider>
                     </Card>
