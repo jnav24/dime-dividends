@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 import ChevronDownIcon from '../ui-elements/icons/ChevronDownIcon';
+import CogIcon from '../ui-elements/icons/CogIcon';
 import Logo from '../../../assets/logo.png';
 import LogoutIcon from '../ui-elements/icons/LogoutIcon';
 import SubNavItems from './SubNavItems';
@@ -13,6 +14,12 @@ const TopNav = () => {
 	const [profileSelected, setProfileSelected] = useState(false);
 
 	const menu = [
+        {
+            to: '/settings',
+            label: 'Settings',
+            method: 'get',
+            icon: <CogIcon className="w-4 h-4" />,
+        },
 		{
 			to: '/logout',
 			label: 'Logout',
