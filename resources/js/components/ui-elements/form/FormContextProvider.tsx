@@ -142,7 +142,7 @@ const FormContextProvider: React.FC<FormContextProviderProps> = ({
 		return result;
 	};
 
-	const setupForm = (label: string, rules: any) => {
+	const setupForm = (label: string, rules: Record<string, string> = {}) => {
 		const labelId = setFormId(label);
 		setFormElement(labelId, rules);
 		matchFields = {
