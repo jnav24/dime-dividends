@@ -13,7 +13,7 @@ const SettingsGroup: React.FC<Props> = ({
 	title,
 }) => {
 	return (
-		<section className="flex flex-row align-top">
+		<section className="flex flex-row align-top border-b-2 mb-8 pb-8">
 			<div>
 				<h3>{title}</h3>
 				<p>{description}</p>

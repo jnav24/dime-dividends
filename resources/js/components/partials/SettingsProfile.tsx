@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { usePage } from '@inertiajs/inertia-react';
 
+import CardActions from '../ui-elements/card/CardActions';
 import { CustomProps } from '../../@types/custom-inertia';
 import CustomInput from '../ui-elements/form/CustomInput';
 import CustomButton from '../ui-elements/form/CustomButton';
@@ -33,14 +34,16 @@ const SettingsProfile: React.FC<Props> = () => {
 					value={email}
 				/>
 
-				<CustomButton
-					block
-					color="secondary"
-					handleClick={() => null}
-					isDisabled={!isValid}
-				>
-					Save
-				</CustomButton>
+				<CardActions>
+					<CustomButton
+						block
+						color="secondary"
+						handleClick={() => null}
+						isDisabled={!isValid}
+					>
+						Save
+					</CustomButton>
+				</CardActions>
 			</FormContextProvider>
 		</SettingsGroup>
 	);
