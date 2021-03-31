@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+import CardActions from '../ui-elements/card/CardActions';
 import CustomInput from '../ui-elements/form/CustomInput';
 import CustomButton from '../ui-elements/form/CustomButton';
 import FormContextProvider from '../ui-elements/form/FormContextProvider';
@@ -19,38 +20,41 @@ const SettingsUpdatePassword: React.FC<Props> = () => {
 			description="Ensure your account is using a long, random password to stay secure."
 		>
 			<FormContextProvider handleUpdateValid={setIsValid} valid={isValid}>
-				<CustomInput
-					handleUpdateInput={setCurrentPassword}
-					label="Current Password"
-					value={currentPassword}
-                    type="password"
-                    rules={['required']}
-				/>
+                <div className="px-4 pt-4">
+                    <CustomInput
+                        handleUpdateInput={setCurrentPassword}
+                        label="Current Password"
+                        value={currentPassword}
+                        type="password"
+                        rules={['required']}
+                    />
 
-				<CustomInput
-					handleUpdateInput={setNewPassword}
-					label="New Password"
-					value={newPassword}
-                    type="password"
-                    rules={['required', 'min:8']}
-				/>
+                    <CustomInput
+                        handleUpdateInput={setNewPassword}
+                        label="New Password"
+                        value={newPassword}
+                        type="password"
+                        rules={['required', 'min:8']}
+                    />
 
-				<CustomInput
-					handleUpdateInput={setConfirmPassword}
-					label="Confirm Password"
-					value={confirmPassword}
-                    type="password"
-                    rules={['required', 'match:new-password']}
-				/>
+                    <CustomInput
+                        handleUpdateInput={setConfirmPassword}
+                        label="Confirm Password"
+                        value={confirmPassword}
+                        type="password"
+                        rules={['required', 'match:new-password']}
+                    />
+                </div>
 
-				<CustomButton
-					block
-					color="secondary"
-					handleClick={() => null}
-					isDisabled={!isValid}
-				>
-					Save
-				</CustomButton>
+                <CardActions>
+                    <CustomButton
+                        color="secondary"
+                        handleClick={() => null}
+                        isDisabled={!isValid}
+                    >
+                        Save
+                    </CustomButton>
+                </CardActions>
 			</FormContextProvider>
 		</SettingsGroup>
 	);

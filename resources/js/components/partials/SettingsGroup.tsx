@@ -14,12 +14,12 @@ const SettingsGroup: React.FC<Props> = ({
 }) => {
 	return (
 		<section className="flex flex-row align-top border-b-2 mb-8 pb-8">
-			<div>
-				<h3>{title}</h3>
-				<p>{description}</p>
+			<div className="pr-8">
+				<h3 className="text-gray-800 font-header text-xl">{title}</h3>
+				<p className="text-gray-600 text-sm">{description}</p>
 			</div>
-			<div>
-				<Card>{children}</Card>
+			<div className="flex-grow">
+				<Card className="shadow-lg">{children}</Card>
 			</div>
 		</section>
 	);
