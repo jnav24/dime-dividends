@@ -17,8 +17,8 @@ const SettingsProfile: React.FC<Props> = () => {
 
 	return (
 		<SettingsGroup
-			title="Profile"
-			description="This is your profile sections"
+			title="Profile Information"
+			description="Update your account's profile information and email address."
 		>
 			<FormContextProvider handleUpdateValid={setIsValid} valid={isValid}>
 				<CustomInput
