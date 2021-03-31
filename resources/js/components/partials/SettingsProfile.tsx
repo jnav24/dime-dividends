@@ -26,12 +26,14 @@ const SettingsProfile: React.FC<Props> = () => {
 					<CustomInput
 						handleUpdateInput={setFullName}
 						label="Full Name"
+                        rules={['required']}
 						value={fullName}
 					/>
 
 					<CustomInput
 						handleUpdateInput={setEmail}
 						label="Email"
+                        rules={['required', 'email']}
 						value={email}
 					/>
 				</div>
