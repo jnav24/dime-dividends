@@ -48,7 +48,7 @@ const SettingsUpdatePassword: React.FC<Props> = () => {
 
                 <CardActions>
                     <CustomButton
-                        color="secondary"
+                        color="primary"
                         handleClick={() => null}
                         isDisabled={!isValid}
                     >

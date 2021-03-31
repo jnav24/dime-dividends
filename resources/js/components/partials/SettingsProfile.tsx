@@ -22,22 +22,23 @@ const SettingsProfile: React.FC<Props> = () => {
 			description="Update your account's profile information and email address."
 		>
 			<FormContextProvider handleUpdateValid={setIsValid} valid={isValid}>
-				<CustomInput
-					handleUpdateInput={setFullName}
-					label="Full Name"
-					value={fullName}
-				/>
+				<div className="px-4 pt-4">
+					<CustomInput
+						handleUpdateInput={setFullName}
+						label="Full Name"
+						value={fullName}
+					/>
 
-				<CustomInput
-					handleUpdateInput={setEmail}
-					label="Email"
-					value={email}
-				/>
+					<CustomInput
+						handleUpdateInput={setEmail}
+						label="Email"
+						value={email}
+					/>
+				</div>
 
 				<CardActions>
 					<CustomButton
-						block
-						color="secondary"
+						color="primary"
 						handleClick={() => null}
 						isDisabled={!isValid}
 					>
