@@ -24,6 +24,7 @@ const SettingsUpdatePassword: React.FC<Props> = () => {
 					label="Current Password"
 					value={currentPassword}
                     type="password"
+                    rules={['required']}
 				/>
 
 				<CustomInput
@@ -31,6 +32,7 @@ const SettingsUpdatePassword: React.FC<Props> = () => {
 					label="New Password"
 					value={newPassword}
                     type="password"
+                    rules={['required', 'min:8']}
 				/>
 
 				<CustomInput
@@ -38,6 +40,7 @@ const SettingsUpdatePassword: React.FC<Props> = () => {
 					label="Confirm Password"
 					value={confirmPassword}
                     type="password"
+                    rules={['required', 'match:new-password']}
 				/>
 
 				<CustomButton
