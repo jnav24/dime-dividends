@@ -33,6 +33,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('search/{ticker}', [HoldingsController::class, 'searchByTicker']);
     Route::get('settings', [SettingsController::class, 'index']);
+    Route::post('settings/profile', [SettingsController::class, 'updateProfileInformation']);
+    Route::post('settings/password', [SettingsController::class, 'updatePassword']);
 });
 
 require __DIR__.'/auth.php';
