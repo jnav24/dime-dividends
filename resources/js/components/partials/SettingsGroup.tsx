@@ -19,7 +19,7 @@ const SettingsGroup: React.FC<Props> = ({
 				<p className="text-gray-600 text-sm">{description}</p>
 			</div>
 			<div className="w-1/2">
-				<Card className="shadow-lg">{children}</Card>
+				<Card className="shadow-md">{children}</Card>
 			</div>
 		</section>
 	);
