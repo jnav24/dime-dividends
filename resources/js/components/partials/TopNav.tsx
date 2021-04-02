@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 import ChevronDownIcon from '../ui-elements/icons/ChevronDownIcon';
+import CogIcon from '../ui-elements/icons/CogIcon';
 import Logo from '../../../assets/logo.png';
 import LogoutIcon from '../ui-elements/icons/LogoutIcon';
 import SubNavItems from './SubNavItems';
@@ -9,10 +10,17 @@ import { usePage } from '@inertiajs/inertia-react';
 import { CustomProps } from '../../@types/custom-inertia';
 
 const TopNav = () => {
+    // @todo this doesn't get updated on name change in the setting profile. consider using a state management
 	const { user } = usePage().props as CustomProps;
 	const [profileSelected, setProfileSelected] = useState(false);
 
 	const menu = [
+        {
+            to: '/settings',
+            label: 'Settings',
+            method: 'get',
+            icon: <CogIcon className="w-4 h-4" />,
+        },
 		{
 			to: '/logout',
 			label: 'Logout',

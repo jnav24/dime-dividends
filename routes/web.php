@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\{HoldingsController, SettingsController};
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -26,11 +27,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         })->name('income');
     });
 
-    Route::get('/dashboard', [\App\Http\Controllers\HoldingsController::class, 'index'])->name('dashboard');
-    Route::post('/add-holding', [\App\Http\Controllers\HoldingsController::class, 'store'])->name('add-holding');
-    Route::post('/update-holding/{id}', [\App\Http\Controllers\HoldingsController::class, 'update'])->name('update-holding');
+    Route::get('dashboard', [HoldingsController::class, 'index'])->name('dashboard');
+    Route::post('add-holding', [HoldingsController::class, 'store'])->name('add-holding');
+    Route::post('update-holding/{id}', [HoldingsController::class, 'update'])->name('update-holding');
 
-    Route::get('/search/{ticker}', [\App\Http\Controllers\HoldingsController::class, 'searchByTicker']);
+    Route::get('search/{ticker}', [HoldingsController::class, 'searchByTicker']);
+    Route::get('settings', [SettingsController::class, 'index']);
+    Route::post('settings/profile', [SettingsController::class, 'updateProfileInformation']);
+    Route::post('settings/password', [SettingsController::class, 'updatePassword']);
 });
 
 require __DIR__.'/auth.php';
