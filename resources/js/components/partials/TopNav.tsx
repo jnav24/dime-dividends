@@ -10,6 +10,7 @@ import { usePage } from '@inertiajs/inertia-react';
 import { CustomProps } from '../../@types/custom-inertia';
 
 const TopNav = () => {
+    // @todo this doesn't get updated on name change in the setting profile. consider using a state management
 	const { user } = usePage().props as CustomProps;
 	const [profileSelected, setProfileSelected] = useState(false);
 
