@@ -7,6 +7,7 @@ use App\Models\UserDividend;
 use App\Services\SeekingAlphaService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class HoldingsController extends Controller
@@ -38,6 +39,7 @@ class HoldingsController extends Controller
 
         if (empty($dividend)) {
             $data = $seekingAlphaService->getHoldingDetails($validated['ticker']);
+            Log::info('Stock Add Holding data: ' . json_encode($data));
 
             $dividend = new Dividend;
             $dividend->ticker = $data['ticker'];
