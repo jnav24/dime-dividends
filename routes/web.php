@@ -1,7 +1,6 @@
 <?php
 
-use App\Http\Controllers\HoldingsController;
-use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\{HoldingsController, SettingsController};
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
