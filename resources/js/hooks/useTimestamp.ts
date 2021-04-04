@@ -1,138 +1,159 @@
 import {
-    format,
-    addMonths,
-    endOfMonth,
-    startOfMonth,
-    addYears,
-    getUnixTime,
+	format,
+	addMonths,
+	endOfMonth,
+	startOfMonth,
+	addYears,
+	getUnixTime,
 } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
 
 export default function useTimestamp() {
-    const getSafeDateTime = (timestamp: string) => {
-        const regex = /(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/;
-        return regex.exec(timestamp);
-    };
+	const getDefaultDateTime = () => {
+		const d = new Date();
+		return [
+			d.toISOString(),
+			d.getFullYear(),
+			d.getMonth(),
+			d.getDay(),
+			d.getHours(),
+			d.getMinutes(),
+			d.getSeconds(),
+		];
+	};
 
-    const getDateObject = (timestamp = '') => {
-        if (!timestamp.trim().length) {
-            return new Date();
-        }
+	const getSafeDateTime = (timestamp: string) => {
+		const regex = /(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/;
+		return regex.exec(timestamp) ?? getDefaultDateTime();
+	};
 
-        // @ts-ignore
-        const [full, year, month, day, hours, minutes, seconds] = getSafeDateTime(timestamp);
-        return new Date(year, month, day, hours, minutes, seconds);
-    };
+	const getDateObject = (timestamp = '') => {
+		if (!timestamp.trim().length) {
+			return new Date();
+		}
 
-    const formatDate = (
-        pattern = 'yyyy-MM-dd hh:mm A',
-        timestamp = ''
-    ): string => {
-        return format(getDateObject(timestamp), pattern);
-    };
+		// @ts-ignore
+		const [
+			full,
+			year,
+			month,
+			day,
+			hours,
+			minutes,
+			seconds,
+		] = getSafeDateTime(timestamp);
+		return new Date(year, month, day, hours, minutes, seconds);
+	};
 
-    const formatTimeZone = (
-        pattern = 'yyyy-MM-dd hh:mm',
-        zone = 'UTC',
-        timestamp = ''
-    ) => {
-        const zonedDate = utcToZonedTime(getDateObject(timestamp), zone);
-        return formatDate(pattern, zonedDate.toLocaleString());
-    };
+	const formatDate = (
+		pattern = 'yyyy-MM-dd hh:mm A',
+		timestamp = ''
+	): string => {
+		return format(getDateObject(timestamp), pattern);
+	};
 
-    const addMonth = (addition: number, timestamp = '') => {
-        return addMonths(getDateObject(timestamp), addition);
-    };
+	const formatTimeZone = (
+		pattern = 'yyyy-MM-dd hh:mm',
+		zone = 'UTC',
+		timestamp = ''
+	) => {
+		const zonedDate = utcToZonedTime(getDateObject(timestamp), zone);
+		return formatDate(pattern, zonedDate.toLocaleString());
+	};
 
-    const addYear = (addition: number, timestamp = '') => {
-        return addYears(getDateObject(timestamp), addition);
-    };
+	const addMonth = (addition: number, timestamp = '') => {
+		return addMonths(getDateObject(timestamp), addition);
+	};
 
-    const setDoubleDigits = (int: number): string => {
-        if (int < 10) {
-            return '0' + int;
-        }
+	const addYear = (addition: number, timestamp = '') => {
+		return addYears(getDateObject(timestamp), addition);
+	};
 
-        return int.toString();
-    };
+	const setDoubleDigits = (int: number): string => {
+		if (int < 10) {
+			return '0' + int;
+		}
 
-    const getEndDayOfMonth = (timestamp = '') => {
-        return endOfMonth(getDateObject(timestamp));
-    };
+		return int.toString();
+	};
 
-    const getStartDayOfMonth = (timestamp = '') => {
-        return startOfMonth(getDateObject(timestamp));
-    };
+	const getEndDayOfMonth = (timestamp = '') => {
+		return endOfMonth(getDateObject(timestamp));
+	};
 
-    const unix = (timestamp = ''): number => {
-        return getUnixTime(getDateObject(timestamp));
-    };
+	const getStartDayOfMonth = (timestamp = '') => {
+		return startOfMonth(getDateObject(timestamp));
+	};
 
-    const generateUnixId = (): number => {
-        return unix() * Math.round(Math.random() * 100) + 1;
-    };
+	const unix = (timestamp = ''): number => {
+		return getUnixTime(getDateObject(timestamp));
+	};
 
-    const generateTempId = (): string => {
-        return 'temp_' + generateUnixId();
-    };
+	const generateUnixId = (): number => {
+		return unix() * Math.round(Math.random() * 100) + 1;
+	};
 
-    const isTempId = (id: number | string): boolean => {
-        return id.toString().includes('temp_');
-    };
+	const generateTempId = (): string => {
+		return 'temp_' + generateUnixId();
+	};
 
-    const getAllMonths = (
-        formatType: 'abbr' | 'full' | 'num' | string
-    ): Array<Record<'value' | 'label', string>> => {
-        return Array.from(Array(12).keys()).map(int => {
-            let label = '';
-            const month =
-                int + 1 < 10
-                    ? '0' + (int + 1).toString()
-                    : (int + 1).toString();
-            const year = formatDate('yyyy');
+	const isTempId = (id: number | string): boolean => {
+		return id.toString().includes('temp_');
+	};
 
-            switch (formatType) {
-                case 'abbr':
-                    label = formatDate('MMM', `${year}-${month}-01 00:00:00`);
-                    break;
-                case 'full':
-                    label = formatDate('MMMM', `${year}-${month}-01 00:00:00`);
-                    break;
-                case 'num':
-                default:
-                    label = month;
-                    break;
-            }
+	const getAllMonths = (
+		formatType: 'abbr' | 'full' | 'num' | string
+	): Array<Record<'value' | 'label', string>> => {
+		return Array.from(Array(12).keys()).map((int) => {
+			let label = '';
+			const month =
+				int + 1 < 10
+					? '0' + (int + 1).toString()
+					: (int + 1).toString();
+			const year = formatDate('yyyy');
 
-            return {
-                label,
-                value: month,
-            };
-        });
-    };
+			switch (formatType) {
+				case 'abbr':
+					label = formatDate('MMM', `${year}-${month}-01 00:00:00`);
+					break;
+				case 'full':
+					label = formatDate('MMMM', `${year}-${month}-01 00:00:00`);
+					break;
+				case 'num':
+				default:
+					label = month;
+					break;
+			}
 
-    const getSetAmountOfYears = (amount: number) => {
-        const currentYear = +formatDate('yyyy');
-        return Array.from(Array(amount).keys()).map(year => {
-            return {
-                label: currentYear - year,
-                value: currentYear - year,
-            };
-        });
-    };
+			return {
+				label,
+				value: month,
+			};
+		});
+	};
 
-    return {
-        addMonth,
-        addYear,
-        formatDate,
-        formatTimeZone,
-        generateTempId,
-        getEndDayOfMonth,
-        getAllMonths,
-        isTempId,
-        setDoubleDigits,
-        unix,
-        getStartDayOfMonth,
-        getSetAmountOfYears,
-    };
+	const getSetAmountOfYears = (amount: number) => {
+		const currentYear = +formatDate('yyyy');
+		return Array.from(Array(amount).keys()).map((year) => {
+			return {
+				label: currentYear - year,
+				value: currentYear - year,
+			};
+		});
+	};
+
+	return {
+		addMonth,
+		addYear,
+		formatDate,
+		formatTimeZone,
+		generateTempId,
+		getEndDayOfMonth,
+		getAllMonths,
+		isTempId,
+		setDoubleDigits,
+		unix,
+		getStartDayOfMonth,
+		getSetAmountOfYears,
+	};
 }
