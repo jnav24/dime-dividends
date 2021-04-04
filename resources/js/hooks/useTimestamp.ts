@@ -15,7 +15,7 @@ export default function useTimestamp() {
 			d.toISOString(),
 			d.getFullYear(),
 			d.getMonth(),
-			d.getDay(),
+			d.getDate(),
 			d.getHours(),
 			d.getMinutes(),
 			d.getSeconds(),
@@ -42,7 +42,7 @@ export default function useTimestamp() {
 			minutes,
 			seconds,
 		] = getSafeDateTime(timestamp);
-		return new Date(year, month, day, hours, minutes, seconds);
+		return new Date(+year, +month, +day, +hours, +minutes, +seconds);
 	};
 
 	const formatDate = (
