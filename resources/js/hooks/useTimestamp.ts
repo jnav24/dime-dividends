@@ -9,8 +9,20 @@ import {
 import { utcToZonedTime } from 'date-fns-tz';
 
 export default function useTimestamp() {
-    const getDateObject = (timestamp = '') =>
-        timestamp.length ? new Date(timestamp) : new Date();
+    const getSafeDateTime = (timestamp: string) => {
+        const regex = /(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/;
+        return regex.exec(timestamp);
+    };
+
+    const getDateObject = (timestamp = '') => {
+        if (!timestamp.trim().length) {
+            return new Date();
+        }
+
+        // @ts-ignore
+        const [full, year, month, day, hours, minutes, seconds] = getSafeDateTime(timestamp);
+        return new Date(year, month, day, hours, minutes, seconds);
+    };
 
     const formatDate = (
         pattern = 'yyyy-MM-dd hh:mm A',
