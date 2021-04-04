@@ -21,13 +21,13 @@ const Login = () => {
 	const { errors, flash } = usePage().props as CustomProps;
 
 	useEffect(() => {
-	    if (Object.values(flash).length) {
-            setLoginErrors(Object.values(flash));
-        }
+		if (Object.values(flash).length) {
+			setLoginErrors(Object.values(flash));
+		}
 
-	    if (Object.values(errors).length) {
-            setLoginErrors(Object.values(errors));
-        }
+		if (Object.values(errors).length) {
+			setLoginErrors(Object.values(errors));
+		}
 	}, [errors, flash]);
 
 	const handleSubmit = async (e: BaseSyntheticEvent) => {
