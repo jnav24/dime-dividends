@@ -33,7 +33,7 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 
 	const frequency = {
 		annually: 1,
-        semiannual: 2,
+		semiannual: 2,
 		monthly: 12,
 		quarterly: 4,
 	};
@@ -131,7 +131,10 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 
 			<div className="w-full relative overflow-hidden">
 				<div className="bg-dark-primary w-full h-full absolute z-20 bg-opacity-90" />
-				<img src={BannerImage} className="w-full h-full object-fill absolute z-10" />
+				<img
+					src={BannerImage}
+					className="w-full h-full object-fill absolute z-10"
+				/>
 
 				<div className="relative z-30">
 					<AuthContent>
