@@ -25,20 +25,21 @@ const Pagination: React.FC<Props> = ({
 
 	return (
 		<section className="text-center">
-			{links > 1 && Array.from(Array(links).keys()).map((link) => (
-				<button
-					className={`mr-4 py-2 px-4 rounded-full transition duration-150 ${
-						currentPage === link + 1
-							? 'bg-primary text-white'
-							: 'bg-white hover:bg-secondary text-gray-600'
-					}`}
-					key={link}
-					type="button"
-					onClick={() => handlePagination(link + 1)}
-				>
-					{link + 1}
-				</button>
-			))}
+			{links > 1 &&
+				Array.from(Array(links).keys()).map((link) => (
+					<button
+						className={`focus:outline-none focus:shadow-outline mr-4 py-2 px-4 rounded-full transition duration-150 ${
+							currentPage === link + 1
+								? 'bg-primary text-white'
+								: 'bg-white hover:bg-secondary text-gray-600'
+						}`}
+						key={link}
+						type="button"
+						onClick={() => handlePagination(link + 1)}
+					>
+						{link + 1}
+					</button>
+				))}
 		</section>
 	);
 };
