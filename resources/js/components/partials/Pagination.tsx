@@ -2,24 +2,24 @@ import React, { useEffect, useState } from 'react';
 
 type Props = {
 	amountPerPage?: number;
+	currentPage: number;
 	handlePageChange: (num: number) => void;
-	total: number;
+	totalPages: number;
 };
 
 const Pagination: React.FC<Props> = ({
 	amountPerPage = 10,
+	currentPage,
 	handlePageChange,
-	total,
+	totalPages,
 }) => {
-	const [currentPage, setCurrentPage] = useState(1);
 	const [links, setLinks] = useState(0);
 
 	useEffect(() => {
-		setLinks(Math.ceil(total / amountPerPage));
-	}, [total, amountPerPage]);
+		setLinks(Math.ceil(totalPages / amountPerPage));
+	}, [totalPages, amountPerPage]);
 
 	const handlePagination = (page: number) => {
-		setCurrentPage(page);
 		handlePageChange(page);
 	};
 

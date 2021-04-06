@@ -249,7 +249,8 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 				</Card>
 				<Pagination
                     amountPerPage={totalPages}
-					total={holdings.length}
+                    currentPage={currentPage}
+					totalPages={holdings.length}
 					handlePageChange={setCurrentPage}
 				/>
 			</AuthContent>
