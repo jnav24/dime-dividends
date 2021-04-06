@@ -58,8 +58,12 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 	};
 
 	useEffect(() => {
-		console.log(holdings);
-		setData(sortHoldings(holdings).slice(totalPages * (currentPage-1), (totalPages * currentPage)-1));
+		setData(
+			sortHoldings(holdings).slice(
+				totalPages * (currentPage - 1),
+				totalPages * currentPage - 1
+			)
+		);
 	}, [currentPage]);
 
 	useEffect(() => {
@@ -71,7 +75,12 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 	const addHolding = async (holding: HoldingSubmitType) => {
 		const response = await axios.post('/add-holding', holding);
 		if (response.data.success) {
-			setData(sortHoldings([...data, response.data.data]));
+			setData(
+				sortHoldings([...data, response.data.data]).slice(
+					totalPages * (currentPage - 1),
+					totalPages * currentPage - 1
+				)
+			);
 		}
 	};
 
@@ -248,8 +257,8 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 					))}
 				</Card>
 				<Pagination
-                    amountPerPage={totalPages}
-                    currentPage={currentPage}
+					amountPerPage={totalPages}
+					currentPage={currentPage}
 					totalPages={holdings.length}
 					handlePageChange={setCurrentPage}
 				/>
