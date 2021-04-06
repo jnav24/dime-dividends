@@ -31,6 +31,8 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 		{} as HoldingType
 	);
 	const [showModal, setShowModal] = useState(false);
+	const [currentPage, setCurrentPage] = useState(1);
+	const totalPages = 10;
 
 	const frequency = {
 		annually: 1,
@@ -57,8 +59,8 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 
 	useEffect(() => {
 		console.log(holdings);
-		setData(sortHoldings(holdings));
-	}, []);
+		setData(sortHoldings(holdings).slice(totalPages * (currentPage-1), (totalPages * currentPage)-1));
+	}, [currentPage]);
 
 	useEffect(() => {
 		if (Object.keys(selectedData).length) {
@@ -140,7 +142,7 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 				<div className="relative z-30">
 					<AuthContent>
 						<HoldingsSummary
-							holdings={data}
+							holdings={holdings}
 							handleShowModal={setShowModal}
 						/>
 					</AuthContent>
@@ -245,7 +247,11 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 						</div>
 					))}
 				</Card>
-                <Pagination />
+				<Pagination
+                    amountPerPage={totalPages}
+					total={holdings.length}
+					handlePageChange={setCurrentPage}
+				/>
 			</AuthContent>
 		</Auth>
 	);
