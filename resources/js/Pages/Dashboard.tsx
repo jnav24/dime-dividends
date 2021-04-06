@@ -15,6 +15,7 @@ import useUtils from '../hooks/useUtils';
 import useCurrency from '../hooks/useCurrency';
 import { HoldingType, HoldingSubmitType } from '../@types/holdings';
 import useTimestamp from '../hooks/useTimestamp';
+import Pagination from '../components/partials/Pagination';
 
 type DashboardType = {
 	holdings: HoldingType[];
@@ -244,6 +245,7 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 						</div>
 					))}
 				</Card>
+                <Pagination />
 			</AuthContent>
 		</Auth>
 	);
