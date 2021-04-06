@@ -58,9 +58,8 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 	};
 
 	useEffect(() => {
-		// @todo when add new holding, the holdings doesn't have the new holding to sort by. need to add new holding here
 		setData(sortHoldings(holdings));
-	}, [currentPage]);
+	}, []);
 
 	useEffect(() => {
 		if (Object.keys(selectedData).length) {
@@ -71,8 +70,7 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 	const addHolding = async (holding: HoldingSubmitType) => {
 		const response = await axios.post('/add-holding', holding);
 		if (response.data.success) {
-			// @todo this is not setting the data properly; it's as if the new holding is not being added
-			setData(sortHoldings([...holdings, response.data.data]));
+			setData(sortHoldings([...data, response.data.data]));
 		}
 	};
 
@@ -262,7 +260,7 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 				<Pagination
 					amountPerPage={totalPages}
 					currentPage={currentPage}
-					totalPages={holdings.length}
+					totalPages={data.length}
 					handlePageChange={setCurrentPage}
 				/>
 			</AuthContent>
