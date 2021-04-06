@@ -25,7 +25,7 @@ const Pagination: React.FC<Props> = ({
 
 	return (
 		<section className="text-center">
-			{Array.from(Array(links).keys()).map((link) => (
+			{links > 1 && Array.from(Array(links).keys()).map((link) => (
 				<button
 					className={`mr-4 py-2 px-4 rounded-full transition duration-150 ${
 						currentPage === link + 1
