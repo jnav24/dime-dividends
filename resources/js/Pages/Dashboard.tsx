@@ -143,7 +143,7 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 				<div className="relative z-30">
 					<AuthContent>
 						<HoldingsSummary
-							holdings={holdings}
+							holdings={data}
 							handleShowModal={setShowModal}
 						/>
 					</AuthContent>
