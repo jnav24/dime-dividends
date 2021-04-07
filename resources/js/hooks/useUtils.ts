@@ -48,11 +48,24 @@ export default function useUtils() {
 		return result;
 	};
 
+	const removeDuplicatesByUniqueKey = <
+		K extends keyof T,
+		T extends Record<string, any>
+	>(
+		objArray: Array<T>,
+		uniqueId: K
+	): Array<T> => {
+		return [
+			...new Map(objArray.map((item) => [item[uniqueId], item])).values(),
+		];
+	};
+
 	return {
 		arrayColumn,
 		camelCase,
 		toTitleCase,
 		sortObject,
 		ucFirst,
+		removeDuplicatesByUniqueKey,
 	};
 }
