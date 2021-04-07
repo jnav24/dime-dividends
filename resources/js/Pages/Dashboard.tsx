@@ -15,6 +15,7 @@ import useUtils from '../hooks/useUtils';
 import useCurrency from '../hooks/useCurrency';
 import { HoldingType, HoldingSubmitType } from '../@types/holdings';
 import useTimestamp from '../hooks/useTimestamp';
+import Pagination from '../components/partials/Pagination';
 
 type DashboardType = {
 	holdings: HoldingType[];
@@ -30,6 +31,8 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 		{} as HoldingType
 	);
 	const [showModal, setShowModal] = useState(false);
+	const [currentPage, setCurrentPage] = useState(1);
+	const totalPages = 10;
 
 	const frequency = {
 		annually: 1,
@@ -55,7 +58,6 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 	};
 
 	useEffect(() => {
-		console.log(holdings);
 		setData(sortHoldings(holdings));
 	}, []);
 
@@ -109,6 +111,8 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 		}
 	};
 
+	// @todo do not add a new holding if the user already has a holding
+	// @todo turn off autocomplete on unmount and on blur
 	const submitHolding = (holding: HoldingSubmitType) => {
 		if (!holding.id) {
 			addHolding(holding);
@@ -186,64 +190,79 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 						</div>
 					)}
 
-					{data.map((holding) => (
-						<div
-							className={`grid grid-cols-${
-								headers.length + 1
-							} gap-2 text-gray-700 py-4 items-center text-sm bg-white hover:bg-primary hover:bg-opacity-10`}
-							key={holding.id}
-						>
-							<div className="pl-2 col-span-2">
-								<p className="font-body font-bold text-lg">
-									{holding.ticker}
-								</p>
-								<p>{holding.name}</p>
+					{data
+						.slice(
+							totalPages * (currentPage - 1),
+							totalPages * currentPage - 1
+						)
+						.map((holding) => (
+							<div
+								className={`grid grid-cols-${
+									headers.length + 1
+								} gap-2 text-gray-700 py-4 items-center text-sm bg-white hover:bg-primary hover:bg-opacity-10`}
+								key={holding.id}
+							>
+								<div className="pl-2 col-span-2">
+									<p className="font-body font-bold text-lg">
+										{holding.ticker}
+									</p>
+									<p>{holding.name}</p>
+								</div>
+
+								<div className="pl-2">{holding.quantity}</div>
+
+								<div className="pl-2">
+									${formatDollar(holding.portfolio_value)}
+								</div>
+
+								<div className="pl-2">{holding.yield}%</div>
+
+								<div className="pl-2">
+									${formatDollar(holding.amount_per_share)}
+								</div>
+
+								<div className="pl-2">
+									$
+									{formatDollar(
+										holding.amount_per_share *
+											(frequency as any)[
+												holding.frequency
+											] *
+											holding.quantity
+									)}
+								</div>
+
+								<div className="pl-2">
+									{formatDate(
+										'MM/dd/yyyy',
+										holding.next_payout_at
+									)}
+								</div>
+
+								<div className="pl-2">
+									{ucFirst(holding.frequency)}
+								</div>
+
+								<div className="text-center">
+									<CustomButton
+										fab
+										color="secondary"
+										handleClick={() =>
+											setSelectedData(holding)
+										}
+									>
+										<EditIcon className="w-4 h-4" />
+									</CustomButton>
+								</div>
 							</div>
-
-							<div className="pl-2">{holding.quantity}</div>
-
-							<div className="pl-2">
-								${formatDollar(holding.portfolio_value)}
-							</div>
-
-							<div className="pl-2">{holding.yield}%</div>
-
-							<div className="pl-2">
-								${formatDollar(holding.amount_per_share)}
-							</div>
-
-							<div className="pl-2">
-								$
-								{formatDollar(
-									holding.amount_per_share *
-										(frequency as any)[holding.frequency] *
-										holding.quantity
-								)}
-							</div>
-
-							<div className="pl-2">
-								{formatDate(
-									'MM/dd/yyyy',
-									holding.next_payout_at
-								)}
-							</div>
-
-							<div className="pl-2">
-								{ucFirst(holding.frequency)}
-							</div>
-
-							<div className="text-center">
-								<CustomButton
-									fab
-									color="secondary"
-									handleClick={() => setSelectedData(holding)}
-								>
-									<EditIcon className="w-4 h-4" />
-								</CustomButton>
-							</div>
-						</div>
-					))}
+						))}
 				</Card>
+				<Pagination
+					amountPerPage={totalPages}
+					currentPage={currentPage}
+					totalPages={data.length}
+					handlePageChange={setCurrentPage}
+				/>
 			</AuthContent>
 		</Auth>
 	);
