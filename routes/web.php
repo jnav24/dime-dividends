@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\{HoldingsController, SettingsController};
+use App\Http\Controllers\{HoldingsController, IncomeController, SettingsController};
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -21,18 +21,18 @@ Route::get('/', function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::group(['middleware' => 'password.confirm'], function () {
-        // Any pages you need a confirm password view to show.
-        Route::get('/income', function () {
-            return Inertia::render('Income');
-        })->name('income');
+        // Any pages you want the user to enter their password before showing the view
     });
 
+    // Pages
     Route::get('dashboard', [HoldingsController::class, 'index'])->name('dashboard');
+    Route::get('/income', [IncomeController::class, 'index'])->name('income');
+    Route::get('settings', [SettingsController::class, 'index']);
+
+    // AJAX Calls
     Route::post('add-holding', [HoldingsController::class, 'store'])->name('add-holding');
     Route::post('update-holding/{id}', [HoldingsController::class, 'update'])->name('update-holding');
-
     Route::get('search/{ticker}', [HoldingsController::class, 'searchByTicker']);
-    Route::get('settings', [SettingsController::class, 'index']);
     Route::post('settings/profile', [SettingsController::class, 'updateProfileInformation']);
     Route::post('settings/password', [SettingsController::class, 'updatePassword']);
 });
