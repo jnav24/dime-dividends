@@ -14,6 +14,9 @@ class UpdatePayoutService
         $dividends->each(function ($dividend) use ($seekingAlphaService) {
             $data = $seekingAlphaService->getHoldingDetails($dividend->ticker);
             if (!empty($data)) {
+                $dividend->yield = $data['yield'];
+                $dividend->amount_per_share = $data['amount-per-share'];
+                $dividend->frequency = strtolower($data['frequency']);
                 $dividend->next_payout_at = Carbon::createFromFormat('Y-m-d', $data['next-payout']);
                 $dividend->save();
             }
