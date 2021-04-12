@@ -18,15 +18,15 @@ const BarChart: React.FC<Props> = ({ labels, data }) => {
 		    animation: {
 		        duration: 1000,
                 onComplete(chart: any) {
-		            const chartValues = chart.chart.data.datasets[0].data;
-		            const ctx = chart.chart.ctx;
+		            const { ctx, data: { datasets } } = chart.chart;
+		            const { data } = datasets[0];
 		            ctx.font = Chart.helpers.fontString(18, 'bold', Chart.defaults.global.defaultFontFamily);
                     ctx.fillStyle = '#4B5563';
 
-                    chart.chart.data.datasets[0].data.forEach(function(dataset: number, i: number) {
+                    data.forEach(function(dataset: number, i: number) {
                         const meta = chart.chart.controller.getDatasetMeta(i);
                         meta.data.forEach(function(bar: any, index: number) {
-                            const label = `$${chartValues[index]}`;
+                            const label = `$${data[index]}`;
                             const xOffset = bar._model.x - (label.length * 10)/2;
                             const yOffset = 450;
                             ctx.fillText(label, xOffset, yOffset);
