@@ -16,7 +16,7 @@ const BarChart: React.FC<Props> = ({ labels, data }) => {
 		},
 		options: {
 		    animation: {
-		        duration: 1,
+		        duration: 1000,
                 onComplete(chart: any) {
 		            const chartValues = chart.chart.data.datasets[0].data;
 		            const ctx = chart.chart.ctx;
@@ -25,12 +25,8 @@ const BarChart: React.FC<Props> = ({ labels, data }) => {
 
                     chart.chart.data.datasets[0].data.forEach(function(dataset: number, i: number) {
                         const meta = chart.chart.controller.getDatasetMeta(i);
-                        console.log('meta');
-                        console.log(meta);
                         meta.data.forEach(function(bar: any, index: number) {
                             const label = `$${chartValues[index]}`;
-                            console.log('bar._model');
-                            console.log(bar._model);
                             const xOffset = bar._model.x - (label.length * 10)/2;
                             const yOffset = 450;
                             ctx.fillText(label, xOffset, yOffset);
