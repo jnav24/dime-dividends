@@ -13,14 +13,19 @@ const SettingsTwoFactor: React.FC<Props> = () => {
 			title="Two Factor Authentication"
 			description="Add additional security to your account by using two factor authentication"
 		>
-			<div className="flex flex-row justify-between items-center text-gray-600 mb-2">
-				<span>{toggleState ? 'Enabled' : 'Disabled'}</span>
-				<CustomToggle value={toggleState} handleClick={setToggleState} />
+			<div className="p-4">
+				<div className="flex flex-row justify-between items-center text-gray-600 mb-2">
+					<span>{toggleState ? 'Enabled' : 'Disabled'}</span>
+					<CustomToggle
+						value={toggleState}
+						handleClick={setToggleState}
+					/>
+				</div>
+				<p className="text-sm text-gray-400">
+					*You will need an authenticator app like Authy or Google
+					Authenticator to use two factor.
+				</p>
 			</div>
-			<p className="text-sm text-gray-400">
-				*You will need an authenticator app like Authy or Google
-				Authenticator to use two factor.
-			</p>
 		</SettingsGroup>
 	);
 };
