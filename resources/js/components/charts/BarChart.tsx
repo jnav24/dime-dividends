@@ -1,12 +1,24 @@
 import React, { useEffect, useRef } from 'react';
-import { Chart, ChartConfiguration, ChartDataSets } from 'chart.js';
+import {
+	Chart,
+	ChartConfiguration,
+	ChartDataSets,
+	ChartOptions,
+} from 'chart.js';
 
 type Props = {
 	labels: string[] | Array<string[]>;
 	data: ChartDataSets[];
+	options?: ChartOptions;
+	wrapperStyles?: Record<string, string>;
 };
 
-const BarChart: React.FC<Props> = ({ labels, data }) => {
+const BarChart: React.FC<Props> = ({
+	labels,
+	data,
+	options = {},
+	wrapperStyles = {},
+}) => {
 	let chart;
 	const chartData: ChartConfiguration = {
 		type: 'bar',
@@ -14,60 +26,7 @@ const BarChart: React.FC<Props> = ({ labels, data }) => {
 			labels,
 			datasets: data,
 		},
-		options: {
-		    animation: {
-		        duration: 1000,
-                onComplete(chart: any) {
-		            const { ctx, data: { datasets } } = chart.chart;
-		            const { data } = datasets[0];
-		            ctx.font = Chart.helpers.fontString(18, 'bold', Chart.defaults.global.defaultFontFamily);
-                    ctx.fillStyle = '#4B5563';
-
-                    data.forEach(function(dataset: number, i: number) {
-                        const meta = chart.chart.controller.getDatasetMeta(i);
-                        meta.data.forEach(function(bar: any, index: number) {
-                            const label = `$${data[index]}`;
-                            const xOffset = bar._model.x - (label.length * 10)/2;
-                            const yOffset = 450;
-                            ctx.fillText(label, xOffset, yOffset);
-                        });
-                    });
-                },
-            },
-			legend: {
-				display: false,
-			},
-            maintainAspectRatio: false,
-            responsive: true,
-            scales: {
-				xAxes: [
-					{
-						gridLines: {
-							display: false,
-						},
-                        position: 'chartArea',
-						ticks: {
-							fontSize: 14,
-							// fontStyle: 'bold',
-						},
-					},
-				],
-				yAxes: [
-					{
-						gridLines: {
-							display: false,
-						},
-						ticks: {
-							beginAtZero: true,
-							display: false,
-						},
-					},
-				],
-			},
-			tooltips: {
-				enabled: false,
-			},
-		},
+		options,
 	};
 	const myChart: React.MutableRefObject<null | HTMLCanvasElement> = useRef(
 		null
@@ -79,10 +38,10 @@ const BarChart: React.FC<Props> = ({ labels, data }) => {
 	}, []);
 
 	return (
-	    <div style={{ height: '500px' }}>
-            <canvas ref={myChart} />
-        </div>
-    );
+		<div style={wrapperStyles}>
+			<canvas ref={myChart} />
+		</div>
+	);
 };
 
 export default BarChart;
