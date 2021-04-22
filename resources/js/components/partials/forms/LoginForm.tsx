@@ -3,13 +3,13 @@ import axios from 'axios';
 import { Inertia } from '@inertiajs/inertia';
 import { InertiaLink } from '@inertiajs/inertia-react';
 
-import Alert from '../../components/ui-elements/Alert';
-import CustomButton from '../../components/ui-elements/form/CustomButton';
-import CustomCheckbox from '../../components/ui-elements/form/CustomCheckbox';
-import CustomInput from '../../components/ui-elements/form/CustomInput';
-import FormContextProvider from '../../components/ui-elements/form/FormContextProvider';
-import LoadingIcon from '../../components/ui-elements/icons/LoadingIcon';
-import Guest from '../../Pages/layouts/Guest';
+import Alert from '../../ui-elements/Alert';
+import CustomButton from '../../ui-elements/form/CustomButton';
+import CustomCheckbox from '../../ui-elements/form/CustomCheckbox';
+import CustomInput from '../../ui-elements/form/CustomInput';
+import FormContextProvider from '../../ui-elements/form/FormContextProvider';
+import LoadingIcon from '../../ui-elements/icons/LoadingIcon';
+import Guest from '../../../Pages/layouts/Guest';
 
 type Props = {
     handleTwoFactor: () => void,
