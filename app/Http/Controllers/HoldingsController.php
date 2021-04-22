@@ -14,7 +14,7 @@ class HoldingsController extends Controller
 {
     public function index(): \Inertia\Response
     {
-        $holdings = UserDividend::where('user_id', auth()->user()->id)->get();
+        $holdings = UserDividend::with('dividend')->where('user_id', auth()->user()->id)->get();
 
         return Inertia::render('Dashboard', [
             'holdings' => $holdings->map(function ($holding) {
