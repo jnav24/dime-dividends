@@ -1,5 +1,4 @@
 import React, { BaseSyntheticEvent, useState } from 'react';
-import axios from 'axios';
 import { Inertia } from '@inertiajs/inertia';
 import { InertiaLink } from '@inertiajs/inertia-react';
 
@@ -8,14 +7,16 @@ import CustomButton from '../../ui-elements/form/CustomButton';
 import CustomCheckbox from '../../ui-elements/form/CustomCheckbox';
 import CustomInput from '../../ui-elements/form/CustomInput';
 import FormContextProvider from '../../ui-elements/form/FormContextProvider';
-import LoadingIcon from '../../ui-elements/icons/LoadingIcon';
 import Guest from '../../../Pages/layouts/Guest';
+import LoadingIcon from '../../ui-elements/icons/LoadingIcon';
+import useHttp from '../../../hooks/useHttp';
 
 type Props = {
-    handleTwoFactor: () => void,
+	handleTwoFactor: () => void;
 };
 
 const LoginForm: React.FC<Props> = ({ handleTwoFactor }) => {
+	const { postAuth } = useHttp();
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [rememberMe, setRememberMe] = useState('');
@@ -24,40 +25,35 @@ const LoginForm: React.FC<Props> = ({ handleTwoFactor }) => {
 	const [loginErrors, setLoginErrors] = useState<string[]>([]);
 
 	const handleSubmit = async (e: BaseSyntheticEvent) => {
-		try {
-			e.preventDefault();
-			setIsSubmitting(true);
-			const {
-				status,
-				data: { two_factor },
-			} = await axios({
-				method: 'post',
-				data: {
-					email,
-					password,
-					remember: rememberMe === 'checked',
-				},
-				url: '/login',
-				withCredentials: true,
-			});
+		e.preventDefault();
+		const {
+			data: { two_factor },
+			isSuccess,
+			isError,
+			isLoading,
+			errors,
+		} = await postAuth({
+			path: '/login',
+			params: {
+				email,
+				password,
+				remember: rememberMe === 'checked',
+			},
+		});
 
-			if (status === 200) {
-				if (two_factor) {
-                    handleTwoFactor();
-				} else {
-					await Inertia.get('/dashboard');
-				}
-			}
-		} catch (err) {
-			const { data } = err.response;
-			if (data?.errors) {
-				setLoginErrors(Object.values(data.errors));
-			} else {
-				setLoginErrors(['Something unexpected had occurred.']);
-			}
-		} finally {
-			setIsSubmitting(false);
-		}
+        setIsSubmitting(isLoading);
+
+		if (isError) {
+            setLoginErrors(errors);
+        }
+
+		if (isSuccess) {
+            if (two_factor) {
+                handleTwoFactor();
+            } else {
+                await Inertia.get('/dashboard');
+            }
+        }
 	};
 
 	return (
