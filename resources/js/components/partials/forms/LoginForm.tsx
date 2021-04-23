@@ -16,44 +16,32 @@ type Props = {
 };
 
 const LoginForm: React.FC<Props> = ({ handleTwoFactor }) => {
-	const { postAuth } = useHttp();
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [rememberMe, setRememberMe] = useState('');
-	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [isValid, setIsValid] = useState(false);
-	const [loginErrors, setLoginErrors] = useState<string[]>([]);
+	const { data, errors, isLoading, isSuccess, refetch } = useHttp({
+        method: 'post',
+        path: '/login',
+        params: {
+            email,
+            password,
+            remember: rememberMe === 'checked',
+        },
+        enable: false,
+    });
+
+	if (isSuccess) {
+	    if (data.two_factor) {
+            handleTwoFactor();
+        } else {
+            Inertia.get('/dashboard');
+        }
+    }
 
 	const handleSubmit = async (e: BaseSyntheticEvent) => {
 		e.preventDefault();
-		const {
-			data: { two_factor },
-			isSuccess,
-			isError,
-			isLoading,
-			errors,
-		} = await postAuth({
-			path: '/login',
-			params: {
-				email,
-				password,
-				remember: rememberMe === 'checked',
-			},
-		});
-
-        setIsSubmitting(isLoading);
-
-		if (isError) {
-            setLoginErrors(errors);
-        }
-
-		if (isSuccess) {
-            if (two_factor) {
-                handleTwoFactor();
-            } else {
-                await Inertia.get('/dashboard');
-            }
-        }
+        refetch();
 	};
 
 	return (
@@ -63,7 +51,7 @@ const LoginForm: React.FC<Props> = ({ handleTwoFactor }) => {
 			</h1>
 
 			<div className="px-4">
-				<Alert errors={loginErrors} type="error" />
+				<Alert errors={errors} type="error" />
 
 				<FormContextProvider
 					handleSubmit={handleSubmit}
@@ -97,10 +85,10 @@ const LoginForm: React.FC<Props> = ({ handleTwoFactor }) => {
 						block
 						color="secondary"
 						submit
-						isDisabled={isSubmitting}
+						isDisabled={isLoading}
 					>
-						{!isSubmitting && <span>Login</span>}
-						{isSubmitting && (
+						{!isLoading && <span>Login</span>}
+						{isLoading && (
 							<LoadingIcon className="w-6 h-6 text-gray-600 animate-spin" />
 						)}
 					</CustomButton>
