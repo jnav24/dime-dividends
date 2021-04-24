@@ -59,7 +59,9 @@ class HandleInertiaRequests extends Middleware
             },
             'request' => fn () => $request,
             'reset_password_token' => fn () => $request->route('token') ?? '',
-            'user' => fn () => Auth::user(),
+            'user' => fn () => [
+                    'mfa_enabled' => !empty(Auth::user()->two_factor_secret),
+                ] + Auth::user()->toArray(),
         ]);
     }
 }

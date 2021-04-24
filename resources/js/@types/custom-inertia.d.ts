@@ -8,6 +8,7 @@ declare namespace CustomInertia {
 		id: number;
 		name: string;
 		updated_at: string;
+		mfa_enabled: boolean;
 	};
 
 	interface CustomProps extends PageProps {
