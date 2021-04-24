@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Providers\RouteServiceProvider;
+use Illuminate\Http\{JsonResponse,RedirectResponse};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -26,15 +27,20 @@ class AuthenticatedSessionController extends Controller
      * Handle an incoming authentication request.
      *
      * @param  \App\Http\Requests\Auth\LoginRequest  $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse|JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(LoginRequest $request)
+    public function store(LoginRequest $request): RedirectResponse | JsonResponse
     {
         $request->authenticate();
 
-        $request->session()->regenerate();
+        // @todo check if going to the dashboard directly bypasses the two_factor
+        if (!empty(auth()->user()->two_factor_secret)) {
+            return response()->json([ 'two_factor' => true ]);
+        }
 
-        return redirect(RouteServiceProvider::HOME);
+        $request->session()->regenerate();
+        return response()->json([ 'two_factor' => false ]);
     }
 
     /**
