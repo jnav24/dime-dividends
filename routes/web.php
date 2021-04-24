@@ -37,6 +37,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('settings/password', [SettingsController::class, 'updatePassword']);
     Route::delete('user/two-factor-authentication', [TwoFactorAuthenticationController::class, 'destroy']);
     Route::post('user/two-factor-authentication', [TwoFactorAuthenticationController::class, 'store']);
+    Route::get('user/two-factor-qr-code', [TwoFactorAuthenticationController::class, 'show']);
 });
 
 require __DIR__.'/auth.php';

@@ -19,7 +19,7 @@ type Response = {
 	isError: boolean;
 	isLoading: boolean;
 	isSuccess: boolean;
-	data: Record<string, string>;
+	data: Record<string, any>;
 	refetch: () => void;
 };
 
@@ -36,7 +36,7 @@ type HttpState = {
     isError: boolean;
     isLoading: boolean;
     isSuccess: boolean;
-    data: Record<string, string>;
+    data: Record<string, any>;
     runFetch: boolean;
 };
 
