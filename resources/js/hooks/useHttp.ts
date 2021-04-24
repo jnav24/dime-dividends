@@ -50,15 +50,20 @@ const initialState: HttpState = {
 };
 
 enum HttpTypes {
+    RESET_STATE = 'RESET_STATE',
     UPDATE_STATE = 'UPDATE_STATE',
 };
 
-function reducer(state: HttpState, { type, payload }: { type: HttpTypes, payload: Partial<HttpState> }) {
+function reducer(state: HttpState, { type, payload }: { type: HttpTypes, payload?: Partial<HttpState> }) {
     switch (type) {
         case HttpTypes.UPDATE_STATE:
             return {
                 ...state,
                 ...payload,
+            };
+        case HttpTypes.RESET_STATE:
+            return {
+                ...initialState,
             };
         default:
             return state;
@@ -122,6 +127,7 @@ export default function useHttp({
                     isLoading: false,
                 },
             });
+            dispatch({ type: HttpTypes.RESET_STATE });
 		}
 	};
 
