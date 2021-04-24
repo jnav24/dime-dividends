@@ -86,10 +86,16 @@ function validateGt(value: string, num: string) {
     return Number(value) > Number(num);
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function validateExact(value: string, num: string) {
+    return value.length === +num;
+}
+
 export default function useFormValidation() {
     const defaultErrorMessages: Record<string, string> = {
         required: 'Field is required',
         email: 'Must be a valid email address',
+        exact: 'Field should be ##REPLACE## characters long',
         max: 'Field can not exceed ##REPLACE## characters',
         min: 'Field should be ##REPLACE## or more characters',
         'alpha-numeric': 'Field must contain letters and numbers',
