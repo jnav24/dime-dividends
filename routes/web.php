@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\{HoldingsController, SettingsController};
+use App\Http\Controllers\{Auth\TwoFactorAuthenticationController, HoldingsController, SettingsController};
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -35,6 +35,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('settings', [SettingsController::class, 'index']);
     Route::post('settings/profile', [SettingsController::class, 'updateProfileInformation']);
     Route::post('settings/password', [SettingsController::class, 'updatePassword']);
+    Route::delete('user/two-factor-authentication', [TwoFactorAuthenticationController::class, 'destroy']);
+    Route::post('user/two-factor-authentication', [TwoFactorAuthenticationController::class, 'store']);
 });
 
 require __DIR__.'/auth.php';
