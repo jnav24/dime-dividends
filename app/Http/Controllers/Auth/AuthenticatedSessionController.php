@@ -34,7 +34,6 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate();
 
-        // @todo check if going to the dashboard directly bypasses the two_factor
         if (!empty(auth()->user()->two_factor_secret)) {
             return response()->json([ 'two_factor' => true ]);
         }
