@@ -52,6 +52,7 @@ class TwoFactorAuthenticationController extends Controller
                 )
             ),
         ])->save();
+        session()->put(config('session.mfa'), Auth::user()->id);
 
         return response()->json(['success' => true]);
     }
@@ -65,6 +66,7 @@ class TwoFactorAuthenticationController extends Controller
             'two_factor_secret' => null,
             'two_factor_recovery_codes' => null,
         ])->save();
+        session()->forget(config('session.mfa'));
 
         return response()->json(['success' => true]);
     }

@@ -198,4 +198,16 @@ return [
 
     'same_site' => 'lax',
 
+    /*
+    |--------------------------------------------------------------------------
+    | Two Factor Authentication
+    |--------------------------------------------------------------------------
+    |
+    | This option is the session name for the Two Factor Authentication which
+    | gets set when a user turns 2fa on and deletes when 2fa is disabled. There
+    | is a TwoFactorAuthenticate middleware that checks for this session.
+    |
+    */
+
+    'mfa' => 'two_factor',
 ];
