@@ -36,7 +36,7 @@ const TwoFactorForm: React.FC<Props> = () => {
 				2-Step Auth
 			</h1>
 
-			<div className="px-4">
+			<div className="px-4 pb-4">
 				<Alert errors={errors} type="error" />
 
 				<FormContextProvider
