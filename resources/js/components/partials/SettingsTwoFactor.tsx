@@ -41,7 +41,12 @@ const SettingsTwoFactor: React.FC<Props> = () => {
 		) {
 			if (!toggleState) {
 				getTwoFactor.refetch();
-			}
+			} else {
+                setTwoFactor({
+                    qrCode: '',
+                    recoveryCodes: [],
+                });
+            }
 			setToggleState(!toggleState);
 		}
 	}, [disableTwoFactor, enableTwoFactor]);
