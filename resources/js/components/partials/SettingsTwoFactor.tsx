@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import SettingsGroup from './SettingsGroup';
 import CustomToggle from '../ui-elements/form/CustomToggle';
+import LoadingIcon from '../ui-elements/icons/LoadingIcon';
 import useHttp from '../../hooks/useHttp';
 import { usePage } from '@inertiajs/inertia-react';
 import { CustomProps } from '../../@types/custom-inertia';
@@ -89,6 +90,11 @@ const SettingsTwoFactor: React.FC<Props> = () => {
 					*You will need an authenticator app like Authy or Google
 					Authenticator to use two factor.
 				</p>
+                {getTwoFactor.isLoading && (
+                    <div className="flex-row flex justify-center pt-4">
+                        <LoadingIcon className="w-6 h-6 text-gray-600 animate-spin" />
+                    </div>
+                )}
 				<div className={`${!!qrCode.length || !!recoveryCodes.length ? 'border-t border-gray-300 mt-4 pt-4' : ''}`}>
 					{!!qrCode.length && (
 						<>
