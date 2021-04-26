@@ -39,6 +39,7 @@ class TwoFactorAuthenticate
 
         if (
             !empty($user->two_factor_secret) &&
+            !$request->is('two-factor-challenge') &&
             (
                 !$request->session()->has(config('session.mfa')) ||
                 $request->session()->get(config('session.mfa')) !== $user->id

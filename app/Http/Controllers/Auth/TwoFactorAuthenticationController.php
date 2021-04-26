@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Services\RecoveryCodeService;
 use App\Services\TwoFactorService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use PragmaRX\Google2FA\Exceptions\IncompatibleWithGoogleAuthenticatorException;
@@ -68,6 +69,31 @@ class TwoFactorAuthenticationController extends Controller
         ])->save();
         session()->forget(config('session.mfa'));
 
+        return response()->json(['success' => true]);
+    }
+
+    public function verify(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'code' => ['required', 'numeric'],
+        ]);
+
+        $user = Auth::user();
+
+        if (empty($user) || empty($user->two_factor_secret)) {
+            return response()->json([
+                'success' => false
+            ]);
+        }
+
+        if (!app(TwoFactorService::class)->verify(decrypt($user->two_factor_secret), $validated['code'])) {
+            return response()->json([
+                'errors' => ['two-factor-challenge' => ['The provided two factor authentication code was invalid.']],
+                'success' => false
+            ], 422);
+        }
+
+        session()->put(config('session.mfa'), $user->id);
         return response()->json(['success' => true]);
     }
 }

@@ -18,6 +18,7 @@ use Inertia\Inertia;
 Route::get('/', function () {
     return Inertia::render('auth/Login');
 });
+Route::post('two-factor-challenge', [TwoFactorAuthenticationController::class, 'verify']);
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::group(['middleware' => 'password.confirm'], function () {
