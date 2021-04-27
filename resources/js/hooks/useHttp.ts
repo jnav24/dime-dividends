@@ -14,13 +14,18 @@ const URLMethods = mkenum({
 	DELETE: 'delete',
 });
 
-type Response = {
-	errors: string[];
-	isError: boolean;
-	isLoading: boolean;
-	isSuccess: boolean;
-	data: Record<string, any>;
+type CommonResponse = {
+    errors: string[];
+    isError: boolean;
+    isFetching: boolean;
+    isLoading: boolean;
+    isSuccess: boolean;
+    data: Record<string, any>;
+};
+
+type Response = CommonResponse & {
 	refetch: () => void;
+    reset: () => void;
 };
 
 type Args = {
@@ -31,12 +36,7 @@ type Args = {
 	enable?: boolean;
 };
 
-type HttpState = {
-    errors: string[];
-    isError: boolean;
-    isLoading: boolean;
-    isSuccess: boolean;
-    data: Record<string, any>;
+type HttpState = CommonResponse & {
     runFetch: boolean;
 };
 
@@ -44,6 +44,7 @@ const initialState: HttpState = {
     data: {},
     errors: [] as string[],
     isError: false,
+    isFetching: false,
     isLoading: false,
     isSuccess: false,
     runFetch: false,
@@ -127,7 +128,6 @@ export default function useHttp({
                     isLoading: false,
                 },
             });
-            dispatch({ type: HttpTypes.RESET_STATE });
 		}
 	};
 
@@ -140,10 +140,12 @@ export default function useHttp({
         });
     };
 
+	const reset = () => dispatch({ type: HttpTypes.RESET_STATE });
+
     if (state.runFetch) {
         getResponse();
     }
 
-    const { errors, isError, isLoading, isSuccess, data } = state;
-	return { errors, isError, isLoading, isSuccess, data, refetch };
+    const { errors, isError, isFetching, isLoading, isSuccess, data } = state;
+	return { errors, isError, isFetching, isLoading, isSuccess, data, refetch, reset };
 }
