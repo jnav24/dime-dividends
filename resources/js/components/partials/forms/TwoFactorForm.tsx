@@ -15,7 +15,7 @@ const TwoFactorForm: React.FC<Props> = () => {
     const [code, setCode] = useState('');
     const [isValid, setIsValid] = useState(false);
 	const { errors, isLoading, isSuccess, refetch } = useHttp({
-		enable: false,
+		initialize: false,
 		method: 'post',
         params: { code },
 		path: 'two-factor-challenge',

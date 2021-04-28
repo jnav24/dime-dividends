@@ -28,7 +28,7 @@ const LoginForm: React.FC<Props> = ({ handleTwoFactor }) => {
             password,
             remember: rememberMe === 'checked',
         },
-        enable: false,
+        initialize: false,
     });
 
 	if (isSuccess) {
