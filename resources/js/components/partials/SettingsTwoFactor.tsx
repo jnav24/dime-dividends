@@ -6,6 +6,9 @@ import LoadingIcon from '../ui-elements/icons/LoadingIcon';
 import useHttp from '../../hooks/useHttp';
 import { usePage } from '@inertiajs/inertia-react';
 import { CustomProps } from '../../@types/custom-inertia';
+import { Inertia } from '@inertiajs/inertia';
+
+const PASSWORD_CONFIRM = 'Password confirmation required.';
 
 type Props = {};
 
@@ -37,20 +40,42 @@ const SettingsTwoFactor: React.FC<Props> = () => {
 		setToggleState(user.mfa_enabled);
 	}, [user]);
 
+	useEffect(() => {
+		if (toggleState && enableTwoFactor.isSuccess) {
+			getTwoFactor.refetch();
+		}
+
+		if (!toggleState && disableTwoFactor.isSuccess) {
+			getTwoFactor.reset();
+		}
+	}, [toggleState]);
+
+	useEffect(() => {
+		if (!enableTwoFactor.isLoading && enableTwoFactor.isSuccess) {
+			setToggleState(true);
+		}
+
+		if (!disableTwoFactor.isLoading && disableTwoFactor.isSuccess) {
+			setToggleState(false);
+		}
+	}, [enableTwoFactor, disableTwoFactor]);
+
+	if (
+		enableTwoFactor.errors.includes(PASSWORD_CONFIRM) ||
+		disableTwoFactor.errors.includes(PASSWORD_CONFIRM)
+	) {
+		Inertia.get('/settings');
+	}
+
 	const handleToggleClick = (e: boolean) => {
-        setToggleState(e);
 		if (e) {
-		    disableTwoFactor.reset();
+			disableTwoFactor.reset();
 			enableTwoFactor.refetch();
 		} else {
-		    enableTwoFactor.reset();
+			enableTwoFactor.reset();
 			disableTwoFactor.refetch();
 		}
 	};
-
-    if (!enableTwoFactor.isLoading && enableTwoFactor.isSuccess) {
-        getTwoFactor.refetch();
-    }
 
 	return (
 		<SettingsGroup
@@ -69,12 +94,18 @@ const SettingsTwoFactor: React.FC<Props> = () => {
 					*You will need an authenticator app like Authy or Google
 					Authenticator to use two factor.
 				</p>
-                {getTwoFactor.isLoading && (
-                    <div className="flex-row flex justify-center pt-4">
-                        <LoadingIcon className="w-6 h-6 text-gray-600 animate-spin" />
-                    </div>
-                )}
-				<div className={`${qr_code || recovery_codes ? 'border-t border-gray-300 mt-4 pt-4' : ''}`}>
+				{getTwoFactor.isLoading && (
+					<div className="flex-row flex justify-center pt-4">
+						<LoadingIcon className="w-6 h-6 text-gray-600 animate-spin" />
+					</div>
+				)}
+				<div
+					className={`${
+						qr_code || recovery_codes
+							? 'border-t border-gray-300 mt-4 pt-4'
+							: ''
+					}`}
+				>
 					{qr_code && !!qr_code?.svg.length && (
 						<>
 							<p className="text-danger text-sm">
@@ -98,7 +129,11 @@ const SettingsTwoFactor: React.FC<Props> = () => {
 										Authenticator app.
 									</p>
 								</div>
-                                <div dangerouslySetInnerHTML={{ __html: qr_code.svg }} />
+								<div
+									dangerouslySetInnerHTML={{
+										__html: qr_code.svg,
+									}}
+								/>
 							</div>
 						</>
 					)}

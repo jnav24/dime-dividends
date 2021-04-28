@@ -111,15 +111,15 @@ export default function useHttp({
 				},
 			});
 		} catch (err) {
-		    let errors = ['Something unexpected had occurred.'];
+			let errors = ['Something unexpected had occurred.'];
 
-		    if (err?.response?.data?.errors) {
-		        errors = Object.values(err.response.data.errors);
-            }
+			if (err?.response?.data?.errors) {
+				errors = Object.values(err.response.data.errors);
+			}
 
-		    if (err?.response?.data?.message) {
-		        errors = [err.response.data.message];
-            }
+			if (err?.response?.data?.message) {
+				errors = [err.response.data.message];
+			}
 
 			dispatch({
 				type: HttpTypes.UPDATE_STATE,
