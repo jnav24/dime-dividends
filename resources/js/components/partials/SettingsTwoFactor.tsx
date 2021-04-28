@@ -11,10 +11,6 @@ type Props = {};
 
 const SettingsTwoFactor: React.FC<Props> = () => {
 	const { user } = usePage().props as CustomProps;
-	const [{ qrCode, recoveryCodes }, setTwoFactor] = useState({
-		qrCode: '',
-		recoveryCodes: [] as string[],
-	});
 	const [toggleState, setToggleState] = useState(false);
 
 	const disableTwoFactor = useHttp({
@@ -34,6 +30,8 @@ const SettingsTwoFactor: React.FC<Props> = () => {
 		method: 'get',
 		path: '/user/two-factor-qr-code',
 	});
+
+	const { qr_code, recovery_codes } = getTwoFactor.data;
 
 	useEffect(() => {
 		setToggleState(user.mfa_enabled);
@@ -76,8 +74,8 @@ const SettingsTwoFactor: React.FC<Props> = () => {
                         <LoadingIcon className="w-6 h-6 text-gray-600 animate-spin" />
                     </div>
                 )}
-				<div className={`${!!qrCode.length || !!recoveryCodes.length ? 'border-t border-gray-300 mt-4 pt-4' : ''}`}>
-					{!!qrCode.length && (
+				<div className={`${qr_code || recovery_codes ? 'border-t border-gray-300 mt-4 pt-4' : ''}`}>
+					{qr_code && !!qr_code?.svg.length && (
 						<>
 							<p className="text-danger text-sm">
 								Note: The information below will only be shown
@@ -100,11 +98,11 @@ const SettingsTwoFactor: React.FC<Props> = () => {
 										Authenticator app.
 									</p>
 								</div>
-                                <div dangerouslySetInnerHTML={{ __html: qrCode }} />
+                                <div dangerouslySetInnerHTML={{ __html: qr_code.svg }} />
 							</div>
 						</>
 					)}
-					{!!recoveryCodes.length && (
+					{recovery_codes && !!recovery_codes.length && (
 						<>
 							<div>
 								<p className="text-gray-700 text-sm mb-2">
@@ -116,7 +114,7 @@ const SettingsTwoFactor: React.FC<Props> = () => {
 								<div className="flex flex-row justify-between text-gray-700 bg-gray-200 border border-gray-300 py-2 pl-8 pr-4">
 									{[1, 2].map((v, i) => (
 										<ul key={i}>
-											{[...recoveryCodes]
+											{[...JSON.parse(recovery_codes)]
 												.splice(i * 4, v * 4)
 												.map((code, int) => (
 													<li
