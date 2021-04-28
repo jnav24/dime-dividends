@@ -18,60 +18,41 @@ const SettingsTwoFactor: React.FC<Props> = () => {
 	const [toggleState, setToggleState] = useState(false);
 
 	const disableTwoFactor = useHttp({
-		enable: false,
+		initialize: false,
 		method: 'delete',
 		path: '/user/two-factor-authentication',
 	});
 
 	const enableTwoFactor = useHttp({
-		enable: false,
+		initialize: false,
 		method: 'post',
 		path: '/user/two-factor-authentication',
 	});
 
 	const getTwoFactor = useHttp({
-		enable: false,
+		initialize: false,
 		method: 'get',
 		path: '/user/two-factor-qr-code',
 	});
-
-	useEffect(() => {
-		if (
-			(!disableTwoFactor.isLoading && disableTwoFactor.data.success) ||
-			(!enableTwoFactor.isLoading && enableTwoFactor.data.success)
-		) {
-			if (!toggleState) {
-				getTwoFactor.refetch();
-			} else {
-                setTwoFactor({
-                    qrCode: '',
-                    recoveryCodes: [],
-                });
-            }
-			setToggleState(!toggleState);
-		}
-	}, [disableTwoFactor, enableTwoFactor]);
-
-	useEffect(() => {
-		if (getTwoFactor.isSuccess) {
-			setTwoFactor({
-				qrCode: getTwoFactor.data.qr_code.svg,
-				recoveryCodes: JSON.parse(getTwoFactor.data.recovery_codes),
-			});
-		}
-	}, [getTwoFactor]);
 
 	useEffect(() => {
 		setToggleState(user.mfa_enabled);
 	}, [user]);
 
 	const handleToggleClick = (e: boolean) => {
+        setToggleState(e);
 		if (e) {
+		    disableTwoFactor.reset();
 			enableTwoFactor.refetch();
 		} else {
+		    enableTwoFactor.reset();
 			disableTwoFactor.refetch();
 		}
 	};
+
+    if (!enableTwoFactor.isLoading && enableTwoFactor.isSuccess) {
+        getTwoFactor.refetch();
+    }
 
 	return (
 		<SettingsGroup
