@@ -111,14 +111,22 @@ export default function useHttp({
 				},
 			});
 		} catch (err) {
+		    let errors = ['Something unexpected had occurred.'];
+
+		    if (err?.response?.data?.errors) {
+		        errors = Object.values(err.response.data.errors);
+            }
+
+		    if (err?.response?.data?.message) {
+		        errors = [err.response.data.message];
+            }
+
 			dispatch({
 				type: HttpTypes.UPDATE_STATE,
 				payload: {
 					isError: true,
 					isSuccess: false,
-					errors: err?.response?.data?.errors
-						? Object.values(err.response.data.errors)
-						: ['Something unexpected had occurred.'],
+					errors,
 				},
 			});
 		} finally {
