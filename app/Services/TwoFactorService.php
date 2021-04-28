@@ -53,6 +53,12 @@ class TwoFactorService
         return $this->google2fa->verifyKey($secret, $code);
     }
 
+    /**
+     * @param string $companyName
+     * @param string $companyEmail
+     * @param string $secretKey
+     * @return string
+     */
     public function twoFactorQrCodeSvg(string $companyName, string $companyEmail, string $secretKey): string
     {
         $svg = (new Writer(
