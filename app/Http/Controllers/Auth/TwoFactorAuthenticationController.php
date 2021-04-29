@@ -31,7 +31,7 @@ class TwoFactorAuthenticationController extends Controller
                     decrypt($user->two_factor_secret)
                 )
             ],
-            'recovery_codes' => decrypt($user->two_factor_recovery_codes),
+            'recovery_codes' => json_decode(decrypt($user->two_factor_recovery_codes)),
         ]);
     }
 

@@ -149,7 +149,7 @@ const SettingsTwoFactor: React.FC<Props> = () => {
 								<div className="flex flex-row justify-between text-gray-700 bg-gray-200 border border-gray-300 py-2 pl-8 pr-4">
 									{[1, 2].map((v, i) => (
 										<ul key={i}>
-											{[...JSON.parse(recovery_codes)]
+											{[...recovery_codes]
 												.splice(i * 4, v * 4)
 												.map((code, int) => (
 													<li
