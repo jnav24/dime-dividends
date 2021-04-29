@@ -20,8 +20,10 @@ const ConfirmPassword = () => {
 	const { errors } = usePage().props as CustomProps;
 
 	useEffect(() => {
-		setLoginErrors(Object.values(errors));
-	}, [errors]);
+	    const errorList = Object.values(errors);
+		setLoginErrors(errorList);
+		if (errorList.length) setIsSubmitting(false);
+    }, [errors]);
 
 	const handleSubmit = async (e: BaseSyntheticEvent) => {
 		e.preventDefault();
@@ -29,7 +31,6 @@ const ConfirmPassword = () => {
 		await Inertia.post('/confirm-password', {
 			password,
 		});
-		setIsSubmitting(false);
 	};
 
 	return (
