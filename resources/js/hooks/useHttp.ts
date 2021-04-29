@@ -69,7 +69,6 @@ function reducer(
 	}
 }
 
-// @todo on refetch(), do not overwrite data until new data exists
 export default function useHttp({
 	method,
 	path,
@@ -154,6 +153,7 @@ export default function useHttp({
 	const reset = () => dispatch({ type: HttpTypes.RESET_STATE });
 
 	useEffect(() => {
+	    // @todo test when initialize === true and component re-renders on state change. infinite loop?
 		if (initialize) {
 			dispatch({
 				type: HttpTypes.UPDATE_STATE,
