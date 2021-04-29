@@ -39,6 +39,7 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request)
     {
         return array_merge(parent::share($request), [
+            'app_url' => fn () => env('APP_URL'),
             'errors' => function () {
                 return Session::get('errors')
                     ? Session::get('errors')->getBag('default')->getMessages()
@@ -58,7 +59,15 @@ class HandleInertiaRequests extends Middleware
             },
             'request' => fn () => $request,
             'reset_password_token' => fn () => $request->route('token') ?? '',
-            'user' => fn () => Auth::user(),
+            'user' => function () {
+                $user = Auth::user();
+                if ($user) {
+                    return [
+                        'mfa_enabled' => !empty($user->two_factor_secret),
+                    ] + $user->toArray();
+                }
+                return [];
+            },
         ]);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\{HoldingsController, SettingsController};
+use App\Http\Controllers\{Auth\TwoFactorAuthenticationController, HoldingsController, SettingsController};
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -18,6 +18,7 @@ use Inertia\Inertia;
 Route::get('/', function () {
     return Inertia::render('auth/Login');
 });
+Route::post('two-factor-challenge', [TwoFactorAuthenticationController::class, 'verify']);
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::group(['middleware' => 'password.confirm'], function () {
@@ -25,16 +26,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/income', function () {
             return Inertia::render('Income');
         })->name('income');
+        Route::get('settings', [SettingsController::class, 'index']);
+        Route::post('settings/profile', [SettingsController::class, 'updateProfileInformation']);
+        Route::post('settings/password', [SettingsController::class, 'updatePassword']);
+        Route::delete('user/two-factor-authentication', [TwoFactorAuthenticationController::class, 'destroy']);
+        Route::post('user/two-factor-authentication', [TwoFactorAuthenticationController::class, 'store']);
+        Route::get('user/two-factor-qr-code', [TwoFactorAuthenticationController::class, 'show']);
     });
 
     Route::get('dashboard', [HoldingsController::class, 'index'])->name('dashboard');
     Route::post('add-holding', [HoldingsController::class, 'store'])->name('add-holding');
     Route::post('update-holding/{id}', [HoldingsController::class, 'update'])->name('update-holding');
-
     Route::get('search/{ticker}', [HoldingsController::class, 'searchByTicker']);
-    Route::get('settings', [SettingsController::class, 'index']);
-    Route::post('settings/profile', [SettingsController::class, 'updateProfileInformation']);
-    Route::post('settings/password', [SettingsController::class, 'updatePassword']);
 });
 
 require __DIR__.'/auth.php';

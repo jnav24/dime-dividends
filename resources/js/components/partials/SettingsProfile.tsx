@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { usePage } from '@inertiajs/inertia-react';
 
 import CardActions from '../ui-elements/card/CardActions';
@@ -8,7 +8,9 @@ import CustomButton from '../ui-elements/form/CustomButton';
 import FormContextProvider from '../ui-elements/form/FormContextProvider';
 import InlineAlert from '../ui-elements/InlineAlert';
 import SettingsGroup from './SettingsGroup';
-import axios, { AxiosResponse } from 'axios';
+import useHttp from '../../hooks/useHttp';
+import { Inertia } from '@inertiajs/inertia';
+import { HttpError } from '../../@types/http-responses';
 
 type Props = {};
 
@@ -16,33 +18,37 @@ const SettingsProfile: React.FC<Props> = () => {
 	const { user } = usePage().props as CustomProps;
 	const [email, setEmail] = useState(user.email);
 	const [fullName, setFullName] = useState(user.name);
-	const [isLoading, setIsLoading] = useState(false);
-	const [isSuccess, setIsSuccess] = useState(false);
 	const [isValid, setIsValid] = useState(false);
 	const [showAlert, setShowAlert] = useState(false);
 
-	const handleSave = async () => {
-		try {
-			setIsLoading(true);
-			const response: AxiosResponse<{
-				success?: boolean;
-			}> = await axios.post('/settings/profile', {
-				name: fullName,
-				email,
-			});
+	const { errors, isError, isLoading, isSuccess, refetch, reset } = useHttp({
+		initialize: false,
+		method: 'post',
+		path: '/settings/profile',
+		params: {
+			name: fullName,
+			email,
+		},
+	});
 
-			if (response.data.success) {
-				setIsSuccess(true);
-				setIsValid(false);
-			}
-
-			setShowAlert(true);
-			setIsLoading(false);
-		} catch (e) {
-			setShowAlert(true);
-			setIsLoading(false);
-		}
+	const handleSave = () => {
+		reset();
+		refetch();
 	};
+
+	useEffect(() => {
+		if (isSuccess) {
+			setIsValid(false);
+		}
+
+		if ((isSuccess || isError) && !showAlert) {
+			setShowAlert(true);
+		}
+	}, [isError, isSuccess]);
+
+	if (errors.includes(HttpError.PASSWORD_CONFIRM)) {
+		Inertia.get('/settings');
+	}
 
 	return (
 		<SettingsGroup

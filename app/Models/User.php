@@ -16,6 +16,8 @@ use Illuminate\Notifications\Notifiable;
  * @property DateTime $email_verified_at
  * @property string $password
  * @property string $remember_token
+ * @property string $two_factor_secret
+ * @property string $two_factor_recovery_codes
  * @property DateTime $created_at
  * @property DateTime $updated_at
  */
@@ -38,7 +40,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password', 'remember_token', 'two_factor_recovery_codes', 'two_factor_secret', 'email_verified_at', 'updated_at', 'created_at'
     ];
 
     /**

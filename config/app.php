@@ -175,6 +175,8 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\SeekingAlphaProvider::class,
+        App\Providers\RecoveryCodeProvider::class,
+        App\Providers\TwoFactorProvider::class,
 
     ],
 
