@@ -2,6 +2,7 @@ import { useEffect, useMemo, useReducer } from 'react';
 import { usePage } from '@inertiajs/inertia-react';
 import { CustomProps } from '../@types/custom-inertia';
 import axios, { AxiosResponse } from 'axios';
+import { HttpError } from '../@types/http-responses';
 
 function mkenum<T extends { [index: string]: U }, U extends string>(x: T) {
 	return x;
@@ -110,7 +111,7 @@ export default function useHttp({
 				},
 			});
 		} catch (err) {
-			let errors = ['Something unexpected had occurred.'];
+			let errors = [HttpError.DEFAULT];
 
 			if (err?.response?.data?.errors) {
 				errors = Object.values(err.response.data.errors);

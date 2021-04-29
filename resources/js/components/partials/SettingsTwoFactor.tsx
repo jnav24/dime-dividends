@@ -7,8 +7,7 @@ import useHttp from '../../hooks/useHttp';
 import { usePage } from '@inertiajs/inertia-react';
 import { CustomProps } from '../../@types/custom-inertia';
 import { Inertia } from '@inertiajs/inertia';
-
-const PASSWORD_CONFIRM = 'Password confirmation required.';
+import { HttpError } from '../../@types/http-responses';
 
 type Props = {};
 
@@ -61,8 +60,8 @@ const SettingsTwoFactor: React.FC<Props> = () => {
 	}, [enableTwoFactor, disableTwoFactor]);
 
 	if (
-		enableTwoFactor.errors.includes(PASSWORD_CONFIRM) ||
-		disableTwoFactor.errors.includes(PASSWORD_CONFIRM)
+		enableTwoFactor.errors.includes(HttpError.PASSWORD_CONFIRM) ||
+		disableTwoFactor.errors.includes(HttpError.PASSWORD_CONFIRM)
 	) {
 		Inertia.get('/settings');
 	}

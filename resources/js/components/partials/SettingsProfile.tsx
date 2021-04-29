@@ -10,6 +10,7 @@ import InlineAlert from '../ui-elements/InlineAlert';
 import SettingsGroup from './SettingsGroup';
 import useHttp from '../../hooks/useHttp';
 import { Inertia } from '@inertiajs/inertia';
+import { HttpError } from '../../@types/http-responses';
 
 type Props = {};
 
@@ -45,7 +46,7 @@ const SettingsProfile: React.FC<Props> = () => {
 		}
 	}, [isError, isSuccess]);
 
-	if (errors.includes('Password confirmation required.')) {
+	if (errors.includes(HttpError.PASSWORD_CONFIRM)) {
 		Inertia.get('/settings');
 	}
 
