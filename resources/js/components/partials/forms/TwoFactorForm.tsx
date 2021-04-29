@@ -12,12 +12,12 @@ import { Inertia } from '@inertiajs/inertia';
 type Props = {};
 
 const TwoFactorForm: React.FC<Props> = () => {
-    const [code, setCode] = useState('');
-    const [isValid, setIsValid] = useState(false);
+	const [code, setCode] = useState('');
+	const [isValid, setIsValid] = useState(false);
 	const { errors, isLoading, isSuccess, refetch } = useHttp({
 		initialize: false,
 		method: 'post',
-        params: { code },
+		params: { code },
 		path: 'two-factor-challenge',
 	});
 

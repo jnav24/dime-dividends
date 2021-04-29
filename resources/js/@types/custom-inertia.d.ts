@@ -12,7 +12,7 @@ declare namespace CustomInertia {
 	};
 
 	interface CustomProps extends PageProps {
-	    app_url: string;
+		app_url: string;
 		errors: Record<string, string>;
 		flash: Record<string, string>;
 		status: string;

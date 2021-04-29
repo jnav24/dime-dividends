@@ -21,27 +21,27 @@ const LoginForm: React.FC<Props> = ({ handleTwoFactor }) => {
 	const [rememberMe, setRememberMe] = useState('');
 	const [isValid, setIsValid] = useState(false);
 	const { data, errors, isLoading, isSuccess, refetch } = useHttp({
-        method: 'post',
-        path: '/login',
-        params: {
-            email,
-            password,
-            remember: rememberMe === 'checked',
-        },
-        initialize: false,
-    });
+		method: 'post',
+		path: '/login',
+		params: {
+			email,
+			password,
+			remember: rememberMe === 'checked',
+		},
+		initialize: false,
+	});
 
 	if (isSuccess) {
-	    if (data.two_factor) {
-            handleTwoFactor();
-        } else {
-            Inertia.get('/dashboard');
-        }
-    }
+		if (data.two_factor) {
+			handleTwoFactor();
+		} else {
+			Inertia.get('/dashboard');
+		}
+	}
 
 	const handleSubmit = async (e: BaseSyntheticEvent) => {
 		e.preventDefault();
-        refetch();
+		refetch();
 	};
 
 	return (

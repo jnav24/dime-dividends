@@ -20,10 +20,10 @@ const ConfirmPassword = () => {
 	const { errors } = usePage().props as CustomProps;
 
 	useEffect(() => {
-	    const errorList = Object.values(errors);
+		const errorList = Object.values(errors);
 		setLoginErrors(errorList);
 		if (errorList.length) setIsSubmitting(false);
-    }, [errors]);
+	}, [errors]);
 
 	const handleSubmit = async (e: BaseSyntheticEvent) => {
 		e.preventDefault();

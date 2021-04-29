@@ -14,7 +14,7 @@ const Settings: React.FC<Props> = () => {
 			<AuthContent>
 				<SettingsProfile />
 				<SettingsUpdatePassword />
-                <SettingsTwoFactor />
+				<SettingsTwoFactor />
 			</AuthContent>
 		</Auth>
 	);
