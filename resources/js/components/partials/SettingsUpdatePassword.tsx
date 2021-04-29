@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import axios, { AxiosResponse } from 'axios';
+import React, { useEffect, useState } from 'react';
 
 import CardActions from '../ui-elements/card/CardActions';
 import CustomInput from '../ui-elements/form/CustomInput';
@@ -7,6 +6,8 @@ import CustomButton from '../ui-elements/form/CustomButton';
 import FormContextProvider from '../ui-elements/form/FormContextProvider';
 import InlineAlert from '../ui-elements/InlineAlert';
 import SettingsGroup from './SettingsGroup';
+import useHttp from '../../hooks/useHttp';
+import { Inertia } from '@inertiajs/inertia';
 
 type Props = {};
 
@@ -14,37 +15,40 @@ const SettingsUpdatePassword: React.FC<Props> = () => {
 	const [confirmPassword, setConfirmPassword] = useState('');
 	const [currentPassword, setCurrentPassword] = useState('');
 	const [newPassword, setNewPassword] = useState('');
-	const [isLoading, setIsLoading] = useState(false);
-	const [isSuccess, setIsSuccess] = useState(false);
 	const [isValid, setIsValid] = useState(false);
 	const [showAlert, setShowAlert] = useState(false);
 
-	const handleSave = async () => {
-	    try {
-            setIsLoading(true);
-            const response: AxiosResponse<{ success?: boolean }> = await axios.post(
-                '/settings/password',
-                {
-                    password: newPassword,
-                    password_confirmation: confirmPassword,
-                    password_current: currentPassword,
-                }
-            );
+	const { errors, isError, isLoading, isSuccess, refetch, reset } = useHttp({
+		initialize: false,
+		method: 'post',
+		path: '/settings/password',
+		params: {
+			password: newPassword,
+			password_confirmation: confirmPassword,
+			password_current: currentPassword,
+		},
+	});
 
-            if (response.data.success) {
-                setIsSuccess(true);
-                setConfirmPassword('');
-                setCurrentPassword('');
-                setNewPassword('');
-                setIsValid(false);
-            }
+	useEffect(() => {
+		if (isSuccess) {
+			setConfirmPassword('');
+			setCurrentPassword('');
+			setNewPassword('');
+			setIsValid(false);
+		}
 
-            setShowAlert(true);
-            setIsLoading(false);
-        } catch (e) {
-            setShowAlert(true);
-            setIsLoading(false);
-        }
+		if ((isSuccess || isError) && !showAlert) {
+			setShowAlert(true);
+		}
+	}, [isError, isSuccess]);
+
+	if (errors.includes('Password confirmation required.')) {
+		Inertia.get('/settings');
+	}
+
+	const handleSave = () => {
+		reset();
+		refetch();
 	};
 
 	return (

@@ -30,7 +30,7 @@ const SettingsProfile: React.FC<Props> = () => {
 		},
 	});
 
-	const handleSave = async () => {
+	const handleSave = () => {
 		reset();
 		refetch();
 	};
