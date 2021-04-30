@@ -8,6 +8,7 @@ import BannerImage from '../../assets/banner_user_profile.jpg';
 import Card from '../components/ui-elements/card/Card';
 import CustomButton from '../components/ui-elements/form/CustomButton';
 import EditIcon from '../components/ui-elements/icons/EditIcon';
+import EditHoldingsModal from '../components/modals/EditHoldingsModal';
 import HoldingsSummary from '../components/partials/HoldingsSummary';
 import HoldingsModal from '../components/modals/HoldingsModal';
 import WarningIcon from '../components/ui-elements/icons/WarningIcon';
