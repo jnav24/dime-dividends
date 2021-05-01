@@ -6,14 +6,7 @@ import CustomButton from '../ui-elements/form/CustomButton';
 import CustomInput from '../ui-elements/form/CustomInput';
 import FormContextProvider from '../ui-elements/form/FormContextProvider';
 import Modal from './Modal';
-import { HoldingType, HoldingSubmitType } from '../../@types/holdings';
-
-type HoldingsModalType = {
-	handleAddHolding: (holding: HoldingSubmitType) => void;
-	handleShowModal: (e: boolean) => void;
-	show: boolean;
-	data: HoldingType;
-};
+import { HoldingsModalType, HoldingSubmitType } from '../../@types/holdings';
 
 type AutocompleteLabelType = {
 	name: string;

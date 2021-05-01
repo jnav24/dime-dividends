@@ -12,6 +12,13 @@ declare namespace Holdings {
         yield: number,
     }
 
+    type HoldingsModalType = {
+        handleAddHolding: (holding: HoldingSubmitType) => void;
+        handleShowModal: (e: boolean) => void;
+        show: boolean;
+        data: HoldingType;
+    }
+
     type HoldingSubmitType = {
         id?: number;
         ticker: string;
