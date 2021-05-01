@@ -34,6 +34,9 @@ const EditHoldingsModal: React.FC<HoldingsModalType> = ({
 		if (show) {
 			response.refetch();
 		} else {
+            setCost('');
+            setQuantity('')
+            setIsValid(false);
 			response.reset();
 		}
 	}, [show]);
