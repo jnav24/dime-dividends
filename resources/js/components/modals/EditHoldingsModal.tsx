@@ -34,8 +34,7 @@ const EditHoldingsModal: React.FC<Props> = ({ handleShowModal, show }) => {
                         </div>
 
                         <div>
-                            Buy/Sold
-                            <CustomRadioGroup label="Order Type">
+                            <CustomRadioGroup label="Order Type" row defaultValue="bought">
                                 <CustomRadio label="Bought" value="bought" />
                                 <CustomRadio label="Sold" value="sold" />
                             </CustomRadioGroup>
