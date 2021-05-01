@@ -6,7 +6,7 @@ import CustomInput from '../ui-elements/form/CustomInput';
 import CustomRadio from '../ui-elements/form/CustomRadio';
 import CustomRadioGroup from '../ui-elements/form/CustomRadioGroup';
 import FormContextProvider from '../ui-elements/form/FormContextProvider';
-import { HoldingsModalType } from '../../@types/holdings';
+import { HoldingsModalType, HoldingSubmitType } from '../../@types/holdings';
 import useCurrency from '../../hooks/useCurrency';
 import useHttp from '../../hooks/useHttp';
 import useTimestamp from '../../hooks/useTimestamp';
@@ -109,7 +109,19 @@ const EditHoldingsModal: React.FC<HoldingsModalType> = ({
 
 						<CustomButton
 							color="secondary"
-							handleClick={() => setAnimateCloseModal(true)}
+							handleClick={() => {
+								const submitData: HoldingSubmitType = {
+									id: data.id,
+									ticker: data.ticker,
+									shares: (
+										+data.quantity + +quantity
+									).toString(),
+									sharePrice: cost,
+								};
+
+								handleAddHolding(submitData);
+								setAnimateCloseModal(true);
+							}}
 							isDisabled={!isValid}
 						>
 							Update
