@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Modal from './Modal';
 import CustomButton from '../ui-elements/form/CustomButton';
@@ -7,14 +7,36 @@ import CustomRadio from '../ui-elements/form/CustomRadio';
 import CustomRadioGroup from '../ui-elements/form/CustomRadioGroup';
 import FormContextProvider from '../ui-elements/form/FormContextProvider';
 import { HoldingsModalType } from '../../@types/holdings';
-import useTimestamp  from '../../hooks/useTimestamp';
+import useCurrency from '../../hooks/useCurrency';
+import useHttp from '../../hooks/useHttp';
+import useTimestamp from '../../hooks/useTimestamp';
 
-const EditHoldingsModal: React.FC<HoldingsModalType> = ({ data, handleAddHolding, handleShowModal, show }) => {
-    const { formatDate } = useTimestamp();
+const EditHoldingsModal: React.FC<HoldingsModalType> = ({
+	data,
+	handleAddHolding,
+	handleShowModal,
+	show,
+}) => {
+	const { formatDollar } = useCurrency();
+	const { formatDate } = useTimestamp();
 	const [animateCloseModal, setAnimateCloseModal] = useState(false);
 	const [cost, setCost] = useState('');
 	const [quantity, setQuantity] = useState('');
 	const [isValid, setIsValid] = useState(false);
+
+	const response = useHttp({
+		initialize: false,
+		method: 'get',
+		path: `/real-time-prices/${data.ticker}`,
+	});
+
+	useEffect(() => {
+		if (show) {
+			response.refetch();
+		} else {
+			response.reset();
+		}
+	}, [show]);
 
 	return (
 		<Modal
@@ -33,13 +55,24 @@ const EditHoldingsModal: React.FC<HoldingsModalType> = ({ data, handleAddHolding
 				>
 					<div className="py-6 px-4 flex flex-row justify-between items-start">
 						<div className="text-gray-600">
-                            <div className="mb-8">
-                                <h2 className="text-xl text-black">{data.name}</h2>
-                                <p className="text-sm">({data.ticker})</p>
-                            </div>
-                            <p>Next Payout Date: {formatDate('MM/dd/yyyy', data.next_payout_at)}</p>
-                            <p>Current Holdings: {data.quantity}</p>
-                            <p>Current Price: </p>
+							<div className="mb-8">
+								<h2 className="text-xl text-black">
+									{data.name}
+								</h2>
+								<p className="text-sm">({data.ticker})</p>
+							</div>
+							<p>
+								Next Payout Date:{' '}
+								{formatDate('MM/dd/yyyy', data.next_payout_at)}
+							</p>
+							<p>Current Holdings: {data.quantity}</p>
+							<p>
+								Current Price:{' '}
+								{Object.keys(response.data).length &&
+									`$${formatDollar(
+										response.data[0].attributes.last
+									)}`}
+							</p>
 						</div>
 
 						<div className="space-y-2 w-2/4">
@@ -53,13 +86,13 @@ const EditHoldingsModal: React.FC<HoldingsModalType> = ({ data, handleAddHolding
 							</CustomRadioGroup>
 							<CustomInput
 								handleUpdateInput={setCost}
-                                rules={['required', 'float:2']}
+								rules={['required', 'float:2']}
 								value={cost}
 								label="Cost Per Share"
 							/>
 							<CustomInput
 								handleUpdateInput={setQuantity}
-                                rules={['required', 'float:2']}
+								rules={['required', 'float:2']}
 								value={quantity}
 								label="Quantity"
 							/>
