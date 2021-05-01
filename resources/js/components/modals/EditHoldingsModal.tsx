@@ -2,7 +2,9 @@ import React, {useState} from 'react';
 
 import Modal from './Modal';
 import CustomButton from '../ui-elements/form/CustomButton';
+import CustomRadio from '../ui-elements/form/CustomRadio';
 import FormContextProvider from '../ui-elements/form/FormContextProvider';
+import CustomRadioGroup from '../ui-elements/form/CustomRadioGroup';
 
 type Props = {
     handleShowModal: (e: boolean) => void;
@@ -24,8 +26,22 @@ const EditHoldingsModal: React.FC<Props> = ({ handleShowModal, show }) => {
                     valid={isValid}
                     handleUpdateValid={setIsValid}
                 >
-                    <div className="py-4 px-2">
-                        Content here
+                    <div className="py-4 px-2 flex flex-row justify-between items-start">
+                        <div>
+                            Name/Ticker
+                            Current Price
+                            Quantity
+                        </div>
+
+                        <div>
+                            Buy/Sold
+                            <CustomRadioGroup label="Order Type">
+                                <CustomRadio label="Bought" value="bought" />
+                                <CustomRadio label="Sold" value="sold" />
+                            </CustomRadioGroup>
+                            Cost
+                            Amount
+                        </div>
                     </div>
 
                     <div className="bg-gray-100 flex-row flex justify-end py-2">

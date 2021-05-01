@@ -1,17 +1,27 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
-type Props = {}
+import { CustomRadioGroupContext } from './CustomRadioGroup';
 
-const CustomRadio: React.FC<Props> = () => {
+type Props = {
+    label: string,
+    value: string,
+}
+
+const CustomRadio: React.FC<Props> = ({ label, value }) => {
+    const { groupLabel, selected, setSelected } = useContext(CustomRadioGroupContext);
+
     return (
-        <div className="flex flex-row justify-items-start cursor-pointer items-center">
-            <div className="hover:bg-opacity-30 hover:bg-gray-600 p-2 rounded-full transition duration-100">
-                <div className={`border-2 border-gray-600 rounded-full w-6 h-6 flex flex-row items-center justify-center`}>
-                    <div className="bg-gray-600 w-4 h-4 rounded-full" />
+        <label className="flex flex-row justify-items-start cursor-pointer items-center">
+            <div className="relative">
+                <input className="inset-0 absolute h-full w-full" type="radio" value={value} name={groupLabel} style={{left: '-50px'}} onChange={e => setSelected(e.target.value)}/>
+                <div className="hover:bg-opacity-30 hover:bg-gray-600 p-2 rounded-full transition duration-100">
+                    <div className={`border-2 border-gray-600 rounded-full w-6 h-6 flex flex-row items-center justify-center`}>
+                        {selected === value && <div className="bg-gray-600 w-4 h-4 rounded-full" />}
+                    </div>
                 </div>
             </div>
-            <span className="text-gray-500">Some Label</span>
-        </div>
+            <span className="text-gray-500">{label}</span>
+        </label>
     );
 };
 
