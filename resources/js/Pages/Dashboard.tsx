@@ -32,6 +32,7 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 		{} as HoldingType
 	);
 	const [showModal, setShowModal] = useState(false);
+	const [showEditHoldingsModal, setShowEditHoldingsModal] = useState(false);
 	const [currentPage, setCurrentPage] = useState(1);
 	const totalPages = 10;
 
@@ -64,7 +65,7 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 
 	useEffect(() => {
 		if (Object.keys(selectedData).length) {
-			setShowModal(true);
+            setShowEditHoldingsModal(true);
 		}
 	}, [selectedData]);
 
@@ -133,6 +134,16 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 				}}
 				handleAddHolding={submitHolding}
 			/>
+
+            <EditHoldingsModal
+                data={selectedData}
+                show={showEditHoldingsModal}
+                handleShowModal={(e) => {
+                    setShowEditHoldingsModal(e);
+                    setSelectedData({} as HoldingType);
+                }}
+                handleAddHolding={submitHolding}
+            />
 
 			<div className="w-full relative overflow-hidden">
 				<div className="bg-dark-primary w-full h-full absolute z-20 bg-opacity-90" />
