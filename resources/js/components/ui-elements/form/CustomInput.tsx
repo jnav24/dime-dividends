@@ -80,7 +80,9 @@ const CustomInput: React.FC<CustomInputProps> = ({
 				}`}
 				type={type}
 				value={value}
-				autoComplete={type === 'password' || ignoreAutoComplete ? 'off' : 'on'}
+				autoComplete={
+					type === 'password' || ignoreAutoComplete ? 'off' : 'on'
+				}
 				aria-labelledby={labelId}
 				onBlur={(e) => {
 					if (onBlur) {

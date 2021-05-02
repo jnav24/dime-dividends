@@ -65,7 +65,7 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 
 	useEffect(() => {
 		if (Object.keys(selectedData).length) {
-            setShowEditHoldingsModal(true);
+			setShowEditHoldingsModal(true);
 		}
 	}, [selectedData]);
 
@@ -114,21 +114,23 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 	};
 
 	// @todo do not show the autocomplete list on unmount and on blur
-    // @todo redo autocomplete to detect onchange and oninput event properly to hide/show autocomplete list
-    // @todo redo the holdings modal to not have check for editmode and display error if user tries to add an existing holding
-    // @todo once holdings modal is redone, modify submitHolding() to not check for existing holdings
+	// @todo redo autocomplete to detect onchange and oninput event properly to hide/show autocomplete list
+	// @todo redo the holdings modal to not have check for editmode and display error if user tries to add an existing holding
+	// @todo once holdings modal is redone, modify submitHolding() to not check for existing holdings
 	const submitHolding = (holding: HoldingSubmitType) => {
 		if (!holding.id) {
-            const existingHolding = data.filter(d => holding.ticker === d.ticker);
+			const existingHolding = data.filter(
+				(d) => holding.ticker === d.ticker
+			);
 
-            if (existingHolding.length) {
-                return updateHolding({
-                    id: existingHolding[0].id,
-                    ...holding,
-                });
-            }
+			if (existingHolding.length) {
+				return updateHolding({
+					id: existingHolding[0].id,
+					...holding,
+				});
+			}
 
-            return addHolding(holding);
+			return addHolding(holding);
 		}
 
 		return updateHolding(holding);
@@ -146,15 +148,15 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 				handleAddHolding={submitHolding}
 			/>
 
-            <EditHoldingsModal
-                data={selectedData}
-                show={showEditHoldingsModal}
-                handleShowModal={(e) => {
-                    setShowEditHoldingsModal(e);
-                    setSelectedData({} as HoldingType);
-                }}
-                handleAddHolding={submitHolding}
-            />
+			<EditHoldingsModal
+				data={selectedData}
+				show={showEditHoldingsModal}
+				handleShowModal={(e) => {
+					setShowEditHoldingsModal(e);
+					setSelectedData({} as HoldingType);
+				}}
+				handleAddHolding={submitHolding}
+			/>
 
 			<div className="w-full relative overflow-hidden">
 				<div className="bg-dark-primary w-full h-full absolute z-20 bg-opacity-90" />

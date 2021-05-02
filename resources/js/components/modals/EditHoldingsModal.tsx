@@ -12,8 +12,8 @@ import useHttp from '../../hooks/useHttp';
 import useTimestamp from '../../hooks/useTimestamp';
 
 enum OrderType {
-    BOUGHT = 'bought',
-    SOLD = 'sold'
+	BOUGHT = 'bought',
+	SOLD = 'sold',
 }
 
 const EditHoldingsModal: React.FC<HoldingsModalType> = ({
@@ -49,7 +49,7 @@ const EditHoldingsModal: React.FC<HoldingsModalType> = ({
 
 	useEffect(() => {
 		if (show) {
-            setAnimateCloseModal(false);
+			setAnimateCloseModal(false);
 			response.refetch();
 		} else {
 			setCost('');
@@ -103,8 +103,14 @@ const EditHoldingsModal: React.FC<HoldingsModalType> = ({
 								label="Order Type"
 								defaultValue={OrderType.BOUGHT}
 							>
-								<CustomRadio label="Bought" value={OrderType.BOUGHT} />
-								<CustomRadio label="Sold" value={OrderType.SOLD} />
+								<CustomRadio
+									label="Bought"
+									value={OrderType.BOUGHT}
+								/>
+								<CustomRadio
+									label="Sold"
+									value={OrderType.SOLD}
+								/>
 							</CustomRadioGroup>
 							<CustomInput
 								handleUpdateInput={setCost}

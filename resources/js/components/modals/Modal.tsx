@@ -33,10 +33,10 @@ const Modal: React.FC<ModalType> = ({
 	}, [showContent]);
 
 	useEffect(() => {
-	    if (animateCloseModal) {
-            setShowContent(false);
-        }
-    }, [animateCloseModal]);
+		if (animateCloseModal) {
+			setShowContent(false);
+		}
+	}, [animateCloseModal]);
 
 	const closeModal = () => {
 		if (!persistent) {
@@ -73,11 +73,9 @@ const Modal: React.FC<ModalType> = ({
 								onClick={closeModal}
 							/>
 						</div>
-
 						{/* This element is to trick the browser into centering the modal contents. */}
 						<span className="hidden sm:inline-block sm:align-middle sm:h-screen" />
 						&#8203;
-
 						<animated.div
 							style={contentAnimation}
 							className="inline-block align-bottom bg-white overflow-x-hidden rounded-lg text-left shadow-xl sm:my-8 sm:align-middle"
