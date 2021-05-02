@@ -31,7 +31,6 @@ const HoldingsModal: React.FC<HoldingsModalType> = ({
 	handleShowModal,
 	show,
 }) => {
-	const [editMode, setEditMode] = useState(false);
 	const [tickerItems, setTickerItems] = useState([]);
 	const [isValid, setIsValid] = useState(false);
 	const [animateCloseModal, setAnimateCloseModal] = useState(false);
@@ -48,9 +47,6 @@ const HoldingsModal: React.FC<HoldingsModalType> = ({
 			setSharePrice('0.00');
 			setTicker(data.ticker);
 			setIsValid(!!data.ticker.length && !!data.quantity);
-			setEditMode(true);
-		} else {
-			setEditMode(false);
 		}
 	}, [data]);
 
@@ -115,7 +111,7 @@ const HoldingsModal: React.FC<HoldingsModalType> = ({
 		>
 			<div className="w-100">
 				<div className="bg-gray-100 pl-2 py-2 text-2xl text-gray-700 font-header">
-					{editMode ? 'Edit' : 'Add'} Holding
+					Add Holding
 				</div>
 
 				<FormContextProvider
@@ -130,7 +126,6 @@ const HoldingsModal: React.FC<HoldingsModalType> = ({
 							label="Ticker"
 							rules={['required']}
 							value={ticker}
-							readOnly={editMode}
 						/>
 
 						<CustomInput
@@ -138,7 +133,6 @@ const HoldingsModal: React.FC<HoldingsModalType> = ({
 							label="Shares"
 							rules={['required', 'float:2']}
 							value={shares}
-							validateOnInit={editMode}
 						/>
 
 						<CustomInput
@@ -146,7 +140,6 @@ const HoldingsModal: React.FC<HoldingsModalType> = ({
 							label="Cost Per Share"
 							rules={['required', 'float:2']}
 							value={sharePrice}
-							validateOnInit={editMode}
 						/>
 					</div>
 
@@ -164,10 +157,6 @@ const HoldingsModal: React.FC<HoldingsModalType> = ({
 									shares,
 									sharePrice,
 								};
-
-								if (editMode) {
-									submitData.id = data.id;
-								}
 
 								handleAddHolding(submitData);
 								setAnimateCloseModal(true);
