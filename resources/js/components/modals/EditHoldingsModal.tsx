@@ -49,6 +49,7 @@ const EditHoldingsModal: React.FC<HoldingsModalType> = ({
 
 	useEffect(() => {
 		if (show) {
+            setAnimateCloseModal(false);
 			response.refetch();
 		} else {
 			setCost('');
