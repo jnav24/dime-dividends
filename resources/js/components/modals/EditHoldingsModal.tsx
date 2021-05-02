@@ -11,6 +11,11 @@ import useCurrency from '../../hooks/useCurrency';
 import useHttp from '../../hooks/useHttp';
 import useTimestamp from '../../hooks/useTimestamp';
 
+enum OrderType {
+    BOUGHT = 'bought',
+    SOLD = 'sold'
+}
+
 const EditHoldingsModal: React.FC<HoldingsModalType> = ({
 	data,
 	handleAddHolding,
@@ -21,8 +26,20 @@ const EditHoldingsModal: React.FC<HoldingsModalType> = ({
 	const { formatDate } = useTimestamp();
 	const [animateCloseModal, setAnimateCloseModal] = useState(false);
 	const [cost, setCost] = useState('');
+	const [orderType, setOrderType] = useState('');
 	const [quantity, setQuantity] = useState('');
 	const [isValid, setIsValid] = useState(false);
+
+	const getShares = () => {
+		if (orderType === OrderType.BOUGHT) {
+			return (+data.quantity + +quantity).toString();
+		}
+
+		return (
+			Math.max(+data.quantity, +quantity) -
+			Math.min(+data.quantity, +quantity)
+		).toString();
+	};
 
 	const response = useHttp({
 		initialize: false,
@@ -34,9 +51,9 @@ const EditHoldingsModal: React.FC<HoldingsModalType> = ({
 		if (show) {
 			response.refetch();
 		} else {
-            setCost('');
-            setQuantity('')
-            setIsValid(false);
+			setCost('');
+			setQuantity('');
+			setIsValid(false);
 			response.reset();
 		}
 	}, [show]);
@@ -80,12 +97,13 @@ const EditHoldingsModal: React.FC<HoldingsModalType> = ({
 
 						<div className="space-y-2 w-2/4">
 							<CustomRadioGroup
-								label="Order Type"
 								row
-								defaultValue="bought"
+								handleRadioSelect={setOrderType}
+								label="Order Type"
+								defaultValue={OrderType.BOUGHT}
 							>
-								<CustomRadio label="Bought" value="bought" />
-								<CustomRadio label="Sold" value="sold" />
+								<CustomRadio label="Bought" value={OrderType.BOUGHT} />
+								<CustomRadio label="Sold" value={OrderType.SOLD} />
 							</CustomRadioGroup>
 							<CustomInput
 								handleUpdateInput={setCost}
@@ -116,9 +134,7 @@ const EditHoldingsModal: React.FC<HoldingsModalType> = ({
 								const submitData: HoldingSubmitType = {
 									id: data.id,
 									ticker: data.ticker,
-									shares: (
-										+data.quantity + +quantity
-									).toString(),
+									shares: getShares(),
 									sharePrice: cost,
 								};
 
