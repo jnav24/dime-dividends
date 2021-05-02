@@ -8,6 +8,7 @@ import BannerImage from '../../assets/banner_user_profile.jpg';
 import Card from '../components/ui-elements/card/Card';
 import CustomButton from '../components/ui-elements/form/CustomButton';
 import EditIcon from '../components/ui-elements/icons/EditIcon';
+import EditHoldingsModal from '../components/modals/EditHoldingsModal';
 import HoldingsSummary from '../components/partials/HoldingsSummary';
 import HoldingsModal from '../components/modals/HoldingsModal';
 import WarningIcon from '../components/ui-elements/icons/WarningIcon';
@@ -31,6 +32,7 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 		{} as HoldingType
 	);
 	const [showModal, setShowModal] = useState(false);
+	const [showEditHoldingsModal, setShowEditHoldingsModal] = useState(false);
 	const [currentPage, setCurrentPage] = useState(1);
 	const totalPages = 10;
 
@@ -63,7 +65,7 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 
 	useEffect(() => {
 		if (Object.keys(selectedData).length) {
-			setShowModal(true);
+			setShowEditHoldingsModal(true);
 		}
 	}, [selectedData]);
 
@@ -111,14 +113,27 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 		}
 	};
 
-	// @todo do not add a new holding if the user already has a holding
-	// @todo turn off autocomplete on unmount and on blur
+	// @todo do not show the autocomplete list on unmount and on blur
+	// @todo redo autocomplete to detect onchange and oninput event properly to hide/show autocomplete list
+	// @todo redo the holdings modal to not have check for editmode and display error if user tries to add an existing holding
+	// @todo once holdings modal is redone, modify submitHolding() to not check for existing holdings
 	const submitHolding = (holding: HoldingSubmitType) => {
 		if (!holding.id) {
-			addHolding(holding);
-		} else {
-			updateHolding(holding);
+			const existingHolding = data.filter(
+				(d) => holding.ticker === d.ticker
+			);
+
+			if (existingHolding.length) {
+				return updateHolding({
+					id: existingHolding[0].id,
+					...holding,
+				});
+			}
+
+			return addHolding(holding);
 		}
+
+		return updateHolding(holding);
 	};
 
 	return (
@@ -128,6 +143,16 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 				show={showModal}
 				handleShowModal={(e) => {
 					setShowModal(e);
+					setSelectedData({} as HoldingType);
+				}}
+				handleAddHolding={submitHolding}
+			/>
+
+			<EditHoldingsModal
+				data={selectedData}
+				show={showEditHoldingsModal}
+				handleShowModal={(e) => {
+					setShowEditHoldingsModal(e);
 					setSelectedData({} as HoldingType);
 				}}
 				handleAddHolding={submitHolding}

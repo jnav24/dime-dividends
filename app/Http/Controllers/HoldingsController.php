@@ -95,4 +95,9 @@ class HoldingsController extends Controller
     {
         return $seekingAlphaService->searchHoldingByTicker($ticker);
     }
+
+    public function getRealTimePrice(SeekingAlphaService $seekingAlphaService, $ticker): array
+    {
+        return $seekingAlphaService->getRealTimePrice($ticker);
+    }
 }

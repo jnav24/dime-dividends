@@ -70,4 +70,10 @@ class SeekingAlphaService
         $response = Http::get($this->domain . 'api/common/ac/search?limit=5&symbols=1&term=' . $ticker);
         return $response->json()['symbols'] ?? [];
     }
+
+    public function getRealTimePrice(string $ticker)
+    {
+        $response = Http::get('https://finance.api.seekingalpha.com/v2/real-time-prices?symbols=' . $ticker);
+        return $response->json()['data'] ?? [];
+    }
 }

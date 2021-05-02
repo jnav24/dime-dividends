@@ -45,6 +45,7 @@ const CustomAutocomplete: React.FC<CustomAutocompleteType> = ({
 				rules={rules}
 				value={value}
 				readOnly={readOnly}
+				ignoreAutoComplete
 			/>
 
 			<div

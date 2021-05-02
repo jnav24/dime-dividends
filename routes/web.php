@@ -38,6 +38,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('add-holding', [HoldingsController::class, 'store'])->name('add-holding');
     Route::post('update-holding/{id}', [HoldingsController::class, 'update'])->name('update-holding');
     Route::get('search/{ticker}', [HoldingsController::class, 'searchByTicker']);
+    Route::get('real-time-prices/{ticker}', [HoldingsController::class, 'getRealTimePrice']);
 });
 
 require __DIR__.'/auth.php';

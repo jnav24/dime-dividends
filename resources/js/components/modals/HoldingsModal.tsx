@@ -6,14 +6,7 @@ import CustomButton from '../ui-elements/form/CustomButton';
 import CustomInput from '../ui-elements/form/CustomInput';
 import FormContextProvider from '../ui-elements/form/FormContextProvider';
 import Modal from './Modal';
-import { HoldingType, HoldingSubmitType } from '../../@types/holdings';
-
-type HoldingsModalType = {
-	handleAddHolding: (holding: HoldingSubmitType) => void;
-	handleShowModal: (e: boolean) => void;
-	show: boolean;
-	data: HoldingType;
-};
+import { HoldingsModalType, HoldingSubmitType } from '../../@types/holdings';
 
 type AutocompleteLabelType = {
 	name: string;
@@ -33,7 +26,7 @@ const AutocompleteLabel: React.FC<AutocompleteLabelType> = ({
 };
 
 const HoldingsModal: React.FC<HoldingsModalType> = ({
-    data,
+	data,
 	handleAddHolding,
 	handleShowModal,
 	show,
@@ -51,14 +44,14 @@ const HoldingsModal: React.FC<HoldingsModalType> = ({
 
 	useEffect(() => {
 		if (Object.keys(data).length) {
-		    setShares(data.quantity.toString());
-            setSharePrice('0.00');
-            setTicker(data.ticker);
-            setIsValid(!!data.ticker.length && !!data.quantity);
+			setShares(data.quantity.toString());
+			setSharePrice('0.00');
+			setTicker(data.ticker);
+			setIsValid(!!data.ticker.length && !!data.quantity);
 			setEditMode(true);
 		} else {
-		    setEditMode(false);
-        }
+			setEditMode(false);
+		}
 	}, [data]);
 
 	useEffect(() => {
@@ -68,8 +61,8 @@ const HoldingsModal: React.FC<HoldingsModalType> = ({
 			setSharePrice('');
 			setIsValid(false);
 		} else {
-            setAnimateCloseModal(false);
-        }
+			setAnimateCloseModal(false);
+		}
 	}, [show]);
 
 	const handleUpdateTicker = (e: string) => {
@@ -115,7 +108,11 @@ const HoldingsModal: React.FC<HoldingsModalType> = ({
 	};
 
 	return (
-		<Modal handleShowModal={handleShowModal} show={show} animateCloseModal={animateCloseModal}>
+		<Modal
+			handleShowModal={handleShowModal}
+			show={show}
+			animateCloseModal={animateCloseModal}
+		>
 			<div className="w-100">
 				<div className="bg-gray-100 pl-2 py-2 text-2xl text-gray-700 font-header">
 					{editMode ? 'Edit' : 'Add'} Holding
@@ -133,7 +130,7 @@ const HoldingsModal: React.FC<HoldingsModalType> = ({
 							label="Ticker"
 							rules={['required']}
 							value={ticker}
-                            readOnly={editMode}
+							readOnly={editMode}
 						/>
 
 						<CustomInput
@@ -141,16 +138,16 @@ const HoldingsModal: React.FC<HoldingsModalType> = ({
 							label="Shares"
 							rules={['required', 'float:2']}
 							value={shares}
-                            validateOnInit={editMode}
+							validateOnInit={editMode}
 						/>
 
-                        <CustomInput
-                            handleUpdateInput={setSharePrice}
-                            label="Cost Per Share"
-                            rules={['required', 'float:2']}
-                            value={sharePrice}
-                            validateOnInit={editMode}
-                        />
+						<CustomInput
+							handleUpdateInput={setSharePrice}
+							label="Cost Per Share"
+							rules={['required', 'float:2']}
+							value={sharePrice}
+							validateOnInit={editMode}
+						/>
 					</div>
 
 					<div className="bg-gray-100 flex-row flex justify-end py-2">
@@ -162,18 +159,18 @@ const HoldingsModal: React.FC<HoldingsModalType> = ({
 						</CustomButton>
 						<CustomButton
 							handleClick={() => {
-							    const submitData: HoldingSubmitType = {
-                                    ticker,
-                                    shares,
-                                    sharePrice,
-                                };
+								const submitData: HoldingSubmitType = {
+									ticker,
+									shares,
+									sharePrice,
+								};
 
-							    if (editMode) {
-							        submitData.id = data.id;
-                                }
+								if (editMode) {
+									submitData.id = data.id;
+								}
 
 								handleAddHolding(submitData);
-                                setAnimateCloseModal(true);
+								setAnimateCloseModal(true);
 							}}
 							color="secondary"
 							isDisabled={!isValid}

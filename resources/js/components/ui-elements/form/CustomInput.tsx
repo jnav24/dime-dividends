@@ -18,6 +18,7 @@ type CustomInputProps = {
 	value: string;
 	readOnly?: boolean;
 	validateOnInit?: boolean;
+	ignoreAutoComplete?: boolean;
 };
 
 const CustomInput: React.FC<CustomInputProps> = ({
@@ -28,7 +29,8 @@ const CustomInput: React.FC<CustomInputProps> = ({
 	type = 'text',
 	value,
 	readOnly = false,
-    validateOnInit = false,
+	validateOnInit = false,
+	ignoreAutoComplete = false,
 }) => {
 	const formContext = useContext(FormContext);
 	const [labelId, setLabelId] = useState('');
@@ -78,7 +80,9 @@ const CustomInput: React.FC<CustomInputProps> = ({
 				}`}
 				type={type}
 				value={value}
-				autoComplete={type !== 'password' ? 'on' : 'off'}
+				autoComplete={
+					type === 'password' || ignoreAutoComplete ? 'off' : 'on'
+				}
 				aria-labelledby={labelId}
 				onBlur={(e) => {
 					if (onBlur) {
