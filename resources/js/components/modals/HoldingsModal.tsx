@@ -13,6 +13,8 @@ type AutocompleteLabelType = {
 	company: string;
 };
 
+type Props = HoldingsModalType & {};
+
 const AutocompleteLabel: React.FC<AutocompleteLabelType> = ({
 	name,
 	company,
@@ -25,8 +27,7 @@ const AutocompleteLabel: React.FC<AutocompleteLabelType> = ({
 	);
 };
 
-const HoldingsModal: React.FC<HoldingsModalType> = ({
-	data,
+const HoldingsModal: React.FC<Props> = ({
 	handleAddHolding,
 	handleShowModal,
 	show,
@@ -40,15 +41,6 @@ const HoldingsModal: React.FC<HoldingsModalType> = ({
 	const [tickerTimer, setTickerTimer] = useState<null | ReturnType<
 		typeof setTimeout
 	>>(null);
-
-	useEffect(() => {
-		if (Object.keys(data).length) {
-			setShares(data.quantity.toString());
-			setSharePrice('0.00');
-			setTicker(data.ticker);
-			setIsValid(!!data.ticker.length && !!data.quantity);
-		}
-	}, [data]);
 
 	useEffect(() => {
 		if (!show) {

@@ -140,7 +140,6 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 	return (
 		<Auth>
 			<HoldingsModal
-				data={selectedData}
 				show={showModal}
 				handleShowModal={(e) => {
 					setShowModal(e);

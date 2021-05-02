@@ -16,7 +16,6 @@ declare namespace Holdings {
         handleAddHolding: (holding: HoldingSubmitType) => void;
         handleShowModal: (e: boolean) => void;
         show: boolean;
-        data: HoldingType;
     }
 
     type HoldingSubmitType = {
