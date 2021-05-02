@@ -8,6 +8,7 @@ type ContextType = {
 
 type Props = {
 	defaultValue?: string;
+	handleRadioSelect: (val: string) => void;
 	label: string;
 	row?: boolean;
 };
@@ -16,6 +17,7 @@ export const CustomRadioGroupContext = createContext({} as ContextType);
 
 const CustomRadioGroup: React.FC<Props> = ({
 	children,
+	handleRadioSelect,
 	label,
 	row = false,
 	defaultValue = '',
@@ -28,6 +30,10 @@ const CustomRadioGroup: React.FC<Props> = ({
 	useEffect(() => {
 		setSelected(defaultValue);
 	}, []);
+
+	useEffect(() => {
+	    handleRadioSelect(selected);
+    }, [selected]);
 
 	return (
 		<CustomRadioGroupContext.Provider
