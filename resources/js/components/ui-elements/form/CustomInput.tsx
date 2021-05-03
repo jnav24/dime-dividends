@@ -9,10 +9,14 @@ import React, {
 import CustomLabel from './CustomLabel';
 import { FormContext } from './FormContextProvider';
 
+export type HandleInputType = {
+    event: 'change' | 'blur' | 'select';
+    value: string;
+};
+
 type CustomInputProps = {
-	handleUpdateInput: (value: string) => void;
+	handleUpdateInput: (obj: HandleInputType) => void;
 	label: string;
-	onBlur?: boolean;
 	rules?: Record<string, string> | string[];
 	type?: string;
 	value: string;
@@ -24,7 +28,6 @@ type CustomInputProps = {
 const CustomInput: React.FC<CustomInputProps> = ({
 	handleUpdateInput,
 	label,
-	onBlur = true,
 	rules,
 	type = 'text',
 	value,
@@ -59,11 +62,11 @@ const CustomInput: React.FC<CustomInputProps> = ({
 		}
 	}, [labelId]);
 
-	const updateValue = (inputValue: BaseSyntheticEvent) => {
+	const updateValue = (event: 'change' | 'blur', inputValue: BaseSyntheticEvent) => {
 		if (formContext && !!Object.keys(formContext).length) {
 			formContext.validateField(labelId, inputValue.target.value, true);
 		}
-		handleUpdateInput(inputValue.target.value);
+		handleUpdateInput({ event, value: inputValue.target.value });
 	};
 
 	return (
@@ -84,14 +87,8 @@ const CustomInput: React.FC<CustomInputProps> = ({
 					type === 'password' || ignoreAutoComplete ? 'off' : 'on'
 				}
 				aria-labelledby={labelId}
-				onBlur={(e) => {
-					if (onBlur) {
-						return updateValue(e);
-					}
-
-					return null;
-				}}
-				onChange={updateValue}
+				onBlur={(e) => updateValue('blur', e)}
+				onChange={(e) => updateValue('change', e)}
 				readOnly={readOnly}
 			/>
 			{error && <span className="text-sm text-red-600">{error}</span>}

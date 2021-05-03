@@ -3,7 +3,7 @@ import axios from 'axios';
 
 import CustomAutocomplete from '../ui-elements/form/CustomAutocomplete';
 import CustomButton from '../ui-elements/form/CustomButton';
-import CustomInput from '../ui-elements/form/CustomInput';
+import CustomInput, { HandleInputType } from '../ui-elements/form/CustomInput';
 import FormContextProvider from '../ui-elements/form/FormContextProvider';
 import Modal from './Modal';
 import { HoldingsModalType, HoldingSubmitType } from '../../@types/holdings';
@@ -53,12 +53,12 @@ const HoldingsModal: React.FC<Props> = ({
 		}
 	}, [show]);
 
-	const handleUpdateTicker = (e: string) => {
+	const handleUpdateTicker = (e: HandleInputType) => {
 		if (tickerTimer) {
 			clearTimeout(tickerTimer);
 		}
 
-		if (e.trim().length && e.toLowerCase() !== ticker.toLowerCase()) {
+		if (e.event === 'change' && e.value.trim().length && e.value.toLowerCase() !== ticker.toLowerCase()) {
 			setTickerTimer(
 				setTimeout(() => {
 					axios({
@@ -85,13 +85,13 @@ const HoldingsModal: React.FC<Props> = ({
 			setTickerItems([]);
 		}
 
-		setTicker(e);
+		setTicker(e.value);
 	};
 
 	const handleSelectAutocomplete = (e: string) => {
 		setTickerItems([]);
 		if (e !== ticker) {
-			handleUpdateTicker(e);
+			handleUpdateTicker({ event: 'select', value: e });
 		}
 	};
 
@@ -121,14 +121,14 @@ const HoldingsModal: React.FC<Props> = ({
 						/>
 
 						<CustomInput
-							handleUpdateInput={setShares}
+							handleUpdateInput={(e) => setShares(e.value)}
 							label="Shares"
 							rules={['required', 'float:2']}
 							value={shares}
 						/>
 
 						<CustomInput
-							handleUpdateInput={setSharePrice}
+							handleUpdateInput={(e) => setSharePrice(e.value)}
 							label="Cost Per Share"
 							rules={['required', 'float:2']}
 							value={sharePrice}
