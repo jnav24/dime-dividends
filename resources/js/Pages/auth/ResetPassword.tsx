@@ -54,7 +54,7 @@ const ResetPassword = () => {
 						label="email"
 						rules={['required', 'email']}
 						value={email}
-						handleUpdateInput={setEmail}
+						handleUpdateInput={(e) => setEmail(e.value)}
 					/>
 
 					<CustomInput
@@ -62,7 +62,7 @@ const ResetPassword = () => {
 						rules={['required', 'min:8']}
 						type="password"
 						value={password}
-						handleUpdateInput={setPassword}
+						handleUpdateInput={(e) => setPassword(e.value)}
 					/>
 
 					<CustomInput
@@ -70,7 +70,7 @@ const ResetPassword = () => {
 						rules={['required', 'match:password']}
 						type="password"
 						value={confirmPassword}
-						handleUpdateInput={setConfirmPassword}
+						handleUpdateInput={(e) => setConfirmPassword(e.value)}
 					/>
 
 					<CustomButton

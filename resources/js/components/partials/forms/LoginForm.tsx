@@ -59,14 +59,14 @@ const LoginForm: React.FC<Props> = ({ handleTwoFactor }) => {
 					valid={isValid}
 				>
 					<CustomInput
-						handleUpdateInput={setEmail}
+						handleUpdateInput={(e) => setEmail(e.value)}
 						label="Email"
 						rules={['required', 'email']}
 						value={email}
 					/>
 
 					<CustomInput
-						handleUpdateInput={setPassword}
+						handleUpdateInput={(e) => setPassword(e.value)}
 						label="Password"
 						rules={['required']}
 						type="password"

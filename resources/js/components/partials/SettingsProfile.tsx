@@ -58,14 +58,14 @@ const SettingsProfile: React.FC<Props> = () => {
 			<FormContextProvider handleUpdateValid={setIsValid} valid={isValid}>
 				<div className="px-4 pt-4">
 					<CustomInput
-						handleUpdateInput={setFullName}
+						handleUpdateInput={(e) => setFullName(e.value)}
 						label="Full Name"
 						rules={['required']}
 						value={fullName}
 					/>
 
 					<CustomInput
-						handleUpdateInput={setEmail}
+						handleUpdateInput={(e) => setEmail(e.value)}
 						label="Email"
 						rules={['required', 'email']}
 						value={email}

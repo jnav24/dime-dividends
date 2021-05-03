@@ -55,7 +55,7 @@ const ConfirmPassword = () => {
 							handleUpdateValid={setIsValid}
 						>
 							<CustomInput
-								handleUpdateInput={setPassword}
+								handleUpdateInput={(e) => setPassword(e.value)}
 								label="Password"
 								rules={['required']}
 								type="password"

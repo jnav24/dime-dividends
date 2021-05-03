@@ -121,13 +121,13 @@ const EditHoldingsModal: React.FC<Props> = ({
 								/>
 							</CustomRadioGroup>
 							<CustomInput
-								handleUpdateInput={setCost}
+								handleUpdateInput={(e) => setCost(e.value)}
 								rules={['required', 'float:2']}
 								value={cost}
 								label="Cost Per Share"
 							/>
 							<CustomInput
-								handleUpdateInput={setQuantity}
+								handleUpdateInput={(e) => setQuantity(e.value)}
 								rules={['required', 'float:2']}
 								value={quantity}
 								label="Quantity"
