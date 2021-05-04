@@ -58,7 +58,11 @@ const HoldingsModal: React.FC<Props> = ({
 			clearTimeout(tickerTimer);
 		}
 
-		if (e.event === 'change' && e.value.trim().length && e.value.toLowerCase() !== ticker.toLowerCase()) {
+		if (
+			e.event === 'change' &&
+			e.value.trim().length &&
+			e.value.toLowerCase() !== ticker.toLowerCase()
+		) {
 			setTickerTimer(
 				setTimeout(() => {
 					axios({

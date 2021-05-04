@@ -15,7 +15,7 @@ const Register = () => {
 	const [name, setName] = useState('');
 	const [confirmPassword, setConfirmPassword] = useState('');
 	const [password, setPassword] = useState('');
-    const [isSubmitting, setIsSubmitting] = useState(false);
+	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [isValid, setIsValid] = useState(false);
 	const [loginErrors, setLoginErrors] = useState<string[]>([]);
 	const { errors } = usePage().props as CustomProps;
@@ -26,14 +26,14 @@ const Register = () => {
 
 	const handleSubmit = async (e: BaseSyntheticEvent) => {
 		e.preventDefault();
-        setIsSubmitting(true);
+		setIsSubmitting(true);
 		await Inertia.post('/register', {
 			email,
 			name,
 			password,
 			password_confirmation: confirmPassword,
 		});
-        setIsSubmitting(false);
+		setIsSubmitting(false);
 	};
 
 	return (

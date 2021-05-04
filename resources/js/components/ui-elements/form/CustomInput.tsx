@@ -10,8 +10,8 @@ import CustomLabel from './CustomLabel';
 import { FormContext } from './FormContextProvider';
 
 export type HandleInputType = {
-    event: 'change' | 'blur' | 'select';
-    value: string;
+	event: 'change' | 'blur' | 'select';
+	value: string;
 };
 
 type CustomInputProps = {
@@ -62,7 +62,10 @@ const CustomInput: React.FC<CustomInputProps> = ({
 		}
 	}, [labelId]);
 
-	const updateValue = (event: 'change' | 'blur', inputValue: BaseSyntheticEvent) => {
+	const updateValue = (
+		event: 'change' | 'blur',
+		inputValue: BaseSyntheticEvent
+	) => {
 		if (formContext && !!Object.keys(formContext).length) {
 			formContext.validateField(labelId, inputValue.target.value, true);
 		}
