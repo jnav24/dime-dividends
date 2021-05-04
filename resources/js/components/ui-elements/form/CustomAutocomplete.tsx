@@ -39,7 +39,9 @@ const CustomAutocomplete: React.FC<CustomAutocompleteType> = ({
 	return (
 		<div className="relative">
 			<CustomInput
-				handleUpdateInput={handleUpdateInput}
+				handleUpdateInput={(e) => {
+				    if (e.event === 'change') handleUpdateInput(e)
+                }}
 				label={label}
 				rules={rules}
 				value={value}

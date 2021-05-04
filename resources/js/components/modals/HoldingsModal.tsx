@@ -63,7 +63,7 @@ const HoldingsModal: React.FC<Props> = ({
 				setTimeout(() => {
 					axios({
 						method: 'GET',
-						url: `/search/${e}`,
+						url: `/search/${e.value}`,
 					}).then((response) => {
 						setTickerItems(
 							response.data.map(
@@ -79,7 +79,7 @@ const HoldingsModal: React.FC<Props> = ({
 							)
 						);
 					});
-				}, 250)
+				}, 100)
 			);
 		} else {
 			setTickerItems([]);
