@@ -51,21 +51,21 @@ const Register = () => {
 					valid={isValid}
 				>
 					<CustomInput
-						handleUpdateInput={setName}
+						handleUpdateInput={(e) => setName(e.value)}
 						label="Name"
 						rules={['required', 'max:255']}
 						value={name}
 					/>
 
 					<CustomInput
-						handleUpdateInput={setEmail}
+						handleUpdateInput={(e) => setEmail(e.value)}
 						label="Email"
 						rules={['required', 'email', 'max:255']}
 						value={email}
 					/>
 
 					<CustomInput
-						handleUpdateInput={setPassword}
+						handleUpdateInput={(e) => setPassword(e.value)}
 						label="Password"
 						rules={['required', 'min:8']}
 						type="password"
@@ -73,7 +73,7 @@ const Register = () => {
 					/>
 
 					<CustomInput
-						handleUpdateInput={setConfirmPassword}
+						handleUpdateInput={(e) => setConfirmPassword(e.value)}
 						label="Confirm Password"
 						rules={['required', 'match:password']}
 						type="password"

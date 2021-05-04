@@ -60,7 +60,7 @@ const SettingsUpdatePassword: React.FC<Props> = () => {
 			<FormContextProvider handleUpdateValid={setIsValid} valid={isValid}>
 				<div className="px-4 pt-4">
 					<CustomInput
-						handleUpdateInput={setCurrentPassword}
+						handleUpdateInput={(e) => setCurrentPassword(e.value)}
 						label="Current Password"
 						value={currentPassword}
 						type="password"
@@ -68,7 +68,7 @@ const SettingsUpdatePassword: React.FC<Props> = () => {
 					/>
 
 					<CustomInput
-						handleUpdateInput={setNewPassword}
+						handleUpdateInput={(e) => setNewPassword(e.value)}
 						label="New Password"
 						value={newPassword}
 						type="password"
@@ -76,7 +76,7 @@ const SettingsUpdatePassword: React.FC<Props> = () => {
 					/>
 
 					<CustomInput
-						handleUpdateInput={setConfirmPassword}
+						handleUpdateInput={(e) => setConfirmPassword(e.value)}
 						label="Confirm Password"
 						value={confirmPassword}
 						type="password"
