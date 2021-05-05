@@ -114,8 +114,6 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 	};
 
 	// @todo fix next payout date; i.e. LTC date is wrong. It says 07/31 when it's supposed to say 05/28. Possible that the date was updated in the API.
-	// @todo do not show the autocomplete list on unmount and on blur
-	// @todo redo autocomplete to detect onchange and oninput event properly to hide/show autocomplete list
 	// @todo redo the holdings modal to not have check for editmode and display error if user tries to add an existing holding
 	// @todo once holdings modal is redone, modify submitHolding() to not check for existing holdings
 	const submitHolding = (holding: HoldingSubmitType) => {
