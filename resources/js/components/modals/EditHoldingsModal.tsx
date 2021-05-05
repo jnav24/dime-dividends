@@ -6,7 +6,11 @@ import CustomInput from '../ui-elements/form/CustomInput';
 import CustomRadio from '../ui-elements/form/CustomRadio';
 import CustomRadioGroup from '../ui-elements/form/CustomRadioGroup';
 import FormContextProvider from '../ui-elements/form/FormContextProvider';
-import { HoldingsModalType, HoldingSubmitType } from '../../@types/holdings';
+import {
+	HoldingsModalType,
+	HoldingSubmitType,
+	HoldingType,
+} from '../../@types/holdings';
 import useCurrency from '../../hooks/useCurrency';
 import useHttp from '../../hooks/useHttp';
 import useTimestamp from '../../hooks/useTimestamp';
@@ -16,7 +20,11 @@ enum OrderType {
 	SOLD = 'sold',
 }
 
-const EditHoldingsModal: React.FC<HoldingsModalType> = ({
+type Props = HoldingsModalType & {
+	data: HoldingType;
+};
+
+const EditHoldingsModal: React.FC<Props> = ({
 	data,
 	handleAddHolding,
 	handleShowModal,
@@ -113,13 +121,13 @@ const EditHoldingsModal: React.FC<HoldingsModalType> = ({
 								/>
 							</CustomRadioGroup>
 							<CustomInput
-								handleUpdateInput={setCost}
+								handleUpdateInput={(e) => setCost(e.value)}
 								rules={['required', 'float:2']}
 								value={cost}
 								label="Cost Per Share"
 							/>
 							<CustomInput
-								handleUpdateInput={setQuantity}
+								handleUpdateInput={(e) => setQuantity(e.value)}
 								rules={['required', 'float:2']}
 								value={quantity}
 								label="Quantity"

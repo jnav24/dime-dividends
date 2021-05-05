@@ -1,10 +1,10 @@
 import React, { ReactNode, useEffect, useRef } from 'react';
 
-import CustomInput from './CustomInput';
+import CustomInput, { HandleInputType } from './CustomInput';
 
 type CustomAutocompleteType = {
 	handleSelectAutocomplete: (value: string) => void;
-	handleUpdateInput: (value: string) => void;
+	handleUpdateInput: (obj: HandleInputType) => void;
 	items: Array<{ label: string | ReactNode; value: string }>;
 	label: string;
 	rules?: Record<string, string> | string[];
@@ -39,9 +39,10 @@ const CustomAutocomplete: React.FC<CustomAutocompleteType> = ({
 	return (
 		<div className="relative">
 			<CustomInput
-				handleUpdateInput={handleUpdateInput}
+				handleUpdateInput={(e) => {
+					if (e.event === 'change') handleUpdateInput(e);
+				}}
 				label={label}
-				onBlur={false}
 				rules={rules}
 				value={value}
 				readOnly={readOnly}

@@ -3,7 +3,7 @@ import axios from 'axios';
 
 import CustomAutocomplete from '../ui-elements/form/CustomAutocomplete';
 import CustomButton from '../ui-elements/form/CustomButton';
-import CustomInput from '../ui-elements/form/CustomInput';
+import CustomInput, { HandleInputType } from '../ui-elements/form/CustomInput';
 import FormContextProvider from '../ui-elements/form/FormContextProvider';
 import Modal from './Modal';
 import { HoldingsModalType, HoldingSubmitType } from '../../@types/holdings';
@@ -12,6 +12,8 @@ type AutocompleteLabelType = {
 	name: string;
 	company: string;
 };
+
+type Props = HoldingsModalType & {};
 
 const AutocompleteLabel: React.FC<AutocompleteLabelType> = ({
 	name,
@@ -25,13 +27,11 @@ const AutocompleteLabel: React.FC<AutocompleteLabelType> = ({
 	);
 };
 
-const HoldingsModal: React.FC<HoldingsModalType> = ({
-	data,
+const HoldingsModal: React.FC<Props> = ({
 	handleAddHolding,
 	handleShowModal,
 	show,
 }) => {
-	const [editMode, setEditMode] = useState(false);
 	const [tickerItems, setTickerItems] = useState([]);
 	const [isValid, setIsValid] = useState(false);
 	const [animateCloseModal, setAnimateCloseModal] = useState(false);
@@ -41,18 +41,6 @@ const HoldingsModal: React.FC<HoldingsModalType> = ({
 	const [tickerTimer, setTickerTimer] = useState<null | ReturnType<
 		typeof setTimeout
 	>>(null);
-
-	useEffect(() => {
-		if (Object.keys(data).length) {
-			setShares(data.quantity.toString());
-			setSharePrice('0.00');
-			setTicker(data.ticker);
-			setIsValid(!!data.ticker.length && !!data.quantity);
-			setEditMode(true);
-		} else {
-			setEditMode(false);
-		}
-	}, [data]);
 
 	useEffect(() => {
 		if (!show) {
@@ -65,17 +53,21 @@ const HoldingsModal: React.FC<HoldingsModalType> = ({
 		}
 	}, [show]);
 
-	const handleUpdateTicker = (e: string) => {
+	const handleUpdateTicker = (e: HandleInputType) => {
 		if (tickerTimer) {
 			clearTimeout(tickerTimer);
 		}
 
-		if (e.trim().length && e.toLowerCase() !== ticker.toLowerCase()) {
+		if (
+			e.event === 'change' &&
+			e.value.trim().length &&
+			e.value.toLowerCase() !== ticker.toLowerCase()
+		) {
 			setTickerTimer(
 				setTimeout(() => {
 					axios({
 						method: 'GET',
-						url: `/search/${e}`,
+						url: `/search/${e.value}`,
 					}).then((response) => {
 						setTickerItems(
 							response.data.map(
@@ -91,19 +83,19 @@ const HoldingsModal: React.FC<HoldingsModalType> = ({
 							)
 						);
 					});
-				}, 250)
+				}, 100)
 			);
 		} else {
 			setTickerItems([]);
 		}
 
-		setTicker(e);
+		setTicker(e.value);
 	};
 
 	const handleSelectAutocomplete = (e: string) => {
 		setTickerItems([]);
 		if (e !== ticker) {
-			handleUpdateTicker(e);
+			handleUpdateTicker({ event: 'select', value: e });
 		}
 	};
 
@@ -115,7 +107,7 @@ const HoldingsModal: React.FC<HoldingsModalType> = ({
 		>
 			<div className="w-100">
 				<div className="bg-gray-100 pl-2 py-2 text-2xl text-gray-700 font-header">
-					{editMode ? 'Edit' : 'Add'} Holding
+					Add Holding
 				</div>
 
 				<FormContextProvider
@@ -130,23 +122,20 @@ const HoldingsModal: React.FC<HoldingsModalType> = ({
 							label="Ticker"
 							rules={['required']}
 							value={ticker}
-							readOnly={editMode}
 						/>
 
 						<CustomInput
-							handleUpdateInput={setShares}
+							handleUpdateInput={(e) => setShares(e.value)}
 							label="Shares"
 							rules={['required', 'float:2']}
 							value={shares}
-							validateOnInit={editMode}
 						/>
 
 						<CustomInput
-							handleUpdateInput={setSharePrice}
+							handleUpdateInput={(e) => setSharePrice(e.value)}
 							label="Cost Per Share"
 							rules={['required', 'float:2']}
 							value={sharePrice}
-							validateOnInit={editMode}
 						/>
 					</div>
 
@@ -164,10 +153,6 @@ const HoldingsModal: React.FC<HoldingsModalType> = ({
 									shares,
 									sharePrice,
 								};
-
-								if (editMode) {
-									submitData.id = data.id;
-								}
 
 								handleAddHolding(submitData);
 								setAnimateCloseModal(true);

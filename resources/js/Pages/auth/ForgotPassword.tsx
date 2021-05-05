@@ -59,7 +59,7 @@ const ForgotPassword = () => {
 					valid={isValid}
 				>
 					<CustomInput
-						handleUpdateInput={setEmail}
+						handleUpdateInput={(e) => setEmail(e.value)}
 						label="Email"
 						rules={['required', 'email']}
 						value={email}

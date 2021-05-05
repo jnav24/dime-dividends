@@ -15,7 +15,7 @@ const Register = () => {
 	const [name, setName] = useState('');
 	const [confirmPassword, setConfirmPassword] = useState('');
 	const [password, setPassword] = useState('');
-    const [isSubmitting, setIsSubmitting] = useState(false);
+	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [isValid, setIsValid] = useState(false);
 	const [loginErrors, setLoginErrors] = useState<string[]>([]);
 	const { errors } = usePage().props as CustomProps;
@@ -26,14 +26,14 @@ const Register = () => {
 
 	const handleSubmit = async (e: BaseSyntheticEvent) => {
 		e.preventDefault();
-        setIsSubmitting(true);
+		setIsSubmitting(true);
 		await Inertia.post('/register', {
 			email,
 			name,
 			password,
 			password_confirmation: confirmPassword,
 		});
-        setIsSubmitting(false);
+		setIsSubmitting(false);
 	};
 
 	return (
@@ -51,21 +51,21 @@ const Register = () => {
 					valid={isValid}
 				>
 					<CustomInput
-						handleUpdateInput={setName}
+						handleUpdateInput={(e) => setName(e.value)}
 						label="Name"
 						rules={['required', 'max:255']}
 						value={name}
 					/>
 
 					<CustomInput
-						handleUpdateInput={setEmail}
+						handleUpdateInput={(e) => setEmail(e.value)}
 						label="Email"
 						rules={['required', 'email', 'max:255']}
 						value={email}
 					/>
 
 					<CustomInput
-						handleUpdateInput={setPassword}
+						handleUpdateInput={(e) => setPassword(e.value)}
 						label="Password"
 						rules={['required', 'min:8']}
 						type="password"
@@ -73,7 +73,7 @@ const Register = () => {
 					/>
 
 					<CustomInput
-						handleUpdateInput={setConfirmPassword}
+						handleUpdateInput={(e) => setConfirmPassword(e.value)}
 						label="Confirm Password"
 						rules={['required', 'match:password']}
 						type="password"

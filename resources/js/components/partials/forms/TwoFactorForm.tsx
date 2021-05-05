@@ -45,7 +45,7 @@ const TwoFactorForm: React.FC<Props> = () => {
 					valid={isValid}
 				>
 					<CustomInput
-						handleUpdateInput={setCode}
+						handleUpdateInput={(e) => setCode(e.value)}
 						label="Enter 6 digit code"
 						rules={['required', 'numeric', 'exact:6']}
 						value={code}
