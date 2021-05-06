@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Dividend;
 use App\Models\UserDividend;
+use App\Queries\DividendQuery;
 use App\Services\SeekingAlphaService;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
@@ -42,14 +42,7 @@ class HoldingsController extends Controller
             Log::info('Stock Add Holding data: ' . json_encode($data));
 
             $dividend = new Dividend;
-            $dividend->ticker = $data['ticker'];
-            $dividend->name = $data['name'];
-            $dividend->yield = $data['yield'];
-            $dividend->amount_per_share = $data['amount-per-share'];
-            $dividend->payout_ratio = $data['payout-ratio'];
-            $dividend->frequency = strtolower($data['frequency']);
-            $dividend->next_payout_at = Carbon::createFromFormat('Y-m-d', $data['next-payout']);
-            $dividend->save();
+            DividendQuery::update($dividend, $data);
         }
 
         $userDividend = new UserDividend();
