@@ -7,12 +7,14 @@ use App\Models\UserDividend;
 use App\Queries\DividendQuery;
 use App\Services\SeekingAlphaService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class HoldingsController extends Controller
 {
-    public function index(): \Inertia\Response
+    public function index(): Response
     {
         $holdings = UserDividend::with('dividend')->where('user_id', auth()->user()->id)->get();
 
@@ -27,7 +29,7 @@ class HoldingsController extends Controller
         ]);
     }
 
-    public function store(Request $request, SeekingAlphaService $seekingAlphaService): \Illuminate\Http\JsonResponse
+    public function store(Request $request, SeekingAlphaService $seekingAlphaService): JsonResponse
     {
         $validated = $request->validate([
             'ticker' => 'required',
@@ -38,19 +40,18 @@ class HoldingsController extends Controller
         $dividend = Dividend::where('ticker', $validated['ticker'])->first();
 
         if (empty($dividend)) {
-            $data = $seekingAlphaService->getHoldingDetails($validated['ticker']);
-            Log::info('Stock Add Holding data: ' . json_encode($data));
-
-            $dividend = new Dividend;
-            DividendQuery::update($dividend, $data);
+            $dividend = DividendQuery::save(
+                new Dividend,
+                $seekingAlphaService->getHoldingDetails($validated['ticker'])
+            );
         }
 
-        $userDividend = new UserDividend();
-        $userDividend->user_id = auth()->user()->id;
-        $userDividend->dividend_id = $dividend->id;
-        $userDividend->portfolio_value = (float)$validated['sharePrice'] * (int)$validated['shares'];
-        $userDividend->quantity = (float)$validated['shares'];
-        $userDividend->save();
+        $userDividend = UserDividend::create([
+            'user_id' => Auth::user()->id,
+            'dividend_id' => $dividend->id,
+            'portfolio_value' => (float)$validated['sharePrice'] * (int)$validated['shares'],
+            'quantity' => (float)$validated['shares']
+        ]);
 
         return response()->json([
             'success' => true,
@@ -62,7 +63,7 @@ class HoldingsController extends Controller
         ]);
     }
 
-    public function update(Request $request, int $id): \Illuminate\Http\JsonResponse
+    public function update(Request $request, int $id): JsonResponse
     {
         $validated = $request->validate([
             'ticker' => 'required',
@@ -74,10 +75,11 @@ class HoldingsController extends Controller
         $dividend = Dividend::where('ticker', $validated['ticker'])->first();
 
         if ($userDividend && $dividend) {
-            $userDividend->dividend_id = $dividend->id;
-            $userDividend->quantity = (int)$validated['shares'];
-            $userDividend->portfolio_value = (int)$validated['sharePrice'];
-            $userDividend->save();
+            $userDividend->update([
+                'dividend_id' => $dividend->id,
+                'portfolio_value' => (int)$validated['sharePrice'],
+                'quantity' => (float)$validated['shares']
+            ]);
             return response()->json(['success' => true]);
         }
 

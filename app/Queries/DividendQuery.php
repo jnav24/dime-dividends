@@ -7,7 +7,12 @@ use Carbon\Carbon;
 
 class DividendQuery
 {
-    public static function update(Dividend $dividend, array $data)
+    /**
+     * @param Dividend $dividend
+     * @param array $data
+     * @return Dividend
+     */
+    public static function save(Dividend $dividend, array $data): Dividend
     {
         $dividend->ticker = $data['ticker'];
         $dividend->name = $data['name'];
@@ -17,5 +22,6 @@ class DividendQuery
         $dividend->frequency = strtolower($data['frequency']);
         $dividend->next_payout_at = Carbon::createFromFormat('Y-m-d', $data['next-payout']);
         $dividend->save();
+        return $dividend;
     }
 }

@@ -15,7 +15,7 @@ class UpdatePayoutService
         $dividends->each(function ($dividend) use ($seekingAlphaService) {
             $data = $seekingAlphaService->getHoldingDetails($dividend->ticker);
             if (!empty($data)) {
-                DividendQuery::update($dividend, $data);
+                DividendQuery::save($dividend, $data);
             }
         });
 
