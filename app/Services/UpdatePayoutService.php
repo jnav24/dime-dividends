@@ -10,7 +10,7 @@ class UpdatePayoutService
 {
     public function __invoke(SeekingAlphaService $seekingAlphaService)
     {
-        $dividends = Dividend::whereDate('next_payout_at', '<=', Carbon::now())->get();
+        $dividends = Dividend::whereDate('updated_at', '<=', Carbon::today())->take(15)->get();
         $dividends->each(function ($dividend) use ($seekingAlphaService) {
             $data = $seekingAlphaService->getHoldingDetails($dividend->ticker);
             if (!empty($data)) {
