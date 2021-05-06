@@ -22,6 +22,13 @@ class UserDividend extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'user_id',
+        'dividend_id',
+        'portfolio_value',
+        'quantity',
+    ];
+
     public function dividend(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
         return $this->hasOne(Dividend::class, 'id', 'dividend_id');
