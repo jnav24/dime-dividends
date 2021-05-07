@@ -16,7 +16,7 @@ class DividendQuery
     {
         $dividend->ticker = $data['ticker'];
         $dividend->name = $data['name'];
-        $dividend->yield = $data['yield'];
+        $dividend->yield = number_format($data['yield'], 2);
         $dividend->amount_per_share = $data['amount-per-share'];
         $dividend->payout_ratio = $data['payout-ratio'];
         $dividend->frequency = strtolower($data['frequency']);
