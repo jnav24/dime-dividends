@@ -215,8 +215,8 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 
 					{data
 						.slice(
-							totalPages * (currentPage - 1),
-							totalPages * currentPage - 1
+                            totalPages * (currentPage - 1),
+							totalPages * currentPage
 						)
 						.map((holding) => (
 							<div
