@@ -122,8 +122,8 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 	};
 
 	const doesTickerExistInHoldings = (ticker: string) => {
-	    return !!data.filter(holding => holding.ticker === ticker).length;
-    };
+		return !!data.filter((holding) => holding.ticker === ticker).length;
+	};
 
 	return (
 		<Auth>
@@ -134,7 +134,7 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 					setSelectedData({} as HoldingType);
 				}}
 				handleAddHolding={submitHolding}
-                validateTicker={doesTickerExistInHoldings}
+				validateTicker={doesTickerExistInHoldings}
 			/>
 
 			<EditHoldingsModal
@@ -206,7 +206,7 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 
 					{data
 						.slice(
-                            totalPages * (currentPage - 1),
+							totalPages * (currentPage - 1),
 							totalPages * currentPage
 						)
 						.map((holding) => (

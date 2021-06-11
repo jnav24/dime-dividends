@@ -15,7 +15,7 @@ type AutocompleteLabelType = {
 };
 
 type Props = HoldingsModalType & {
-    validateTicker: (value: string) => boolean;
+	validateTicker: (value: string) => boolean;
 };
 
 const AutocompleteLabel: React.FC<AutocompleteLabelType> = ({
@@ -34,9 +34,9 @@ const HoldingsModal: React.FC<Props> = ({
 	handleAddHolding,
 	handleShowModal,
 	show,
-    validateTicker,
+	validateTicker,
 }) => {
-    const [errors, setErrors] = useState<Array<string>>([]);
+	const [errors, setErrors] = useState<Array<string>>([]);
 	const [tickerItems, setTickerItems] = useState([]);
 	const [isValid, setIsValid] = useState(false);
 	const [animateCloseModal, setAnimateCloseModal] = useState(false);
@@ -95,7 +95,11 @@ const HoldingsModal: React.FC<Props> = ({
 		}
 
 		const tickerName = e.value.toUpperCase();
-        setErrors(validateTicker(tickerName) ? [`Ticker, ${tickerName}, already exists in your holdings`] : []);
+		setErrors(
+			validateTicker(tickerName)
+				? [`Ticker, ${tickerName}, already exists in your holdings`]
+				: []
+		);
 		setTicker(tickerName);
 	};
 
@@ -117,9 +121,9 @@ const HoldingsModal: React.FC<Props> = ({
 					Add Holding
 				</div>
 
-                <div className="px-2 mt-4">
-                    <Alert errors={errors} type={`error`} />
-                </div>
+				<div className="px-2 mt-4">
+					<Alert errors={errors} type={`error`} />
+				</div>
 
 				<FormContextProvider
 					valid={isValid}
