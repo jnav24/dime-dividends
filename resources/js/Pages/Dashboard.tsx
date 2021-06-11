@@ -113,21 +113,8 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 		}
 	};
 
-	// @todo redo the holdings modal to not have check for editmode and display error if user tries to add an existing holding
-	// @todo once holdings modal is redone, modify submitHolding() to not check for existing holdings
 	const submitHolding = (holding: HoldingSubmitType) => {
 		if (!holding.id) {
-			const existingHolding = data.filter(
-				(d) => holding.ticker === d.ticker
-			);
-
-			if (existingHolding.length) {
-				return updateHolding({
-					id: existingHolding[0].id,
-					...holding,
-				});
-			}
-
 			return addHolding(holding);
 		}
 
