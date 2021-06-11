@@ -41,8 +41,8 @@ export default function useTimestamp() {
 			hours,
 			minutes,
 			seconds,
-		] = getSafeDateTime(timestamp);
-		return new Date(+year, +month, +day, +hours, +minutes, +seconds);
+		] = getSafeDateTime(timestamp.trim());
+		return new Date(+year, +month - 1, +day, +hours, +minutes, +seconds);
 	};
 
 	const formatDate = (
