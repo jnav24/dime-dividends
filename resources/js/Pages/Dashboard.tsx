@@ -134,6 +134,10 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 		return updateHolding(holding);
 	};
 
+	const doesTickerExistInHoldings = (ticker: string) => {
+	    return !!data.filter(holding => holding.ticker === ticker).length;
+    };
+
 	return (
 		<Auth>
 			<HoldingsModal
@@ -143,6 +147,7 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 					setSelectedData({} as HoldingType);
 				}}
 				handleAddHolding={submitHolding}
+                validateTicker={doesTickerExistInHoldings}
 			/>
 
 			<EditHoldingsModal
