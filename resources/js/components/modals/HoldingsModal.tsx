@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
+import Alert from '../ui-elements/Alert';
 import CustomAutocomplete from '../ui-elements/form/CustomAutocomplete';
 import CustomButton from '../ui-elements/form/CustomButton';
 import CustomInput, { HandleInputType } from '../ui-elements/form/CustomInput';
@@ -13,7 +14,9 @@ type AutocompleteLabelType = {
 	company: string;
 };
 
-type Props = HoldingsModalType & {};
+type Props = HoldingsModalType & {
+	validateTicker: (value: string) => boolean;
+};
 
 const AutocompleteLabel: React.FC<AutocompleteLabelType> = ({
 	name,
@@ -31,7 +34,9 @@ const HoldingsModal: React.FC<Props> = ({
 	handleAddHolding,
 	handleShowModal,
 	show,
+	validateTicker,
 }) => {
+	const [errors, setErrors] = useState<Array<string>>([]);
 	const [tickerItems, setTickerItems] = useState([]);
 	const [isValid, setIsValid] = useState(false);
 	const [animateCloseModal, setAnimateCloseModal] = useState(false);
@@ -89,7 +94,13 @@ const HoldingsModal: React.FC<Props> = ({
 			setTickerItems([]);
 		}
 
-		setTicker(e.value);
+		const tickerName = e.value.toUpperCase();
+		setErrors(
+			validateTicker(tickerName)
+				? [`Ticker, ${tickerName}, already exists in your holdings`]
+				: []
+		);
+		setTicker(tickerName);
 	};
 
 	const handleSelectAutocomplete = (e: string) => {
@@ -108,6 +119,10 @@ const HoldingsModal: React.FC<Props> = ({
 			<div className="w-100">
 				<div className="bg-gray-100 pl-2 py-2 text-2xl text-gray-700 font-header">
 					Add Holding
+				</div>
+
+				<div className="px-2 mt-4">
+					<Alert errors={errors} type={`error`} />
 				</div>
 
 				<FormContextProvider
@@ -158,7 +173,7 @@ const HoldingsModal: React.FC<Props> = ({
 								setAnimateCloseModal(true);
 							}}
 							color="secondary"
-							isDisabled={!isValid}
+							isDisabled={!isValid || !!errors.length}
 						>
 							Add Holding
 						</CustomButton>

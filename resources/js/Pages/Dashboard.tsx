@@ -113,26 +113,16 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 		}
 	};
 
-	// @todo fix next payout date; i.e. LTC date is wrong. It says 07/31 when it's supposed to say 05/28. Possible that the date was updated in the API.
-	// @todo redo the holdings modal to not have check for editmode and display error if user tries to add an existing holding
-	// @todo once holdings modal is redone, modify submitHolding() to not check for existing holdings
 	const submitHolding = (holding: HoldingSubmitType) => {
 		if (!holding.id) {
-			const existingHolding = data.filter(
-				(d) => holding.ticker === d.ticker
-			);
-
-			if (existingHolding.length) {
-				return updateHolding({
-					id: existingHolding[0].id,
-					...holding,
-				});
-			}
-
 			return addHolding(holding);
 		}
 
 		return updateHolding(holding);
+	};
+
+	const doesTickerExistInHoldings = (ticker: string) => {
+		return !!data.filter((holding) => holding.ticker === ticker).length;
 	};
 
 	return (
@@ -144,6 +134,7 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 					setSelectedData({} as HoldingType);
 				}}
 				handleAddHolding={submitHolding}
+				validateTicker={doesTickerExistInHoldings}
 			/>
 
 			<EditHoldingsModal
@@ -216,7 +207,7 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 					{data
 						.slice(
 							totalPages * (currentPage - 1),
-							totalPages * currentPage - 1
+							totalPages * currentPage
 						)
 						.map((holding) => (
 							<div
