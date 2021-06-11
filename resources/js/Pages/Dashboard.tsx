@@ -229,7 +229,7 @@ const Dashboard: React.FC<DashboardType> = ({ holdings }) => {
 									${formatDollar(holding.portfolio_value)}
 								</div>
 
-								<div className="pl-2">{holding.yield}%</div>
+								<div className="pl-2">{Number(holding.yield).toFixed(2)}%</div>
 
 								<div className="pl-2">
 									${formatDollar(holding.amount_per_share)}
