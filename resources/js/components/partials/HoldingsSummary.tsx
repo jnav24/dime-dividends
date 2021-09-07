@@ -24,7 +24,7 @@ const HoldingsSummary: React.FC<HoldingsSummaryType> = ({
 
 	const frequency = {
 		annually: 1,
-        semiannual: 2,
+		semiannual: 2,
 		monthly: 12,
 		quarterly: 4,
 	};
@@ -69,7 +69,10 @@ const HoldingsSummary: React.FC<HoldingsSummaryType> = ({
 		holdings.map((holding) => {
 			portfolio += +holding.portfolio_value;
 			divYield += +holding.yield;
-			income += ((frequency as any)[holding.frequency] * +holding.amount_per_share) * +holding.quantity;
+			income +=
+				(frequency as any)[holding.frequency] *
+				+holding.amount_per_share *
+				+holding.quantity;
 			topShares = calculateTopShare(
 				topShares,
 				holding.ticker,
@@ -85,13 +88,15 @@ const HoldingsSummary: React.FC<HoldingsSummaryType> = ({
 		});
 
 		if (!!divYield && !!holdings.length) {
-            setDividendYield(Number((divYield / holdings.length).toFixed(2)));
-        }
+			setDividendYield(
+				Number(((incomeValue / portfolioValue) * 100).toFixed(2))
+			);
+		}
 
 		setPortfolioValue(portfolio);
 		setIncomeValue(income);
 		setMostShares(topShares);
-        setHighestReturn(topReturn !== '--' ? setDollar(topReturn) : topReturn);
+		setHighestReturn(topReturn !== '--' ? setDollar(topReturn) : topReturn);
 	}, [holdings]);
 
 	return (
