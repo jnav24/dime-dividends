@@ -87,17 +87,19 @@ const HoldingsSummary: React.FC<HoldingsSummaryType> = ({
 			);
 		});
 
-		if (!!divYield && !!holdings.length) {
-			setDividendYield(
-				Number(((incomeValue / portfolioValue) * 100).toFixed(2))
-			);
-		}
-
 		setPortfolioValue(portfolio);
 		setIncomeValue(income);
 		setMostShares(topShares);
 		setHighestReturn(topReturn !== '--' ? setDollar(topReturn) : topReturn);
 	}, [holdings]);
+
+	useEffect(() => {
+	    if (incomeValue && portfolioValue) {
+            setDividendYield(
+                Number(((incomeValue / portfolioValue) * 100).toFixed(2))
+            );
+        }
+    }, [incomeValue, portfolioValue]);
 
 	return (
 		<>
