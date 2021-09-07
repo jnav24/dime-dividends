@@ -110,7 +110,7 @@ export default function useHttp({
 					isSuccess: response.status >= 200 && response.status < 300,
 				},
 			});
-		} catch (err) {
+		} catch (err: any) {
 			let errors = [HttpError.DEFAULT];
 
 			if (err?.response?.data?.errors) {
